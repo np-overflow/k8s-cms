@@ -1,0 +1,3 @@
+[submodule "deps/cms"]
+	path = deps/cms
+	url = https://github.com/cms-dev/cms.git
