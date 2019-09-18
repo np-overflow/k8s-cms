@@ -1,4 +1,4 @@
-# K8s Contest Managment System
+ K8s Contest Managment System
 Make deploying [CMS](https://github.com/cms-dev/cms) great again.
 
 ## Intro
@@ -11,10 +11,17 @@ kubectl apply -f https://raw.github.com.... TODO
 ```
 
 ## Setup
-This repository contains submodules - run after cloning;
-```
+### Contributing
+1. Resolve submodules after cloning;
+```sh
 git submodule update --init --recursive
 ```
+2. Fill `env` file with secrets
+```sh
+cp env .env
+nano .env # use your favourite editor
+```
+
 
 ## Design
 ![k8s-cms Design](./assets/k8s_cms_design.jpg)

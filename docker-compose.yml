@@ -1,0 +1,27 @@
+#
+# k8s-cms
+# Docker Compose 
+# 
+
+version: '3'
+services:
+  cms-db:
+    build: 
+      context: .
+      dockerfile: containers/cms-db/Dockerfile
+    image: mrzzy/cms-db
+    ports:
+    - "5432:5432"
+    env_file: .env
+    environment:
+      - CMS_DB=localhost
+  cms-web-admin:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-admin/Dockerfile
+    image: mrzzy/cms-web-admin
+    ports:
+      - "8889:8889"
+    env_file: .env
+    depends_on:
+      - cms-db

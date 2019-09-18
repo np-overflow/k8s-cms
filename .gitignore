@@ -1,2 +1,4 @@
 # tag files
 tags*
+# env fils
+.env
