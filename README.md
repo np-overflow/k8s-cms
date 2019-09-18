@@ -20,7 +20,7 @@ git submodule update --init --recursive
 ![k8s-cms Design](./assets/k8s_cms_design.jpg)
 
 Containers:
-- Database - Deploy using Postgres SQL container
+- Database - Deploy using Postgres SQL container `cms-db`
 - CMS - all services derive from base container `cms-base`
     - ResourceService - `cms-resource`
     - LogService - `cms-log`
@@ -39,6 +39,7 @@ Containers:
 - deps/ - project dependencies/submodules
 - containers/ - docker containers
 - k8s/ - kubernetes deployemennt
+- config - cms configuration
 
 ## Roadmap
 - dockerizing all these:
