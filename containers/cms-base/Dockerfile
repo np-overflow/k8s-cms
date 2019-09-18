@@ -1,0 +1,37 @@
+#
+# k8s-cms
+# Database Container
+# 
+
+FROM ubuntu:18.04
+
+# install packages
+RUN apt-get update && apt-get install -y \
+    python3-pip  \
+    libpq-dev \
+    libcups2-dev \
+    gettext-base \
+    && rm -rf /var/lib/apt/lists/*
+
+# configure user/groups
+RUN useradd --user-group --home-dir /project cmsuser
+
+# install python dependencies
+RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN mkdir /cms
+COPY deps/cms/requirements.txt /cms/requirements.txt
+RUN pip3 install -r /cms/requirements.txt
+
+# setup source directory
+COPY deps/cms /cms
+COPY config /cms/config
+ENV PYTHONPATH=/cms
+RUN chmod -R a+x /cms/scripts
+
+COPY containers/cms-base /scripts
+RUN chmod -R a+x /scripts
+
+# configure entrypoint script
+ENTRYPOINT ["/scripts/cms-entrypoint.sh"]
+WORKDIR /cms
+CMD bash
