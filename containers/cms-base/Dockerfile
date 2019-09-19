@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libcups2-dev \
     gettext-base \
+    iputils-ping \
+    netcat \
     && rm -rf /var/lib/apt/lists/*
 
 # configure user/groups
