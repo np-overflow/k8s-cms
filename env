@@ -22,3 +22,5 @@ CMS_RANKING_USER=ranking
 CMS_RANKING_PASSWORD=
 
 CMS_PRINTING=cms-printing
+
+CMS_EVALUATION=cms-evaluation

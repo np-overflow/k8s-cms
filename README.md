@@ -3,9 +3,10 @@ Make deploying [CMS](https://github.com/cms-dev/cms) great again.
 
 ## Intro
 The Contest Managment System (CMS) is a great open source platform to host programming contests. 
-However deploying it is also really hard to deploy.
+However deploying it is also really hard.
 
-By adapting to be deployed using `kubernetes`, we can make deploying CMS as:
+By adapting CMS to be deployed using `kubernetes`, k8s-cms can make deploying 
+CMS simple as:
 ```
 kubectl apply -f https://raw.github.com.... TODO
 ```
@@ -51,7 +52,7 @@ Containers:
 ### Security
 Secrets are injected into the containers as environment variables via `.env` file.
 
-## Limitations
+### Limitations
 What does not work:
 - multiple contests - only supports running one contest at a time
 
@@ -64,7 +65,7 @@ What does not work:
     - LogService :heavy_check_mark:
     - ScoringService :heavy_check_mark:
     - ProxyService - with single contest support limitation :heavy_check_mark:
-    - EvaluationService 
+    - EvaluationService :heavy_check_mark:
     - PrintingService :heavy_check_mark:
     - AdminWebServer :heavy_check_mark:
     - RankingWebServer :heavy_check_mark:
@@ -90,12 +91,15 @@ What does not work:
 
 ### Version 0.2 alpha
 - making k8s-cms scalable:
-    - generate `cms.conf` using kubernetes deployment/docker-compose  file.
-    - scaling `ContestWebServer` and other components live.
+    - scaling `Workers` to cater to more participants.
+        - regenerate `cms.conf` using kubernetes deployment/docker-compose file.
+        - restart `Checker` and `EvaluationService` to load rescaled workers
+    - scaling `ContestWebServer` to cater to more participants
 - securing k8s-cms:
     - data storage encryption
     - k8s communication encryption.
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
 - multiple contests support
     - contests can be obtained from DB via `get_contest_list()`
-    - spawn multiple
+    - make `cms-proxy` run without an active contest
+    - spawn multiple `cms-proxy` to serve multiple contests

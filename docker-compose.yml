@@ -88,6 +88,16 @@ services:
       - "25123"
     depends_on:
       - cms-db
+  cms-evaluation:
+    build: 
+      context: .
+      dockerfile: containers/cms-evaluation/Dockerfile
+    image: mrzzy/cms-evaluation
+    env_file: .env
+    expose:
+      - "25000"
+    depends_on:
+      - cms-db
   cms-checker:
     build: 
       context: .
@@ -105,3 +115,4 @@ services:
       - cms-proxy
       - cms-web-ranking
       - cms-printing
+      - cms-evaluation
