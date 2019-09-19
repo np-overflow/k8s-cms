@@ -57,6 +57,16 @@ services:
       - "28000"
     depends_on:
       - cms-db
+  cms-web-ranking:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-ranking/Dockerfile
+    image: mrzzy/cms-web-ranking
+    env_file: .env
+    ports:
+      - "8890:8890"
+    depends_on:
+      - cms-db
   cms-proxy:
     build: 
       context: .
@@ -67,6 +77,7 @@ services:
       - "28600"
     depends_on:
       - cms-db
+      - cms-web-ranking
   cms-checker:
     build: 
       context: .
@@ -82,3 +93,4 @@ services:
       - cms-scoring
       - cms-resource
       - cms-proxy
+      - cms-web-ranking

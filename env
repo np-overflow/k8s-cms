@@ -16,3 +16,7 @@ CMS_CHECKER=cms-checker
 CMS_RESOURCE=cms-resource
 
 CMS_PROXY=cms-proxy
+
+CMS_RANKING=cms-web-ranking
+CMS_RANKING_USER=ranking
+CMS_RANKING_PASSWORD=

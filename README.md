@@ -40,7 +40,7 @@ Containers:
     - ProxyService - `cms-proxy`
     - PrintingService - `cms-printing`
     - AdminWebServer - `cms-web-admin`
-    - RankingWebServer - `cms-ranking`
+    - RankingWebServer - `cms-web-ranking`
     - Checker - `cms-checker`
     - ContestWebServer - `cms-web-contest`
     - Worker - `cms-worker` requires language support
@@ -52,9 +52,11 @@ Secrets are injected into the containers as environment variables.
 
 ## Limitations
 What does not work:
-    - multiple contests - only supports running one contest at a time
+- multiple contests - only supports running one contest at a time
 
 ## Roadmap
+
+### Version 0.1 alpha
 - dockerizing all these:
     - Database  :heavy_check_mark:
     - ResourceService :heavy_check_mark:
@@ -64,7 +66,7 @@ What does not work:
     - EvaluationService 
     - PrintingService
     - AdminWebServer :heavy_check_mark:
-    - RankingWebServer
+    - RankingWebServer :heavy_check_mark:
     - Checker :heavy_check_mark:
     - ContestWebServer
     - Worker - requires language support
@@ -84,6 +86,8 @@ What does not work:
     - Worker - requires language support
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
 - figure out contest & deployment
+
+### Version 0.2 alpha
 - making k8s-cms scalable:
     - generate `cms.conf` using kubernetes deployment/docker-compose  file.
     - scaling `ContestWebServer` and other components live.
@@ -91,3 +95,6 @@ What does not work:
     - data storage encryption
     - k8s communication encryption.
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
+- multiple contests support
+    - contests can be obtained from DB via `get_contest_list()`
+    - spawn multiple
