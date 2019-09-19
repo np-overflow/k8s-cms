@@ -15,6 +15,16 @@ services:
     env_file: .env
     environment:
       - CMS_DB=localhost
+  cms-log:
+    build: 
+      context: .
+      dockerfile: containers/cms-log/Dockerfile
+    image: mrzzy/cms-log
+    env_file: .env
+    expose:
+      - "29000"
+    depends_on:
+      - cms-db
   cms-web-admin:
     build: 
       context: .
@@ -28,16 +38,6 @@ services:
     depends_on:
       - cms-db
       - cms-log
-  cms-log:
-    build: 
-      context: .
-      dockerfile: containers/cms-log/Dockerfile
-    image: mrzzy/cms-log
-    env_file: .env
-    expose:
-      - "29000"
-    depends_on:
-      - cms-db
   cms-scoring:
     build: 
       context: .
@@ -49,4 +49,28 @@ services:
     depends_on:
       - cms-db
       - cms-log
-  
+  cms-resource:
+    build: 
+      context: .
+      dockerfile: containers/cms-resource/Dockerfile
+    image: mrzzy/cms-resource
+    env_file: .env
+    expose:
+      - "28000"
+    depends_on:
+      - cms-db
+      - cms-log
+  cms-checker:
+    build: 
+      context: .
+      dockerfile: containers/cms-checker/Dockerfile
+    image: mrzzy/cms-checker
+    env_file: .env
+    expose:
+      - "22000"
+    depends_on:
+      - cms-db
+      - cms-log
+      - cms-web-admin
+      - cms-scoring
+      - cms-resource

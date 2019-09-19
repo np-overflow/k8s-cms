@@ -10,3 +10,7 @@ CMS_ADMIN_PASSWORD=
 CMS_LOG=cms-log
 
 CMS_SCORING=cms-scoring
+
+CMS_CHECKER=cms-checker
+
+CMS_RESOURCE=cms-resource
