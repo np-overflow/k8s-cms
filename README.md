@@ -3,7 +3,7 @@ Make deploying [CMS](https://github.com/cms-dev/cms) great again.
 
 ## Intro
 The Contest Managment System (CMS) is a great open source platform to host programming contests. 
-However deploying it is a certified pain. 
+However deploying it is also really hard to deploy.
 
 By adapting to be deployed using `kubernetes`, we can make deploying CMS as:
 ```
@@ -48,7 +48,8 @@ Containers:
 > `cms-base` contains python runtime, copy of cms source code and `cms.conf`
 >  and is used a a base to build the other services
 
-Secrets are injected into the containers as environment variables.
+### Security
+Secrets are injected into the containers as environment variables via `.env` file.
 
 ## Limitations
 What does not work:
@@ -64,11 +65,11 @@ What does not work:
     - ScoringService :heavy_check_mark:
     - ProxyService - with single contest support limitation :heavy_check_mark:
     - EvaluationService 
-    - PrintingService
+    - PrintingService :heavy_check_mark:
     - AdminWebServer :heavy_check_mark:
     - RankingWebServer :heavy_check_mark:
     - Checker :heavy_check_mark:
-    - ContestWebServer
+    - ContestWebServer 
     - Worker - requires language support
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
 - write k8s deployment YAMLs all these:

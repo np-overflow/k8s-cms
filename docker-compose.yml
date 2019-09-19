@@ -78,6 +78,16 @@ services:
     depends_on:
       - cms-db
       - cms-web-ranking
+  cms-printing:
+    build: 
+      context: .
+      dockerfile: containers/cms-printing/Dockerfile
+    image: mrzzy/cms-printing
+    env_file: .env
+    expose:
+      - "25123"
+    depends_on:
+      - cms-db
   cms-checker:
     build: 
       context: .
@@ -94,3 +104,4 @@ services:
       - cms-resource
       - cms-proxy
       - cms-web-ranking
+      - cms-printing
