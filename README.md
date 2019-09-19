@@ -51,15 +51,15 @@ Secrets are injected into the containers as environment variables.
 
 ## Roadmap
 - dockerizing all these:
-    - Database 
-    - ResourceService
-    - LogService
-    - ScoringService
+    x Database 
+    x ResourceService
+    x LogService
+    x ScoringService
     - ProxyService
     - PrintingService
-    - AdminWebServer
+    x AdminWebServer
     - RankingWebServer
-    - Checker
+    x Checker
     - ContestWebServer
     - Worker - requires language support
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
