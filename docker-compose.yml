@@ -37,7 +37,6 @@ services:
     env_file: .env
     depends_on:
       - cms-db
-      - cms-log
   cms-scoring:
     build: 
       context: .
@@ -48,7 +47,6 @@ services:
       - "28500"
     depends_on:
       - cms-db
-      - cms-log
   cms-resource:
     build: 
       context: .
@@ -59,7 +57,16 @@ services:
       - "28000"
     depends_on:
       - cms-db
-      - cms-log
+  cms-proxy:
+    build: 
+      context: .
+      dockerfile: containers/cms-proxy/Dockerfile
+    image: mrzzy/cms-proxy
+    env_file: .env
+    expose:
+      - "28600"
+    depends_on:
+      - cms-db
   cms-checker:
     build: 
       context: .
@@ -74,3 +81,4 @@ services:
       - cms-web-admin
       - cms-scoring
       - cms-resource
+      - cms-proxy

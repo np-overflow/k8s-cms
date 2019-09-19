@@ -35,6 +35,7 @@ Containers:
 - CMS - all services derive from base container `cms-base`
     - ResourceService - `cms-resource`
     - LogService - `cms-log`
+    - EvaluationService - `cms-evaluation`
     - ScoringService - `cms-scoring`
     - ProxyService - `cms-proxy`
     - PrintingService - `cms-printing`
@@ -49,17 +50,22 @@ Containers:
 
 Secrets are injected into the containers as environment variables.
 
+## Limitations
+What does not work:
+    - multiple contests - only supports running one contest at a time
+
 ## Roadmap
 - dockerizing all these:
-    x Database 
-    x ResourceService
-    x LogService
-    x ScoringService
-    - ProxyService
+    - Database  :heavy_check_mark:
+    - ResourceService :heavy_check_mark:
+    - LogService :heavy_check_mark:
+    - ScoringService :heavy_check_mark:
+    - ProxyService - with single contest support limitation :heavy_check_mark:
+    - EvaluationService 
     - PrintingService
-    x AdminWebServer
+    - AdminWebServer :heavy_check_mark:
     - RankingWebServer
-    x Checker
+    - Checker :heavy_check_mark:
     - ContestWebServer
     - Worker - requires language support
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
@@ -68,6 +74,7 @@ Secrets are injected into the containers as environment variables.
     - ResourceService
     - LogService
     - ScoringService
+    - EvaluationService 
     - ProxyService
     - PrintingService
     - AdminWebServer
