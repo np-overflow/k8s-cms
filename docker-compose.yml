@@ -10,8 +10,8 @@ services:
       context: .
       dockerfile: containers/cms-db/Dockerfile
     image: mrzzy/cms-db
-    ports:
-    - "5432:5432"
+    expose:
+    - "5432"
     env_file: .env
     environment:
       - CMS_DB=localhost
@@ -22,6 +22,19 @@ services:
     image: mrzzy/cms-web-admin
     ports:
       - "8889:8889"
+    expose:
+      - "21100"
     env_file: .env
+    depends_on:
+      - cms-db
+      - cms-log
+  cms-log:
+    build: 
+      context: .
+      dockerfile: containers/cms-log/Dockerfile
+    image: mrzzy/cms-log
+    env_file: .env
+    expose:
+      - "29000"
     depends_on:
       - cms-db
