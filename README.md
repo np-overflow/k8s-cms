@@ -12,6 +12,7 @@ kubectl apply -f https://raw.github.com.... TODO
 
 ## Setup
 ### Contributing
+
 1. Resolve submodules after cloning;
 ```sh
 git submodule update --init --recursive
@@ -20,6 +21,10 @@ git submodule update --init --recursive
 ```sh
 cp env .env
 nano .env # use your favourite editor
+```
+3. Run the stack
+```sh
+docker-compose up
 ```
 
 ## Design
