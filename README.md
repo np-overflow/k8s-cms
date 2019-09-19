@@ -22,7 +22,6 @@ cp env .env
 nano .env # use your favourite editor
 ```
 
-
 ## Design
 ![k8s-cms Design](./assets/k8s_cms_design.jpg)
 
@@ -41,12 +40,9 @@ Containers:
     - Worker - `cms-worker` requires language support
 
 > `cms-base` contains python runtime, copy of cms source code and `cms.conf`
+>  and is used a a base to build the other services
 
-## Project Structure
-- deps/ - project dependencies/submodules
-- containers/ - docker containers
-- k8s/ - kubernetes deployemennt
-- config - cms configuration
+Secrets are injected into the containers as environment variables.
 
 ## Roadmap
 - dockerizing all these:
