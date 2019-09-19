@@ -5,6 +5,7 @@
 
 version: '3'
 services:
+  # database
   cms-db:
     build: 
       context: .
@@ -15,6 +16,8 @@ services:
     env_file: .env
     environment:
       - CMS_DB=localhost
+
+  # core cms services
   cms-log:
     build: 
       context: .
@@ -23,18 +26,6 @@ services:
     env_file: .env
     expose:
       - "29000"
-    depends_on:
-      - cms-db
-  cms-web-admin:
-    build: 
-      context: .
-      dockerfile: containers/cms-web-admin/Dockerfile
-    image: mrzzy/cms-web-admin
-    ports:
-      - "8889:8889"
-    expose:
-      - "21100"
-    env_file: .env
     depends_on:
       - cms-db
   cms-scoring:
@@ -55,16 +46,6 @@ services:
     env_file: .env
     expose:
       - "28000"
-    depends_on:
-      - cms-db
-  cms-web-ranking:
-    build: 
-      context: .
-      dockerfile: containers/cms-web-ranking/Dockerfile
-    image: mrzzy/cms-web-ranking
-    env_file: .env
-    ports:
-      - "8890:8890"
     depends_on:
       - cms-db
   cms-proxy:
@@ -109,10 +90,47 @@ services:
     depends_on:
       - cms-db
       - cms-log
-      - cms-web-admin
       - cms-scoring
       - cms-resource
       - cms-proxy
-      - cms-web-ranking
       - cms-printing
       - cms-evaluation
+      - cms-web-admin
+      - cms-web-ranking
+      - cms-web-contest
+        
+  # web services
+  cms-web-ranking:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-ranking/Dockerfile
+    image: mrzzy/cms-web-ranking
+    env_file: .env
+    ports:
+      - "8890:8890"
+    depends_on:
+      - cms-db
+  cms-web-admin:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-admin/Dockerfile
+    image: mrzzy/cms-web-admin
+    ports:
+      - "8889:8889"
+    expose:
+      - "21100"
+    env_file: .env
+    depends_on:
+      - cms-db
+  cms-web-contest:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-contest/Dockerfile
+    image: mrzzy/cms-web-contest
+    ports:
+      - "8888:8888"
+    expose:
+      - "21000"
+    env_file: .env
+    depends_on:
+      - cms-db

@@ -70,7 +70,7 @@ What does not work:
     - AdminWebServer :heavy_check_mark:
     - RankingWebServer :heavy_check_mark:
     - Checker :heavy_check_mark:
-    - ContestWebServer 
+    - ContestWebServer :heavy_check_mark:
     - Worker - requires language support
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
 - write k8s deployment YAMLs all these:
