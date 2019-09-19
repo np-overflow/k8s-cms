@@ -1,4 +1,4 @@
- K8s Contest Managment System
+# K8s Contest Managment System
 Make deploying [CMS](https://github.com/cms-dev/cms) great again.
 
 ## Intro

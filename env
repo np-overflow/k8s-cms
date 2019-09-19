@@ -8,3 +8,5 @@ CMS_ADMIN_USER=admin
 CMS_ADMIN_PASSWORD=
 
 CMS_LOG=cms-log
+
+CMS_SCORING=cms-scoring

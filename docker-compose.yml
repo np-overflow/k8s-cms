@@ -38,3 +38,15 @@ services:
       - "29000"
     depends_on:
       - cms-db
+  cms-scoring:
+    build: 
+      context: .
+      dockerfile: containers/cms-scoring/Dockerfile
+    image: mrzzy/cms-scoring
+    env_file: .env
+    expose:
+      - "28500"
+    depends_on:
+      - cms-db
+      - cms-log
+  
