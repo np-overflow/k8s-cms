@@ -71,7 +71,7 @@ What does not work:
     - RankingWebServer :heavy_check_mark:
     - Checker :heavy_check_mark:
     - ContestWebServer :heavy_check_mark:
-    - Worker - requires language support
+    - Worker - requires language support :heavy_check_mark:
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
 - write k8s deployment YAMLs all these:
     - Database
@@ -97,6 +97,7 @@ What does not work:
         - regenerate `cms.conf` using kubernetes deployment/docker-compose file.
         - restart `Checker` and `EvaluationService` to load rescaled workers
     - scaling `ContestWebServer` to cater to more participants
+    - lightweight version of `cms-worker` with limited language support.
 - securing k8s-cms:
     - data storage encryption
     - k8s communication encryption.

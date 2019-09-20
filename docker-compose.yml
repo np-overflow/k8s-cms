@@ -16,6 +16,8 @@ services:
     env_file: .env
     environment:
       - CMS_DB=localhost
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
   # core cms services
   cms-log:
@@ -98,6 +100,10 @@ services:
       - cms-web-admin
       - cms-web-ranking
       - cms-web-contest
+      - cms-worker-1
+        #- cms-worker-2
+        #- cms-worker-3
+        #- cms-worker-4
         
   # web services
   cms-web-ranking:
@@ -134,3 +140,60 @@ services:
     env_file: .env
     depends_on:
       - cms-db
+
+  # workers
+  cms-worker-1:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: mrzzy/cms-worker
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=0
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-2:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: mrzzy/cms-worker
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=1
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-3:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: mrzzy/cms-worker
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=2
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-3:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: mrzzy/cms-worker
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=3
+    depends_on:
+      - cms-db
+    privileged: true
+
+volumes:
+  db-data:

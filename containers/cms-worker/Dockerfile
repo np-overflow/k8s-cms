@@ -23,6 +23,8 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
     
+# reconfigure cms
+RUN bash -c "cd /cms && python3 setup.py install"
 # install isolate sandbox
 RUN python /cms/prerequisites.py --as-root -y build_isolate
 RUN python /cms/prerequisites.py --as-root -y install_isolate
