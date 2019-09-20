@@ -90,6 +90,8 @@ What does not work:
 - figure out contest & deployment
 
 ### Version 0.2 alpha
+- importing contests
+    - importing contests in the italian filesystem format
 - making k8s-cms scalable:
     - scaling `Workers` to cater to more participants.
         - regenerate `cms.conf` using kubernetes deployment/docker-compose file.
@@ -101,5 +103,5 @@ What does not work:
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
 - multiple contests support
     - contests can be obtained from DB via `get_contest_list()`
-    - make `cms-proxy` run without an active contest
-    - spawn multiple `cms-proxy` to serve multiple contests
+    - make `cms-proxy` & `cms-web-contest` run without an active contest
+    - spawn multiple `cms-proxy` & `cms-web-contest` to serve multiple contests

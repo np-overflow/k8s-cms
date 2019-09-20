@@ -26,3 +26,5 @@ CMS_PRINTING=cms-printing
 CMS_EVALUATION=cms-evaluation
 
 CMS_CONTEST=cms-contest
+
+CMS_WORKER=cms-worker
