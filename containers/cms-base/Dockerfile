@@ -7,6 +7,7 @@ FROM ubuntu:18.04
 
 # install packages
 RUN apt-get update && apt-get install -y \
+    python3-dev \
     python3-pip  \
     libpq-dev \
     libcups2-dev \
@@ -29,6 +30,7 @@ COPY deps/cms /cms
 COPY config /cms/config
 ENV PYTHONPATH=/cms
 RUN chmod -R a+x /cms/scripts
+RUN bash -c "cd /cms && python setup.py install"
 
 COPY containers/cms-base /scripts
 RUN chmod -R a+x /scripts
