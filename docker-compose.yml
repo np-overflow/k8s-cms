@@ -181,7 +181,7 @@ services:
     depends_on:
       - cms-db
     privileged: true
-  cms-worker-3:
+  cms-worker-4:
     build:
       context: .
       dockerfile: containers/cms-worker/Dockerfile
