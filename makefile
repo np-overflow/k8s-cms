@@ -7,8 +7,8 @@
 DOCKER:=docker
 TAG_PREFIX:=mrzzy
 
-IMG_NAMES:=cms-base cms-db cms-web-admin
-DEP_BASE_NAMES:=cms-web-admin
+IMG_NAMES:=$(notdir $(wildcard containers/*))
+DEP_BASE_NAMES:=$(filter-out cms-base,$(filter-out cms-db, $(IMG_NAMES)))
 CMS_SRC_DIR:=deps/cms/
 
 BASE_IMAGE:=$(TAG_PREFIX)/cms-base
@@ -16,7 +16,7 @@ IMAGES:=$(foreach img,$(IMG_NAMES),$(TAG_PREFIX)/$(img))
 DEP_BASE_IMAGES:=$(foreach img,$(DEP_BASE_NAMES),$(TAG_PREFIX)/$(img))
 
 # phony rules
-.PHONY: all clean push pull
+.PHONY: all
 .DEFAULT: all
 
 all: $(IMAGES)
