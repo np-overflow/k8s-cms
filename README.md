@@ -12,22 +12,22 @@ kubectl apply -f https://raw.github.com.... TODO
 ```
 
 ## Setup
-### Contributing
 
-1. Resolve submodules after cloning;
+### Single Machine with Docker-Compose
+Setups CMS on a single machine. Suitable for testing.
+- Only requires `docker` and `docker-compose`. No kubernetes required.
+1. Fill `env` file with secrets
 ```sh
-git submodule update --init --recursive
-```
-2. Fill `env` file with secrets
-```sh
+curl https://raw.githubusercontent.com/np-overflow/k8s-cms/master/env -o env
 cp env .env
 nano .env # use your favourite editor
 ```
-3. Run the stack
+2. Run CMS on a single machine with `docker-compose`:
 ```sh
-docker-compose up
+curl https://raw.githubusercontent.com/np-overflow/k8s-cms/master/docker-compose.yml -o docker-compose.yaml
+docker-compose pull 
+docker-compose up 
 ```
-
 ## Design
 Each CMS service to containerized by its own docker container:
 - Database - Deploy using Postgres SQL container `cms-db`
@@ -48,60 +48,33 @@ Each CMS service to containerized by its own docker container:
 >  and is used a a base to build the other services
 
 ### Security
-Secrets are injected into the containers as environment variables via `.env` file.
+Making k8s-cms secure:
+- internal service communicate on a virtual network are inaccessable to participants.
+- Secrets are injected into the containers as environment variables via `.env` file.
 
 ### Limitations
 What does not work:
 - multiple contests - only supports running one contest at a time
 - printing - hooking up printers to print stuff has not been implemented yet.
+- importing contests - importing contests has not been  implmemented yet.
 
-## Roadmap
+## Contributing
+Guidelines for contributors:
+- proposed changes: `TODO.md`
+- project changelog: `CHANGELOG.md`
 
-### Version 0.1 alpha
-- dockerizing all these:
-    - Database  :heavy_check_mark:
-    - ResourceService :heavy_check_mark:
-    - LogService :heavy_check_mark:
-    - ScoringService :heavy_check_mark:
-    - ProxyService - with single contest support limitation :heavy_check_mark:
-    - EvaluationService :heavy_check_mark:
-    - PrintingService :heavy_check_mark:
-    - AdminWebServer :heavy_check_mark:
-    - RankingWebServer :heavy_check_mark:
-    - Checker :heavy_check_mark:
-    - ContestWebServer - with single contest limitation :heavy_check_mark:
-    - Worker - requires language support :heavy_check_mark:
-        - C C++ Java Pascal Python with zip executable PHP Rust C# 
-- write k8s deployment YAMLs all these:
-    - Database
-    - ResourceService
-    - LogService
-    - ScoringService
-    - EvaluationService 
-    - ProxyService
-    - PrintingService
-    - AdminWebServer
-    - RankingWebServer
-    - Checker
-    - ContestWebServer
-    - Worker - requires language support
-        - C C++ Java Pascal Python with zip executable PHP Rust C# 
-- figure out contest & deployment
 
-### Version 0.2 alpha
-- importing contests
-    - importing contests in the italian filesystem format
-- making k8s-cms scalable:
-    - scaling `Workers` to cater to more participants.
-        - regenerate `cms.conf` using kubernetes deployment/docker-compose file.
-        - restart `Checker` and `EvaluationService` to load rescaled workers
-    - scaling `ContestWebServer` to cater to more participants
-    - lightweight version of `cms-worker` with limited language support.
-- securing k8s-cms:
-    - data storage encryption
-    - k8s communication encryption.
-    - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
-- multiple contests support
-    - contests can be obtained from DB via `get_contest_list()`
-    - make `cms-proxy` run without an active contest
-    - spawn multiple `cms-proxy` to serve multiple contests
+Development setup for contributors:
+1. Resolve submodules after cloning;
+```sh
+git submodule update --init --recursive
+```
+2. Fill `env` file with secrets
+```sh
+cp env .env
+nano .env # use your favourite editor
+```
+3. Run the stack
+```sh
+docker-compose up
+```
