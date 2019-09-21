@@ -29,9 +29,7 @@ docker-compose up
 ```
 
 ## Design
-![k8s-cms Design](./assets/k8s_cms_design.jpg)
-
-Containers:
+Each CMS service to containerized by its own docker container:
 - Database - Deploy using Postgres SQL container `cms-db`
 - CMS - all services derive from base container `cms-base`
     - ResourceService - `cms-resource`
@@ -55,6 +53,7 @@ Secrets are injected into the containers as environment variables via `.env` fil
 ### Limitations
 What does not work:
 - multiple contests - only supports running one contest at a time
+- printing - hooking up printers to print stuff has not been implemented yet.
 
 ## Roadmap
 
@@ -70,7 +69,7 @@ What does not work:
     - AdminWebServer :heavy_check_mark:
     - RankingWebServer :heavy_check_mark:
     - Checker :heavy_check_mark:
-    - ContestWebServer :heavy_check_mark:
+    - ContestWebServer - with single contest limitation :heavy_check_mark:
     - Worker - requires language support :heavy_check_mark:
         - C C++ Java Pascal Python with zip executable PHP Rust C# 
 - write k8s deployment YAMLs all these:
@@ -104,5 +103,5 @@ What does not work:
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
 - multiple contests support
     - contests can be obtained from DB via `get_contest_list()`
-    - make `cms-proxy` & `cms-web-contest` run without an active contest
-    - spawn multiple `cms-proxy` & `cms-web-contest` to serve multiple contests
+    - make `cms-proxy` run without an active contest
+    - spawn multiple `cms-proxy` to serve multiple contests
