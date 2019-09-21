@@ -194,6 +194,32 @@ services:
     depends_on:
       - cms-db
     privileged: true
+  cms-worker-5:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: mrzzy/cms-worker
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=4
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-6:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: mrzzy/cms-worker
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=5
+    depends_on:
+      - cms-db
+    privileged: true
 
 volumes:
   db-data:
