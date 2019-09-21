@@ -2,3 +2,5 @@
 tags*
 # env fils
 .env
+# vim sessions
+.session.vim

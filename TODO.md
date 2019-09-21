@@ -1,22 +1,5 @@
 # k8s-cms Roadmap
 
-## Version 0.1.0 alpha
-- dockerizing all these:
-    - Database  :heavy_check_mark:
-    - ResourceService :heavy_check_mark:
-    - LogService :heavy_check_mark:
-    - ScoringService :heavy_check_mark:
-    - ProxyService - with single contest support limitation :heavy_check_mark:
-    - EvaluationService :heavy_check_mark:
-    - PrintingService :heavy_check_mark:
-    - AdminWebServer :heavy_check_mark:
-    - RankingWebServer :heavy_check_mark:
-    - Checker :heavy_check_mark:
-    - ContestWebServer - with single contest limitation :heavy_check_mark:
-    - Worker - requires language support :heavy_check_mark:
-        - C C++ Java Pascal Python with zip executable PHP Rust C# 
-- docker-compose single machine support :heavy_check_mark:
-
 ## Version 0.2.0 alpha
 - kubernetes support - write k8s deployment YAMLs all these:
     - Database
