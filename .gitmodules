@@ -1,0 +1,6 @@
+[submodule "deps/cms"]
+	path = deps/cms
+	url = https://github.com/mrzzy/cms.git
+[submodule "deps/con_test"]
+	path = deps/con_test
+	url = https://github.com/cms-dev/con_test.git

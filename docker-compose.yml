@@ -1,0 +1,227 @@
+#
+# k8s-cms
+# Docker Compose 
+# 
+
+version: '3'
+services:
+  # database
+  cms-db:
+    build: 
+      context: .
+      dockerfile: containers/cms-db/Dockerfile
+    image: "mrzzy/cms-db:0.1.0a"
+    expose:
+    - "5432"
+    env_file: .env
+    environment:
+      - CMS_DB=localhost
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  # core cms services
+  cms-log:
+    build: 
+      context: .
+      dockerfile: containers/cms-log/Dockerfile
+    image: "mrzzy/cms-log:0.1.0a"
+    env_file: .env
+    expose:
+      - "29000"
+    depends_on:
+      - cms-db
+  cms-scoring:
+    build: 
+      context: .
+      dockerfile: containers/cms-scoring/Dockerfile
+    image: "mrzzy/cms-scoring:0.1.0a"
+    env_file: .env
+    expose:
+      - "28500"
+    depends_on:
+      - cms-db
+  cms-resource:
+    build: 
+      context: .
+      dockerfile: containers/cms-resource/Dockerfile
+    image: "mrzzy/cms-resource:0.1.0a"
+    env_file: .env
+    expose:
+      - "28000"
+    depends_on:
+      - cms-db
+  cms-proxy:
+    build: 
+      context: .
+      dockerfile: containers/cms-proxy/Dockerfile
+    image: "mrzzy/cms-proxy:0.1.0a"
+    env_file: .env
+    expose:
+      - "28600"
+    depends_on:
+      - cms-db
+      - cms-web-ranking
+  cms-printing:
+    build: 
+      context: .
+      dockerfile: containers/cms-printing/Dockerfile
+    image: "mrzzy/cms-printing:0.1.0a"
+    env_file: .env
+    expose:
+      - "25123"
+    depends_on:
+      - cms-db
+  cms-evaluation:
+    build: 
+      context: .
+      dockerfile: containers/cms-evaluation/Dockerfile
+    image: "mrzzy/cms-evaluation:0.1.0a"
+    env_file: .env
+    expose:
+      - "25000"
+    depends_on:
+      - cms-db
+  cms-checker:
+    build: 
+      context: .
+      dockerfile: containers/cms-checker/Dockerfile
+    image: "mrzzy/cms-checker:0.1.0a"
+    env_file: .env
+    expose:
+      - "22000"
+    depends_on:
+      - cms-db
+      - cms-log
+      - cms-scoring
+      - cms-resource
+      - cms-proxy
+      - cms-printing
+      - cms-evaluation
+      - cms-web-admin
+      - cms-web-ranking
+      - cms-web-contest
+      - cms-worker-1
+      - cms-worker-2
+      - cms-worker-3
+      - cms-worker-4
+      - cms-worker-5
+      - cms-worker-6
+        
+  # web services
+  cms-web-ranking:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-ranking/Dockerfile
+    image: "mrzzy/cms-web-ranking:0.1.0a"
+    env_file: .env
+    ports:
+      - "8890:8890"
+    depends_on:
+      - cms-db
+  cms-web-admin:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-admin/Dockerfile
+    image: "mrzzy/cms-web-admin:0.1.0a"
+    ports:
+      - "8889:8889"
+    expose:
+      - "21100"
+    env_file: .env
+    depends_on:
+      - cms-db
+  cms-web-contest:
+    build: 
+      context: .
+      dockerfile: containers/cms-web-contest/Dockerfile
+    image: "mrzzy/cms-web-contest:0.1.0a"
+    ports:
+      - "8888:8888"
+    expose:
+      - "21000"
+    env_file: .env
+    depends_on:
+      - cms-db
+
+  # workers
+  cms-worker-1:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: "mrzzy/cms-worker:0.1.0a"
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=0
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-2:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: "mrzzy/cms-worker:0.1.0a"
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=1
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-3:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: "mrzzy/cms-worker:0.1.0a"
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=2
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-4:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: "mrzzy/cms-worker:0.1.0a"
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=3
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-5:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: "mrzzy/cms-worker:0.1.0a"
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=4
+    depends_on:
+      - cms-db
+    privileged: true
+  cms-worker-6:
+    build:
+      context: .
+      dockerfile: containers/cms-worker/Dockerfile
+    image: "mrzzy/cms-worker:0.1.0a"
+    expose:
+      - "26000"
+    env_file: .env
+    environment:
+      - CMS_WORKER_SHARD=5
+    depends_on:
+      - cms-db
+    privileged: true
+
+volumes:
+  db-data:
