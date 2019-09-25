@@ -1,0 +1,14 @@
+#
+# k8s-cms
+# Kubenetes Intergration
+#
+
+namespace: k8s-cms
+namePrefix: k8s-cms-
+commonLabels:
+  app: k8s-cms
+  version: 0.2.0a
+  release: rolling
+  envionment: dev
+
+resources:[]
