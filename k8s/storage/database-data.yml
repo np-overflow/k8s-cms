@@ -1,0 +1,16 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Database Data Storage
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cms-database-data-pvc
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  accessModes:
+    - ReadWriteOnce

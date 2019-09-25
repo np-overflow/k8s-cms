@@ -7,7 +7,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-cms-database
+  name: cms-database
   labels:
     app: k8s-cms
     component: database
@@ -47,5 +47,6 @@ spec:
             periodSeconds: 1
       volumes:
         - name: database-data
-          emptyDir: {}
-        
+          persistentVolumeClaim:
+            claimName:
+              database-data-pvc

@@ -16,3 +16,4 @@ resources:
   # database
   - deployments/database.yml
   - services/database.yml
+  - storage/database-data.yml
