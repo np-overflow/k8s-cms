@@ -1,0 +1,32 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+#
+
+namespace: k8s-cms
+commonLabels:
+  app: k8s-cms
+  version: 0.2.0a
+  release: rolling
+  envionment: dev
+
+configMapGenerator:
+  - name: cms-config-env
+    env: "config/config.env"
+  - name: cms-config
+    files:
+      - "config/cms.conf"
+      - "config/cms.ranking.conf"
+      - "config/nginx.conf"
+    
+secretGenerator:
+  - name: cms-secrets
+    env: ".env"
+
+resources:
+  - "k8s/namespace.yml"
+
+  # database
+  - "k8s/deployments/database.yml"
+  - "k8s/services/database.yml"
+  - "k8s/storage/database-data.yml"
