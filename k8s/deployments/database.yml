@@ -1,0 +1,47 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Database Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-cms-database
+  labels:
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: database
+  # database pod spec
+  template:
+    metadata:
+      labels:
+        component: database
+    spec:
+      containers:
+        - name: cms-db
+          image: mrzzy/cms-db:0.1.0a
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: CMS_DB
+              value: localhost
+          volumeMounts:
+            - name: database-data
+              mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            tcpSocket:
+              port: postgres
+            initialDelaySeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: postgres
+      volumes:
+        - name: database-data
+          emptyDir: {}
+        
