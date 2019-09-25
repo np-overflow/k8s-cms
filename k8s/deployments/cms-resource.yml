@@ -1,0 +1,29 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Resource Deployment
+#
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cms-resource
+  labels:
+    app: k8s-cms
+    component: resource
+spec:
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: resource
+    template:
+      metadata:
+        app: k8s-cms
+        component: resource
+      spec:
+        containers:
+          - name: cms-resource
+            image: mrzzy/cms-resource:0.1.0a
+            ports:
+              - name:
+        
