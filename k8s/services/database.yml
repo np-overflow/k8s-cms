@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Database Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-cms-database
+  labels:
+    app: k8s-cms
+    component: database
+spec:
+  type: ClusterIP
+  selector:
+    app: k8s-cms
+    component: database
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432

@@ -9,6 +9,7 @@ kind: Deployment
 metadata:
   name: k8s-cms-database
   labels:
+    app: k8s-cms
     component: database
 spec:
   replicas: 1
@@ -20,6 +21,7 @@ spec:
   template:
     metadata:
       labels:
+        app: k8s-cms
         component: database
     spec:
       containers:
@@ -35,12 +37,14 @@ spec:
             - name: database-data
               mountPath: /var/lib/postgresql/data
           livenessProbe:
-            tcpSocket:
-              port: postgres
+            exec:
+              command: [ "/usr/bin/pg_isready" ]
             initialDelaySeconds: 5
+            periodSeconds: 2
           readinessProbe:
-            tcpSocket:
-              port: postgres
+            exec:
+              command: [ "/usr/bin/pg_isready" ]
+            periodSeconds: 1
       volumes:
         - name: database-data
           emptyDir: {}
