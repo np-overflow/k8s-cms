@@ -49,4 +49,4 @@ spec:
         - name: database-data
           persistentVolumeClaim:
             claimName:
-              database-data-pvc
+              cms-database-data-pvc
