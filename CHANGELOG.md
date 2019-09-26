@@ -1,5 +1,15 @@
 # k8s-cms Changelog
 
+## Version 0.2.0 alpha - Unreleased
+### Added
+- database dependency - wait for database before starting
+- kubernetes support - write k8s deployment for YAMLs all these:
+    - Database :heavy_check_marK:
+
+### Changed
+- make cms docker images source cms configuration from /etc/
+- split singular env file to config.env for config, .env for secrets
+
 ## Version 0.1.0 alpha - 2019-09-21
 ### Added
 - docker containers for CMS services :heavy_check_mark:
