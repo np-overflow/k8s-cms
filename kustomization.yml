@@ -42,6 +42,10 @@ resources:
   # cms scoring service
   - "k8s/deployments/cms-scoring.yml"
   - "k8s/services/cms-scoring.yml"
+    
+  # cms evaluation service
+  - "k8s/deployments/cms-evaluation.yml"
+  - "k8s/services/cms-evaluation.yml"
 
 patchesStrategicMerge:
   - "k8s/config.yaml"

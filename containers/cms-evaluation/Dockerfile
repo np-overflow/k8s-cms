@@ -10,4 +10,4 @@ COPY config /cms/config
 
 # run ranking web server
 EXPOSE 25000
-CMD ./scripts/cmsEvaluationService
+CMD ./scripts/cmsEvaluationService 0

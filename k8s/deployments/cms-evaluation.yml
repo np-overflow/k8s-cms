@@ -1,0 +1,58 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Evaluation Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-evaluation
+  labels:
+    app: k8s-cms
+    component: evaluation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: evaluation
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: evaluation
+    spec:
+      containers:
+        - name: cms-evaluation
+          image: mrzzy/cms-evaluation
+          ports:
+            - name: cmseval
+              containerPort: 25000
+          envFrom:
+            - configMapRef:
+                name: cms-config-env
+            - secretRef:
+                name: cms-secrets
+          env:
+            # required to listen properly
+            - name: CMS_EVALUATION
+              value: "0.0.0.0"
+
+          livenessProbe:
+            tcpSocket:
+              port: cmseval
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmseval
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config
