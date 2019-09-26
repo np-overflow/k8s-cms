@@ -38,7 +38,10 @@ resources:
   # cms logging service
   - "k8s/deployments/cms-logging.yml"
   - "k8s/services/cms-logging.yml"
-
+   
+  # cms scoring service
+  - "k8s/deployments/cms-scoring.yml"
+  - "k8s/services/cms-scoring.yml"
 
 patchesStrategicMerge:
   - "k8s/config.yaml"

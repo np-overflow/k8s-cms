@@ -10,4 +10,4 @@ COPY config /cms/config
 
 # run scoring service
 EXPOSE 28500
-CMD ./scripts/cmsScoringService
+CMD ./scripts/cmsScoringService 0
