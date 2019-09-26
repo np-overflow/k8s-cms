@@ -30,3 +30,10 @@ resources:
   - "k8s/deployments/database.yml"
   - "k8s/services/database.yml"
   - "k8s/storage/database-data.yml"
+
+  # resourcecms.confs
+  - "k8s/deployments/cms-resource.yml"
+
+
+patchesStrategicMerge:
+  - "k8s/config.yaml"

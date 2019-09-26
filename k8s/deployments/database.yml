@@ -33,18 +33,20 @@ spec:
           env:
             - name: CMS_DB
               value: localhost
-          volumeMounts:
-            - name: database-data
-              mountPath: /var/lib/postgresql/data
+          
           livenessProbe:
             exec:
               command: [ "/usr/bin/pg_isready" ]
             initialDelaySeconds: 5
-            periodSeconds: 2
+            periodSeconds: 3
           readinessProbe:
             exec:
               command: [ "/usr/bin/pg_isready" ]
-            periodSeconds: 1
+            periodSeconds: 2
+
+          volumeMounts:
+            - name: database-data
+              mountPath: "/var/lib/postgresql/data"
       volumes:
         - name: database-data
           persistentVolumeClaim:

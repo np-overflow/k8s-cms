@@ -1,0 +1,13 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Configuration Overrides
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cms-config-env
+data:
+  CMS_CONFIG: "/config/cms.conf"
+  CMS_RANKING_CONFIG: "/config/cms.ranking.conf"
