@@ -26,29 +26,39 @@ spec:
     spec:
       containers:
         - name: cms-db
-          image: mrzzy/cms-db:0.1.0a
+          image: mrzzy/cms-db:0.2.0a
           ports:
             - name: postgres
               containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
           env:
             - name: CMS_DB
               value: localhost
           
           livenessProbe:
             exec:
-              command: [ "/usr/bin/pg_isready" ]
+              command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
             initialDelaySeconds: 5
             periodSeconds: 3
           readinessProbe:
             exec:
-              command: [ "/usr/bin/pg_isready" ]
+              command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
             periodSeconds: 2
 
           volumeMounts:
             - name: database-data
               mountPath: "/var/lib/postgresql/data"
+            - name: cms-config
+              mountPath: "/cms/config"
       volumes:
         - name: database-data
           persistentVolumeClaim:
             claimName:
               cms-database-data-pvc
+        - name: cms-config
+          configMap:
+            name: cms-config
