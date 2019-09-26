@@ -33,6 +33,7 @@ resources:
 
   # resourcecms.confs
   - "k8s/deployments/cms-resource.yml"
+  - "k8s/services/cms-resource.yml"
 
 
 patchesStrategicMerge:
