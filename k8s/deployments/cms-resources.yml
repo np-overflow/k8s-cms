@@ -1,26 +1,26 @@
 #
 # k8s-cms
 # Kubernetes Intergration
-# CMS Resource Deployment
+# CMS Resources Deployment
 #
 
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: cms-resource
+  name: cms-resources
   labels:
     app: k8s-cms
-    component: resource
+    component: resources
 spec:
   selector:
     matchLabels:
       app: k8s-cms
-      component: resource
+      component: resources
   template:
     metadata:
       labels:
         app: k8s-cms
-        component: resource
+        component: resources
     spec:
       containers:
         - name: cms-resource

@@ -31,9 +31,13 @@ resources:
   - "k8s/services/database.yml"
   - "k8s/storage/database-data.yml"
 
-  # resourcecms.confs
-  - "k8s/deployments/cms-resource.yml"
-  - "k8s/services/cms-resource.yml"
+  # cms resources service
+  - "k8s/deployments/cms-resources.yml"
+  - "k8s/services/cms-resources.yml"
+    
+  # cms logging service
+  - "k8s/deployments/cms-logging.yml"
+  - "k8s/services/cms-logging.yml"
 
 
 patchesStrategicMerge:

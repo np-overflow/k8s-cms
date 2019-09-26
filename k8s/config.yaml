@@ -10,3 +10,5 @@ metadata:
   name: cms-config-env
 data:
   CMS_DB: cms-database
+  CMS_LOG: cms-logging
+  CMS_RESOURCE: cms-resources

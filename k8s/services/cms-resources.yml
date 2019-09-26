@@ -1,21 +1,21 @@
 #
 # k8s-cms
 # Kubernetes Intergration
-# CMS Resource Service
+# CMS Resources Service
 #
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-resource
+  name: cms-resources
   labels:
     app: k8s-cms
-    component: resource
+    component: resources
 spec:
   type: ClusterIP
   selector:
     app: k8s-cms
-    component: resource
+    component: resources
   ports:
     - name: cmsres
       port: 28000
