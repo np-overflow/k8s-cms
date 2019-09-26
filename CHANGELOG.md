@@ -4,7 +4,8 @@
 ### Added
 - database dependency - wait for database before starting
 - kubernetes support - write k8s deployment for YAMLs all these:
-    - Database :heavy_check_marK:
+    - Database :heavy_check_mark:
+    - ResourceService :heavy_check_mark:
 
 ### Changed
 - make cms docker images source cms configuration from /etc/

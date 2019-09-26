@@ -34,6 +34,7 @@ spec:
             - secretRef:
                 name: cms-secrets
           env:
+            # required for container to listen
             - name: CMS_RESOURCE
               value: "0.0.0.0"
           livenessProbe:

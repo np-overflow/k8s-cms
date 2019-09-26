@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # configure user/groups
-RUN useradd --user-group --home-dir /project cmsuser
+RUN useradd --user-group --home-dir /home/cms cmsuser
 
 # install python dependencies
 RUN ln -s /usr/bin/python3 /usr/bin/python

@@ -33,10 +33,10 @@ $(DEP_BASE_IMAGES): $(BASE_IMAGE)
 
 # docker build rule
 $(TAG_PREFIX)/%: containers/%/Dockerfile $(CMS_SRC_DIR)
-	# versioned tag
-	$(DOCKER) build -f $< -t $@:$(VERSION) .
 	# latest tag
 	$(DOCKER) build -f $< -t $@ .
+	# versioned tag
+	$(DOCKER) tag $@ $@:$(VERSION) 
 
 # docker push rule
 push: $(PUSH_TARGETS)

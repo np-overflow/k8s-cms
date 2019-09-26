@@ -2,7 +2,6 @@
 
 ## Version 0.2.0 alpha
 - kubernetes support - write k8s deployment YAMLs all these:
-    - ResourceService
     - LogService
     - ScoringService
     - EvaluationService 
@@ -18,11 +17,8 @@
 
 - securing k8s-cms:
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
-    - write only filesystem for docker images
+    - read only filesystem for docker images
     - run all services as non root user.
-    - lock down cms-worker
-        - fine grained system capabilities for cms-worker
-        - limit filesystem permissions for cmsuser
 
 ## Version 0.3.0 alpha
 - cms-master 
