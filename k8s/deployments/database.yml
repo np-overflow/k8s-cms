@@ -42,7 +42,7 @@ spec:
           livenessProbe:
             exec:
               command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 3
           readinessProbe:
             exec:

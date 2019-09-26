@@ -25,14 +25,16 @@ RUN mkdir /cms
 COPY deps/cms/requirements.txt /cms/requirements.txt
 RUN pip3 install -r /cms/requirements.txt
 
-# setup source directory
+# setup cms source directory
 COPY deps/cms /cms
 COPY config /cms/config
 ENV PYTHONPATH=/cms
 RUN chmod -R a+x /cms/scripts
 RUN bash -c "cd /cms && python setup.py install"
 
+# copy scripts
 COPY containers/cms-base /scripts
+COPY deps/wait-for-it/wait-for-it.sh /scripts/wait-for-it.sh
 RUN chmod -R a+x /scripts
 
 # configure entrypoint script
