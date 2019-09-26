@@ -2,7 +2,7 @@
 
 ## Version 0.2.0 alpha
 - kubernetes support - write k8s deployment YAMLs all these:
-    - Database
+    - Database :heavy_check_marK:
     - ResourceService
     - LogService
     - ScoringService
