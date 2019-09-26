@@ -63,7 +63,6 @@ Guidelines for contributors:
 - proposed changes: `TODO.md`
 - project changelog: `CHANGELOG.md`
 
-
 Development setup for contributors:
 1. Resolve submodules after cloning;
 ```sh
@@ -76,5 +75,6 @@ nano .env # use your favourite editor
 ```
 3. Run the stack
 ```sh
-docker-compose up
+docker-compose up # use docker-compose 
+kubectl apply -k . # use kubernetes
 ```
