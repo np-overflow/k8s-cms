@@ -1,0 +1,59 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Logging Deployment
+#
+
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: cms-log
+  labels:
+    app: cms-log
+    component: logging
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cms-log
+      component: logging
+  template:
+    metadata:
+      labels:
+        app: cms-log
+        component: logging
+    spec:
+      containers:
+        - name: cms-log
+          image: mrzzy/cms-log
+          ports:
+            - name: cmslog
+              containerPort: 29000
+          envFrom:
+            - secretRef:
+                name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
+          env:
+            - name: CMS_LOG
+              value: "0.0.0.0"
+              
+          livenessProbe:
+            tcpSocket:
+              port: cmslog
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmslog
+            periodSeconds: 3
+     
+          
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config
