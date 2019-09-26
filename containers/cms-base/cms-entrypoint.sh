@@ -5,11 +5,16 @@ set -e
 # Docker Entrypoint
 #
 
+# determine path of configuration
+CMS_CONFIG=${CMS_CONFIG:-"/cms/config/cms.conf"}
+CMS_RANKING_CONFIG=${CMS_CONFIG:-"/cms/config/cms.conf"}
+
 # populates configuration with environment values
-for CONFIG_FILE in "$CMS_CONFIG" "$CMS_RANKING_CONFIG"
-do
-    envsubst < $CONFIG_FILE > /tmp/$(basename $CONFIG_FILE)
-    mv /tmp/$(basename $CONFIG_FILE) $CONFIG_FILE
-done
+envsubst < $CMS_CONFIG > "/etc/$(basename $CMS_CONFIG)"
+envsubst < $CMS_RANKING_CONFIG > "/etc/$(basename $CMS_RANKING_CONFIG)"
+
+# update env vars pointing to populated config path
+CMS_CONFIG="/etc/$(basename $CMS_CONFIG)"
+CMS_RANKING_CONFIG="/etc/$(basename $CMS_RANKING_CONFIG)"
 
 exec "$@"
