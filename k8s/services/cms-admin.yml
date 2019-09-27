@@ -1,22 +1,22 @@
 #
 # k8s-cms
 # Kubernetes Intergration
-# CMS Admin Web Interface Service
+# CMS Admin Service
 #
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-web-admin
+  name: cms-admin
   labels:
     app: k8s-cms
     component: admin
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: k8s-cms
     component: admin
   ports:
-    - name: http
-      port: 80
-      targetPort: 8889
+    - name: cmsadmin
+      port: 21100
+      targetPort: 21100

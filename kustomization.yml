@@ -53,12 +53,18 @@ resources:
     
   # cms web admin interface
   - "k8s/deployments/cms-web-admin.yml"
+  - "k8s/services/cms-admin.yml"
   - "k8s/services/cms-web-admin.yml"
 
-  # cms web printing interface
+  # cms printing service
   - "k8s/deployments/cms-printing.yml"
   - "k8s/services/cms-printing.yml"
 
+  # cms web ranking interface
+  - "k8s/deployments/cms-web-ranking.yml"
+  - "k8s/services/cms-ranking.yml"
+  - "k8s/services/cms-web-ranking.yml"
+
 
 patchesStrategicMerge:
-  - "k8s/config.yaml"
+  - "k8s/config.yml"

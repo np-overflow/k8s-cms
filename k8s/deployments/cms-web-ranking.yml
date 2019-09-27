@@ -1,57 +1,46 @@
 #
 # k8s-cms
 # Kubernetes Intergration
-# CMS Admin Web Interface Deployment
+# CMS Web Ranking Interface
 #
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cms-web-admin
+  name: cms-web-ranking
   labels:
     app: k8s-cms
-    component: admin
+    component: ranking
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: k8s-cms
-      component: admin
-  # web-admin pod spec
+      component: ranking
   template:
     metadata:
       labels:
         app: k8s-cms
-        component: admin
+        component: ranking
     spec:
       containers:
-        - name: cms-web-admin
-          image: mrzzy/cms-web-admin
+        - name: cms-web-ranking
+          image: mrzzy/cms-web-ranking
           ports:
-            # port used by admin service
-            - name: cmsadmin
-              containerPort: 21100
-            # port used to display the admin interface
-            - name: http
-              containerPort: 8889
+            - name: cmsrank
+              containerPort: 8890
           envFrom:
-            - secretRef:
-                name: cms-secrets
             - configMapRef:
                 name: cms-config-env
-          env:
-            # required for container to listen
-            - name: CMS_ADMIN
-              value: "0.0.0.0"
-          
+            - secretRef:
+                name: cms-secrets
           livenessProbe:
             httpGet:
-              port: http
+              port: cmsrank
             initialDelaySeconds: 10
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              port: http
+              port: cmsrank
             periodSeconds: 3
 
           volumeMounts:
