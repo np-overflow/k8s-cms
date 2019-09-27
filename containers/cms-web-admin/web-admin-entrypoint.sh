@@ -8,4 +8,4 @@
 python3 ./cmscontrib/AddAdmin.py -p "$CMS_ADMIN_PASSWORD" "$CMS_ADMIN_USER"
 
 # run admin web server
-exec ./scripts/cmsAdminWebServer 
+exec ./scripts/cmsAdminWebServer 0

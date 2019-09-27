@@ -50,6 +50,10 @@ resources:
   # cms proxy service  
   - "k8s/deployments/cms-proxy.yml"
   - "k8s/services/cms-proxy.yml"
+    
+  # cms web admin interfadce
+  - "k8s/deployments/cms-web-admin.yml"
+  - "k8s/services/cms-web-admin.yml"
 
 patchesStrategicMerge:
   - "k8s/config.yaml"
