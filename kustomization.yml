@@ -65,6 +65,10 @@ resources:
   - "k8s/services/cms-ranking.yml"
   - "k8s/services/cms-web-ranking.yml"
 
+  # cms checking service
+  - "k8s/deployments/cms-checker.yml"
+  - "k8s/services/cms-checker.yml"
+
 
 patchesStrategicMerge:
   - "k8s/config.yml"
