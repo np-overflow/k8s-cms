@@ -1,0 +1,63 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Contest Web Interface Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-web-contest
+  labels:
+    app: k8s-cms
+    component: contest
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: contest
+  # web-contest pod spec
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: contest
+    spec:
+      containers:
+        - name: cms-web-contest
+          image: mrzzy/cms-web-contest
+          ports:
+            # port used by contest service
+            - name: cmscontest
+              containerPort: 21000
+            # port used to display the contest interface
+            - name: http
+              containerPort: 8888
+          envFrom:
+            - secretRef:
+                name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
+          env:
+            # required for container to listen
+            - name: CMS_CONTEST
+              value: "0.0.0.0"
+          
+          livenessProbe:
+            httpGet:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: http
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config

@@ -12,6 +12,6 @@ data:
   CMS_DB: cms-database
   CMS_LOG: cms-logging
   CMS_RESOURCE: cms-resources
-  
   CMS_ADMIN: cms-admin
   CMS_RANKING: cms-ranking
+  CMS_CONTEST: cms-contest

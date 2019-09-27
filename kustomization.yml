@@ -69,6 +69,10 @@ resources:
   - "k8s/deployments/cms-checker.yml"
   - "k8s/services/cms-checker.yml"
 
+  # cms web contest interface
+  - "k8s/deployments/cms-web-contest.yml"
+  - "k8s/services/cms-contest.yml"
+  - "k8s/services/cms-web-contest.yml"
 
 patchesStrategicMerge:
   - "k8s/config.yml"
