@@ -51,9 +51,14 @@ resources:
   - "k8s/deployments/cms-proxy.yml"
   - "k8s/services/cms-proxy.yml"
     
-  # cms web admin interfadce
+  # cms web admin interface
   - "k8s/deployments/cms-web-admin.yml"
   - "k8s/services/cms-web-admin.yml"
+
+  # cms web printing interface
+  - "k8s/deployments/cms-printing.yml"
+  - "k8s/services/cms-printing.yml"
+
 
 patchesStrategicMerge:
   - "k8s/config.yaml"

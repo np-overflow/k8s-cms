@@ -1,0 +1,56 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Printing Deployment 
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-printing
+  labels:
+    app: k8s-cms
+    component: printing
+spec:
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: printing
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: printing
+    spec:
+      containers:
+        - name: cms-printing
+          image: mrzzy/cms-printing
+          ports:
+            - name: cmsprint
+              containerPort: 25123
+          envFrom:
+            - configMapRef:
+                name: cms-config-env
+            - secretRef:
+                name: cms-secrets
+          env:
+            # required for container to listen
+            - name: CMS_PRINTING
+              value: "0.0.0.0"
+          livenessProbe:
+            tcpSocket:
+              port: cmsprint
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmsprint
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config
