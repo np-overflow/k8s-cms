@@ -1,47 +1,57 @@
 #
 # k8s-cms
 # Kubernetes Intergration
-# CMS Web Ranking Interface
+# CMS Contest Web Interface Deployment
 #
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cms-web-ranking
+  name: cms-web-contest
   labels:
     app: k8s-cms
-    component: ranking
+    component: contest
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: k8s-cms
-      component: ranking
+      component: contest
+  # web-contest pod spec
   template:
     metadata:
       labels:
         app: k8s-cms
-        component: ranking
+        component: contest
     spec:
       containers:
-        - name: cms-web-ranking
-          image: mrzzy/cms-web-ranking
+        - name: cms-web-contest
+          image: mrzzy/cms-web-contest
           ports:
-            - name: cmsrank
-              containerPort: 8890
+            # port used by contest service
+            - name: cmscontest
+              containerPort: 21000
+            # port used to display the contest interface
+            - name: http
+              containerPort: 8888
           envFrom:
-            - configMapRef:
-                name: cms-config-env
             - secretRef:
                 name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
+          env:
+            # required for container to listen
+            - name: CMS_CONTEST
+              value: "0.0.0.0"
+          
           livenessProbe:
             httpGet:
-              port: cmsrank
+              port: http
             initialDelaySeconds: 10
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              port: cmsrank
+              port: http
             periodSeconds: 3
 
           volumeMounts:
