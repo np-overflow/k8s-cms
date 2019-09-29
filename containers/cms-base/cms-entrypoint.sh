@@ -18,7 +18,10 @@ export CMS_RANKING_CONFIG="/etc/$(basename $CMS_RANKING_CONFIG)"
 
 # database dependency check: wait for database to start
 CMS_DB=${CMS_DB:-"localhost"}
-/scripts/wait-for-it.sh -t 10 -h $CMS_DB -p 5432
+if [ "$CMS_DB" != "localhost" ]
+then
+    /scripts/wait-for-it.sh -t 10 -h $CMS_DB -p 5432
+fi
 
 # lose root privileges
 su cmsuser

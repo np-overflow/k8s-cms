@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     openjdk-8-jdk-headless \   
     fp-compiler \
-    cppreference-doc-en-html \
     cgroup-lite zip \
     php7.2-cli php7.2-fpm \
     texlive-latex-base a2ps \

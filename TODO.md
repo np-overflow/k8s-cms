@@ -2,18 +2,7 @@
 
 ## Version 0.2.0 alpha
 - kubernetes support - write k8s deployment YAMLs all these:
-    - LogService
-    - ScoringService
-    - EvaluationService 
-    - ProxyService
-    - PrintingService
-    - AdminWebServer
-    - RankingWebServer
-    - Checker
-    - ContestWebServer
-    - Worker - requires language support
-        - C C++ Java Pascal Python with zip executable PHP Rust C# 
-        - readiness probe becomes not ready when the node is working.
+    - Ingress service to combine ranking, contest and admin web servers.
 
 - securing k8s-cms:
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
@@ -40,3 +29,5 @@
     - contests can be obtained from DB via `get_contest_list()`
     - make `cms-proxy` run without an active contest
     - spawn multiple `cms-proxy` to serve multiple contests
+
+- printing support.

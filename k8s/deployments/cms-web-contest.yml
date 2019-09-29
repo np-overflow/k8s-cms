@@ -12,7 +12,7 @@ metadata:
     app: k8s-cms
     component: contest
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: k8s-cms

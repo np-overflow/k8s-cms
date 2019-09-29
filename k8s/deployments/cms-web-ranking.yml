@@ -12,6 +12,7 @@ metadata:
     app: k8s-cms
     component: ranking
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: k8s-cms
