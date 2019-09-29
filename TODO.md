@@ -1,13 +1,6 @@
 # k8s-cms Roadmap
 
 ## Version 0.2.0 alpha
-- kubernetes support - write k8s deployment YAMLs all these:
-    - Ingress service to combine ranking, contest and admin web servers.
-
-- securing k8s-cms:
-    - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
-    - read only filesystem for docker images
-    - run all services as non root user.
 
 ## Version 0.3.0 alpha
 - cms-master 
@@ -23,6 +16,11 @@
     - regenerate `cms.conf` using kubernetes deployment/docker-compose file.
     - restart `Checker` and `EvaluationService` to load rescaled workers
     - lightweight version of `cms-worker` with limited language support.
+
+- securing k8s-cms:
+    - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
+    - read only filesystem for docker images
+
 
 ## Future Releases
 - multiple contests support

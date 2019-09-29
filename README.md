@@ -3,31 +3,42 @@ Make deploying [CMS](https://github.com/cms-dev/cms) great again.
 
 ## Intro
 The Contest Managment System (CMS) is a great open source platform to host programming contests. 
-However deploying it is also really hard.
 
-By adapting CMS to be deployed using `kubernetes`, k8s-cms can make deploying 
-CMS simple as:
-```
-kubectl apply -f https://raw.github.com.... TODO
-```
+Adopting CMS to run on kubernetes brings the following benefits:
+- significantly simplifies the deployment process
+- adds fault tolerance through automatic health checks and self recovery
+- scales to larger contests:
+    - supports running up to 24 workers
+    - supports running multiple contest web servers
 
-## Setup
+## Deploy
 
-### Single Machine with Docker-Compose
-Setups CMS on a single machine. Suitable for testing.
-- Only requires `docker` and `docker-compose`. No kubernetes required.
-1. Fill `env` file with secrets
+Common instructions:
+1. Clone or Download the repository
+2. Fill `env` file with credentials
 ```sh
-curl https://raw.githubusercontent.com/np-overflow/k8s-cms/master/env -o env
 cp env .env
 nano .env # use your favourite editor
 ```
-2. Run CMS on a single machine with `docker-compose`:
+
+### Kubernetes Cluster
+Runs CMS on Kubernetes cluster. Suitable for hosting actual contests:
+- Requires Kubernetes Cluster with the following:
+    - preconfigured default storage class (check with `kubectl get sc`)
+    - ingress controller optional for ingress support.
 ```sh
-curl https://raw.githubusercontent.com/np-overflow/k8s-cms/master/docker-compose.yml -o docker-compose.yaml
+kubectl apply -k .
+```
+
+### Docker-Compose
+Runs CMS on a single machine. Suitable for testing:
+- Only requires `docker` and `docker-compose`. No kubernetes required.
+- Limited to only 2 workers.
+```sh
 docker-compose pull 
 docker-compose up 
 ```
+
 ## Design
 Each CMS service to containerized by its own docker container:
 - Database - Deploy using Postgres SQL container `cms-db`
@@ -51,6 +62,7 @@ Each CMS service to containerized by its own docker container:
 Security Measures:
 - internal service communicate on a virtual network are inaccessable to participants.
 - Secrets are injected into the containers as environment variables via `.env` file.
+- All services (except database) run as an unprivilleged user.
 
 Security Concerns:
 - `cms-worker` runs as a privileged container as the `isolate` sandbox requires 
@@ -81,6 +93,6 @@ nano .env # use your favourite editor
 ```
 3. Run the stack
 ```sh
-docker-compose up # use docker-compose 
+docker-compose up # use docker-compose OR
 kubectl apply -k . # use kubernetes
 ```
