@@ -17,7 +17,7 @@ services:
       - ".env"
       - "config/config.env"
     environment:
-      - CMS_DB=localhost
+      - CMS_DB=0.0.0.0
     volumes:
       - db-data:/var/lib/postgresql/data
 
