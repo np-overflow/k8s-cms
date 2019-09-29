@@ -53,10 +53,11 @@ Making k8s-cms secure:
 - Secrets are injected into the containers as environment variables via `.env` file.
 
 ### Limitations
-What does not work:
+Limitations:
 - multiple contests - only supports running one contest at a time
 - printing - hooking up printers to print stuff has not been implemented yet.
 - importing contests - importing contests has not been  implmemented yet.
+- scaling more than 24 instances - only supports scaling up to  24 worker instances
 
 ## Contributing
 Guidelines for contributors:
