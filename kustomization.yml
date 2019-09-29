@@ -7,7 +7,7 @@ namespace: k8s-cms
 commonLabels:
   app: k8s-cms
   version: 0.2.0a
-  release: rolling
+  release: alpha
   envionment: dev
 
 configMapGenerator:
