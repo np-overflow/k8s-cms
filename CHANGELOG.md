@@ -2,10 +2,20 @@
 
 ## Version 0.2.0 alpha - Unreleased
 ### Added
-- database dependency - wait for database before starting
+- database dependency - wait for database before starting CMS services
 - kubernetes support - write k8s deployment for YAMLs all these:
     - Database :heavy_check_mark:
     - ResourceService :heavy_check_mark:
+    - LogService :heavy_check_mark:
+    - ScoringService :heavy_check_mark:
+    - EvaluationService :heavy_check_mark:
+    - ProxyService :heavy_check_mark:
+    - AdminWebServer :heavy_check_mark:
+    - PrintingService :heavy_check_mark:
+    - RankingWebServer :heavy_check_mark:
+    - Checker :heavy_check_mark:
+    - ContestWebServer :heavy_check_mark:
+    - Worker  :heavy_check_mark:
 
 ### Changed
 - make cms docker images source cms configuration from /etc/
