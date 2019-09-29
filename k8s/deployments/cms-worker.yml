@@ -28,7 +28,6 @@ spec:
       containers:
         - name: cms-worker
           image: mrzzy/cms-worker
-          imagePullPolicy: IfNotPresent
           ports:
             - name: cmswork
               containerPort: 26000

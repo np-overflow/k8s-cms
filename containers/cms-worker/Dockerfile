@@ -29,7 +29,7 @@ RUN rm -rf /cms/isolate/*.o /cms/isolate/isolate
 
 # copy container source
 COPY containers/cms-worker /scripts
-RUN chmod -R u+x /scripts
+RUN chmod -R a+x /scripts
 
 # copy config
 COPY config /cms/config

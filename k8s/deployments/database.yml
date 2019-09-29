@@ -37,7 +37,7 @@ spec:
                 name: cms-config-env
           env:
             - name: CMS_DB
-              value: localhost
+              value: "0.0.0.0"
           
           livenessProbe:
             exec:

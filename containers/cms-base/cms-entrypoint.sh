@@ -16,13 +16,15 @@ envsubst < $CMS_RANKING_CONFIG > "/etc/$(basename $CMS_RANKING_CONFIG)"
 export CMS_CONFIG="/etc/$(basename $CMS_CONFIG)"
 export CMS_RANKING_CONFIG="/etc/$(basename $CMS_RANKING_CONFIG)"
 
-# database dependency check: wait for database to start
-CMS_DB=${CMS_DB:-"localhost"}
-if [ "$CMS_DB" != "localhost" ]
+CMS_DB=${CMS_DB:-"0.0.0.0"}
+if [ "$CMS_DB" != "0.0.0.0" ] # check if not running as database
 then
+    # database dependency check: wait for database to start
     /scripts/wait-for-it.sh -t 10 -h $CMS_DB -p 5432
-fi
 
-# lose root privileges
-su cmsuser
-exec "$@"
+    # lose root privilege to tighten security
+    exec su --preserve-environment -c "$@" cmsuser
+else
+    # database requires root permissions
+    exec "$@"
+fi
