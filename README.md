@@ -48,9 +48,13 @@ Each CMS service to containerized by its own docker container:
 >  and is used a a base to build the other services
 
 ### Security
-Making k8s-cms secure:
+Security Measures:
 - internal service communicate on a virtual network are inaccessable to participants.
 - Secrets are injected into the containers as environment variables via `.env` file.
+
+Security Concerns:
+- `cms-worker` runs as a privileged container as the `isolate` sandbox requires 
+    privileged access to the system.
 
 ### Limitations
 Limitations:
@@ -58,6 +62,7 @@ Limitations:
 - printing - hooking up printers to print stuff has not been implemented yet.
 - importing contests - importing contests has not been  implmemented yet.
 - scaling more than 24 instances - only supports scaling up to  24 worker instances
+- requires the cluster (`kube-apiserver` and `kubelet`) to support privileged containers
 
 ## Contributing
 Guidelines for contributors:
