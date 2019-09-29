@@ -4,7 +4,7 @@
 # 
 
 # vars
-VERSION:=0.2.0a
+VERSION:=0.1.0a
 
 DOCKER:=docker
 TAG_PREFIX:=mrzzy
@@ -22,7 +22,7 @@ DEP_BASE_IMAGES:=$(foreach img,$(DEP_BASE_NAMES),$(TAG_PREFIX)/$(img))
 PUSH_TARGETS:=$(foreach img,$(IMAGES),push/$(img))
 
 # phony rules
-.PHONY: all push
+.PHONY: all push clean clean-version
 .DEFAULT: all 
 
 all: $(DEP_BASE_IMAGES)
@@ -43,3 +43,13 @@ push: $(PUSH_TARGETS)
 
 push/%: %
 	docker push $<
+
+
+# cleans docker images
+# clean all docker images
+clean: clean-version
+	$(foreach img,$(IMAGES),docker rmi -f $(img);)
+
+# clean versioned docker images
+clean-version:
+	$(foreach img,$(IMAGES),docker rmi -f $(img):$(VERSION);)
