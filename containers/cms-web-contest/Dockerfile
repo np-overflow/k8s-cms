@@ -7,7 +7,7 @@ FROM mrzzy/cms-base
 
 # copy container source
 COPY containers/cms-web-contest /scripts
-RUN chmod -R u+x /scripts
+RUN chmod -R a+x /scripts
 
 # copy config
 COPY config /cms/config
