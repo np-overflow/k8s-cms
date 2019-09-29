@@ -1,0 +1,64 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Database Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-database
+  labels:
+    app: k8s-cms
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: database
+  # database pod spec
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: database
+    spec:
+      containers:
+        - name: cms-db
+          image: mrzzy/cms-db:0.2.0a
+          ports:
+            - name: postgres
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
+          env:
+            - name: CMS_DB
+              value: "0.0.0.0"
+          
+          livenessProbe:
+            exec:
+              command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
+            initialDelaySeconds: 6
+            periodSeconds: 3
+          readinessProbe:
+            exec:
+              command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
+            periodSeconds: 2
+
+          volumeMounts:
+            - name: database-data
+              mountPath: "/var/lib/postgresql/data"
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: database-data
+          persistentVolumeClaim:
+            claimName:
+              cms-database-data-pvc
+        - name: cms-config
+          configMap:
+            name: cms-config

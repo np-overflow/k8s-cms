@@ -1,0 +1,53 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Web Ranking Interface
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-web-ranking
+  labels:
+    app: k8s-cms
+    component: ranking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: ranking
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: ranking
+    spec:
+      containers:
+        - name: cms-web-ranking
+          image: mrzzy/cms-web-ranking:0.2.0a
+          ports:
+            - name: cmsrank
+              containerPort: 8890
+          envFrom:
+            - configMapRef:
+                name: cms-config-env
+            - secretRef:
+                name: cms-secrets
+          livenessProbe:
+            httpGet:
+              port: cmsrank
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: cmsrank
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config

@@ -3,11 +3,11 @@
 # Evaluation Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.0a
 
 # copy config
 COPY config /cms/config
 
 # run ranking web server
 EXPOSE 25000
-CMD ./scripts/cmsEvaluationService
+CMD ./scripts/cmsEvaluationService 0

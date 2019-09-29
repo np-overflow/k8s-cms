@@ -1,5 +1,30 @@
 # k8s-cms Changelog
 
+## Version 0.2.0 alpha
+### Added
+- database dependency - wait for database before starting CMS services
+- kubernetes support - write k8s deployment for YAMLs all these:
+    - Database :heavy_check_mark:
+    - ResourceService :heavy_check_mark:
+    - LogService :heavy_check_mark:
+    - ScoringService :heavy_check_mark:
+    - EvaluationService :heavy_check_mark:
+    - ProxyService :heavy_check_mark:
+    - AdminWebServer :heavy_check_mark:
+    - PrintingService :heavy_check_mark:
+    - RankingWebServer :heavy_check_mark:
+    - Checker :heavy_check_mark:
+    - ContestWebServer :heavy_check_mark:
+    - Worker  :heavy_check_mark:
+    - Ingress service to combine ranking, contest and admin web servers.
+
+### Changed
+- make cms docker images source cms configuration from /etc/
+- split singular env file to config.env for config, .env for secrets
+
+- securing k8s-cms:
+    - run all (except db) services as non root user.
+
 ## Version 0.1.0 alpha - 2019-09-21
 ### Added
 - docker containers for CMS services :heavy_check_mark:

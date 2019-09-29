@@ -1,0 +1,58 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Scoring Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-scoring
+  labels:
+    app: k8s-cms
+    component: scoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: scoring
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: scoring
+    spec:
+      containers:
+        - name: cms-scoring
+          image: mrzzy/cms-scoring:0.2.0a
+          ports:
+            - name: cmsscore
+              containerPort: 28500
+          envFrom:
+            - configMapRef:
+                name: cms-config-env
+            - secretRef:
+                name: cms-secrets
+          env:
+            # required to listen properly
+            - name: CMS_SCORING
+              value: "0.0.0.0"
+
+          livenessProbe:
+            tcpSocket:
+              port: cmsscore
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmsscore
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config

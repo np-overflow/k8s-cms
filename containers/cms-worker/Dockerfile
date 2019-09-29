@@ -3,7 +3,7 @@
 # Worker Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.0a
 
 ## install packages for language support
 # no user interaction.
@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     openjdk-8-jdk-headless \   
     fp-compiler \
-    cppreference-doc-en-html \
     cgroup-lite zip \
     php7.2-cli php7.2-fpm \
     texlive-latex-base a2ps \
@@ -30,7 +29,7 @@ RUN rm -rf /cms/isolate/*.o /cms/isolate/isolate
 
 # copy container source
 COPY containers/cms-worker /scripts
-RUN chmod -R u+x /scripts
+RUN chmod -R a+x /scripts
 
 # copy config
 COPY config /cms/config

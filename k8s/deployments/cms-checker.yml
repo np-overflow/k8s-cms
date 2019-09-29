@@ -1,0 +1,61 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Checker Service
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-checker
+  labels:
+    app: k8s-cms
+    component: checker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: checker
+  # checker pod spec
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: checker
+    spec:
+      containers:
+        - name: cms-checker
+          image: mrzzy/cms-checker:0.2.0a
+          ports:
+            # port used by admin service
+            - name: cmscheck
+              containerPort: 22000
+            # port used to displa          
+          envFrom:
+            - secretRef:
+                name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
+          env:
+            # required for container to listen
+            - name: CMS_CHECKER
+              value: "0.0.0.0"
+          
+          livenessProbe:
+            tcpSocket:
+              port: cmscheck
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmscheck
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config

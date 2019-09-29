@@ -3,11 +3,11 @@
 # Contest Web Server Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.0a
 
 # copy container source
 COPY containers/cms-web-contest /scripts
-RUN chmod -R u+x /scripts
+RUN chmod -R a+x /scripts
 
 # copy config
 COPY config /cms/config

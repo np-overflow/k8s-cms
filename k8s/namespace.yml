@@ -1,0 +1,10 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Namespace
+#
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-cms

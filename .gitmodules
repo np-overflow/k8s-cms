@@ -4,3 +4,6 @@
 [submodule "deps/con_test"]
 	path = deps/con_test
 	url = https://github.com/cms-dev/con_test.git
+[submodule "deps/wait-for-it"]
+	path = deps/wait-for-it
+	url = https://github.com/vishnubob/wait-for-it.git

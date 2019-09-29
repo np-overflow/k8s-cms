@@ -1,0 +1,56 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Proxy Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-proxy
+  labels:
+    app: k8s-cms
+    component: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: proxy
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: proxy
+    spec:
+      containers:
+        - name: cms-proxy
+          image: mrzzy/cms-proxy:0.2.0a
+          ports:
+            - name: cmsproxy
+              containerPort: 28600
+          envFrom:
+            - configMapRef:
+                name: cms-config-env
+            - secretRef:
+                name: cms-secrets
+          env:
+            # required to listen properly
+            - name: CMS_PROXY
+              value: "0.0.0.0"
+
+          livenessProbe:
+            exec:
+              command: [ "/bin/cat", "/tmp/is-healthy" ]
+          readinessProbe:
+            tcpSocket:
+              port: cmsproxy
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config

@@ -1,0 +1,56 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Resources Deployment
+#
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cms-resources
+  labels:
+    app: k8s-cms
+    component: resources
+spec:
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: resources
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: resources
+    spec:
+      containers:
+        - name: cms-resource
+          image: mrzzy/cms-resource:0.2.0a
+          ports:
+            - name: cmsres
+              containerPort: 28000
+          envFrom:
+            - configMapRef:
+                name: cms-config-env
+            - secretRef:
+                name: cms-secrets
+          env:
+            # required for container to listen
+            - name: CMS_RESOURCE
+              value: "0.0.0.0"
+          livenessProbe:
+            tcpSocket:
+              port: cmsres
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmsres
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config

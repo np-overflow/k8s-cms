@@ -1,0 +1,63 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Admin Web Interface Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-web-admin
+  labels:
+    app: k8s-cms
+    component: admin
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-cms
+      component: admin
+  # web-admin pod spec
+  template:
+    metadata:
+      labels:
+        app: k8s-cms
+        component: admin
+    spec:
+      containers:
+        - name: cms-web-admin
+          image: mrzzy/cms-web-admin:0.2.0a
+          ports:
+            # port used by admin service
+            - name: cmsadmin
+              containerPort: 21100
+            # port used to display the admin interface
+            - name: http
+              containerPort: 8889
+          envFrom:
+            - secretRef:
+                name: cms-secrets
+            - configMapRef:
+                name: cms-config-env
+          env:
+            # required for container to listen
+            - name: CMS_ADMIN
+              value: "0.0.0.0"
+          
+          livenessProbe:
+            httpGet:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: http
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: cms-config
+              mountPath: "/cms/config"
+      volumes:
+        - name: cms-config
+          configMap:
+            name: cms-config
