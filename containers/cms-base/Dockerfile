@@ -31,8 +31,6 @@ ENV PYTHONPATH=/cms
 RUN chmod -R a+x /cms/scripts
 RUN bash -c "cd /cms && python setup.py install"
 
-COPY config /cms/config
-
 # copy scripts
 COPY containers/cms-base /scripts
 COPY deps/wait-for-it/wait-for-it.sh /scripts/wait-for-it.sh
