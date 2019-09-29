@@ -80,5 +80,8 @@ resources:
   # worker configmap
   - "k8s/config-worker.yml"
 
+  # ingress
+  - "k8s/ingress.yml"
+
 patchesStrategicMerge:
   - "k8s/config-env.yml"
