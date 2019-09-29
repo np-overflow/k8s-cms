@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: cms-web-ranking
-          image: mrzzy/cms-web-ranking
+          image: mrzzy/cms-web-ranking:0.2.0a
           ports:
             - name: cmsrank
               containerPort: 8890

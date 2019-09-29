@@ -3,7 +3,7 @@
 # Proxy Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.0a
 
 # copy container source
 COPY containers/cms-proxy /scripts

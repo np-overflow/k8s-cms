@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: cms-web-contest
-          image: mrzzy/cms-web-contest
+          image: mrzzy/cms-web-contest:0.2.0a
           ports:
             # port used by contest service
             - name: cmscontest

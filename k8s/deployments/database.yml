@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: cms-db
-          image: mrzzy/cms-db
+          image: mrzzy/cms-db:0.2.0a
           ports:
             - name: postgres
               containerPort: 5432

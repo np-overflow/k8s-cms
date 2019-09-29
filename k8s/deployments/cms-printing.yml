@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: cms-printing
-          image: mrzzy/cms-printing
+          image: mrzzy/cms-printing:0.2.0a
           ports:
             - name: cmsprint
               containerPort: 25123
