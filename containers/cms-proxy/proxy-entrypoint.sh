@@ -5,6 +5,12 @@ set -e
 # Proxy Service Entrypoint
 #
 
+# determine if we are execing a command or proxyservice proper
+if [ "$@" != "cmsProxyService" ]
+then
+    exec $@
+fi
+
 # figure out the contest id that this proxy service targets.
 CONTEST_ID=${CMS_CONTEST_ID:-"DEFAULT"}
 POLL_INTERVAL=${CMS_POLL_INTERVAL:-"15"}
@@ -27,7 +33,7 @@ then
         sleep $POLL_INTERVAL
     done
 else
-    exec ./scripts/cmsProxyService --contest-id $CONTEST_ID 0
+    exec /cms//scripts/cmsProxyService --contest-id $CONTEST_ID 0
 fi
 
 rm /tmp/is-healthy 
