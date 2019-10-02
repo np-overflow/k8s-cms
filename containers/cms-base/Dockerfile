@@ -29,20 +29,20 @@ RUN pip3 install -r /cms/requirements.txt
 COPY deps/cms /cms
 ENV PYTHONPATH=/cms
 RUN chown -R cmsuser /cms
-RUN chmod -R a+x /cms/scripts
+RUN chmod -R u+x /cms/scripts/
 RUN bash -c "cd /cms && python setup.py install"
 
-
 # copy scripts
-COPY containers/cms-base /scripts
-COPY deps/wait-for-it/wait-for-it.sh /scripts/wait-for-it.sh
-RUN chmod -R a+x /scripts
+RUN mkdir /scripts
+COPY containers/cms-base/cms-entrypoint.sh /scripts/
+COPY deps/wait-for-it/wait-for-it.sh /scripts/
+RUN chmod -R u+x /scripts
 
 # copy cms config
 COPY config /cms/config
 
 # configure entrypoint script
-ENTRYPOINT ["/scripts/cms-entrypoint.sh"]
 ENV HOME /cms
 WORKDIR /cms
+ENTRYPOINT ["/scripts/cms-entrypoint.sh"]
 CMD bash
