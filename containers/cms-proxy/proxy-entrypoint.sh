@@ -33,7 +33,7 @@ then
         sleep $POLL_INTERVAL
     done
 else
-    exec /cms//scripts/cmsProxyService --contest-id $CONTEST_ID 0
+    exec /cms/scripts/cmsProxyService --contest-id $CONTEST_ID 0
 fi
 
 rm /tmp/is-healthy 
