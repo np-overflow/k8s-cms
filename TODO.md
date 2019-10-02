@@ -1,8 +1,11 @@
 # k8s-cms Roadmap
 ## Version 0.2.1 alpha
+### Added
 - securing k8s-cms:
 	- expose only required secrets instead of using env from exposing everything
-	- readonly filesystem
+
+### Todo
+- securing k8s-cms:
     - tighten cluster security using RBAC
         - with service accounts and role bindings
         - assign read only for secrets permissions to service accounts
