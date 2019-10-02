@@ -4,7 +4,6 @@
 # Web Admin Entrypoint
 #
 
-
 # determine if we are execing a command or web admin server proper
 if [ "$@" != "cmsAdminWebServer" ]
 then
