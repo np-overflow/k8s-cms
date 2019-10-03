@@ -32,9 +32,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: cms-config-env
-            - secretRef:
-                name: cms-secrets
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required to listen properly
             - name: CMS_PROXY
               value: "0.0.0.0"

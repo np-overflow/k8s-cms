@@ -32,13 +32,15 @@ spec:
           envFrom:
             - configMapRef:
                 name: cms-config-env
-            - secretRef:
-                name: cms-secrets
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required to listen properly
             - name: CMS_EVALUATION
               value: "0.0.0.0"
-
           livenessProbe:
             tcpSocket:
               port: cmseval

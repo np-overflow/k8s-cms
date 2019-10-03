@@ -35,11 +35,14 @@ spec:
             - name: http
               containerPort: 8888
           envFrom:
-            - secretRef:
-                name: cms-secrets
             - configMapRef:
                 name: cms-config-env
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_CONTEST
               value: "0.0.0.0"
