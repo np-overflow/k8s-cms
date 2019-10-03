@@ -21,10 +21,14 @@ if [ "$CMS_DB" != "0.0.0.0" ] # check if not running as database
 then
     # database dependency check: wait for database to start
     CMS_DB_WAIT=${CMS_DB_WAIT:-"30"} # how long to wait for the database
-    /scripts/wait-for-it.sh -t $CMS_DB_WAIT -h $CMS_DB -p 5432
-
-    # lose root privilege to tighten security
-    exec su --preserve-environment -c "$@" cmsuser
+    if /scripts/wait-for-it.sh -t $CMS_DB_WAIT -h $CMS_DB -p 5432
+    then
+        # lose root privilege to tighten security
+        exec su --preserve-environment -c "$@" cmsuser 
+    else
+        # could not extablish database connection in time
+        exit 1
+    fi
 else
     # database requires root permissions
     exec "$@"
