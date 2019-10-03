@@ -32,8 +32,18 @@ spec:
           envFrom:
             - configMapRef:
                 name: cms-config-env
-            - secretRef:
-                name: cms-secrets
+          env:
+            # inject ranking credentials
+            - name: CMS_RANKING_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_RANKING_USER
+            - name: CMS_RANKING_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_RANKING_PASSWORD
           livenessProbe:
             httpGet:
               port: cmsrank

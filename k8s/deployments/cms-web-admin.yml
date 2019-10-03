@@ -35,15 +35,28 @@ spec:
             - name: http
               containerPort: 8889
           envFrom:
-            - secretRef:
-                name: cms-secrets
             - configMapRef:
                 name: cms-config-env
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_ADMIN
               value: "0.0.0.0"
-          
+            # inject credentials for admin web server
+            - name: CMS_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_ADMIN_USER
+            - name: CMS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_ADMIN_PASSWORD
           livenessProbe:
             httpGet:
               port: http

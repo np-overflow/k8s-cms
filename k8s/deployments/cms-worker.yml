@@ -36,9 +36,12 @@ spec:
                 name: cms-config-env
             - configMapRef:
                 name: cms-config-worker-env
-            - secretRef:
-                name: cms-secrets
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_RESOURCE
               value: "0.0.0.0"
