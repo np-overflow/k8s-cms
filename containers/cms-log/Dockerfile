@@ -10,4 +10,4 @@ COPY config /cms/config
 
 # run log service
 EXPOSE 29000
-CMD ./scripts/cmsLogService 0
+CMD [ "./scripts/cmsLogService", "0" ]

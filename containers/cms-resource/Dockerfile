@@ -10,4 +10,4 @@ COPY config /cms/config
 
 # run resource usage
 EXPOSE 28000
-CMD ./scripts/cmsResourceService 0
+CMD ["/cms/scripts/cmsResourceService", "0"]

@@ -10,4 +10,4 @@ COPY config /cms/config
 
 # run ranking
 EXPOSE 25123
-CMD ./scripts/cmsPrintingService 0
+CMD [ "/cms/scripts/cmsPrintingService", "0" ] 
