@@ -22,6 +22,7 @@ spec:
         app: k8s-cms
         component: printing
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-printing
           image: mrzzy/cms-printing

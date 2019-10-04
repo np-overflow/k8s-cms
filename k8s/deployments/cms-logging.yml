@@ -24,6 +24,7 @@ spec:
         app: cms-log
         component: logging
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-log
           image: mrzzy/cms-log

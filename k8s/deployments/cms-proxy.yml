@@ -23,6 +23,7 @@ spec:
         app: k8s-cms
         component: proxy
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-proxy
           image: mrzzy/cms-proxy

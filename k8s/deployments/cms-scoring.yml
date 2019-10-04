@@ -23,6 +23,7 @@ spec:
         app: k8s-cms
         component: scoring
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-scoring
           image: mrzzy/cms-scoring

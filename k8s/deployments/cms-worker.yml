@@ -25,6 +25,7 @@ spec:
         app: k8s-cms
         component: worker
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-worker
           image: mrzzy/cms-worker
