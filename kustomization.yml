@@ -6,8 +6,8 @@
 namespace: k8s-cms
 commonLabels:
   app: k8s-cms
-  version: 0.2.1b
-  release: beta
+  version: rolling
+  release: alpha
   envionment: dev
 
 configMapGenerator:
@@ -92,28 +92,28 @@ patchesStrategicMerge:
 # image versioning
 images:
   - name: mrzzy/postgres
-    newTag: "11.5"
+    newTag: "latest"
   - name: mrzzy/cms-db
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-resource
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-log
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-scoring
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-evaluation
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-proxy
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-web-admin
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-printing
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-web-ranking
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-checker
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-web-contest
-    newTag: "0.2.1b"
+    newTag: "latest"
   - name: mrzzy/cms-worker
-    newTag: "0.2.1b"
+    newTag: "latest"

@@ -29,5 +29,5 @@ then
         exit 1
     fi
 else
-    exec "$*"
+    exec sh -c "$*"
 fi

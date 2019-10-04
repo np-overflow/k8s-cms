@@ -4,7 +4,7 @@
 # 
 
 # vars
-VERSION:=0.2.1b
+VERSION:=0.2.1a
 
 DOCKER:=docker
 TAG_PREFIX:=mrzzy
