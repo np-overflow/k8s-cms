@@ -24,6 +24,7 @@ spec:
         app: k8s-cms
         component: contest
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-web-contest
           image: mrzzy/cms-web-contest:0.2.0a

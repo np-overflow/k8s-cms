@@ -23,6 +23,7 @@ spec:
         app: k8s-cms
         component: ranking
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-web-ranking
           image: mrzzy/cms-web-ranking:0.2.0a

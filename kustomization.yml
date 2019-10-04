@@ -6,7 +6,7 @@
 namespace: k8s-cms
 commonLabels:
   app: k8s-cms
-  version: 0.2.0a
+  version: 0.2.1a
   release: alpha
   envionment: dev
 
@@ -26,6 +26,9 @@ secretGenerator:
 resources:
   - "k8s/namespace.yml"
 
+  # service account and role based access control
+  - "k8s/rbac/service-account.yml"
+  
   # database
   - "k8s/deployments/database.yml"
   - "k8s/services/database.yml"
@@ -75,13 +78,14 @@ resources:
   - "k8s/services/cms-web-contest.yml"
   
   # cms workers
-  - "k8s/services/cms-worker.yml"
   - "k8s/deployments/cms-worker.yml"
+  - "k8s/services/cms-worker.yml"
   # worker configmap
   - "k8s/config/config-worker.yml"
 
   # ingress
   - "k8s/ingress.yml"
+  
 
 patchesStrategicMerge:
   - "k8s/config/config-env.yml"

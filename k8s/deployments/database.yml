@@ -24,6 +24,7 @@ spec:
         app: k8s-cms
         component: database
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-db
           image: mrzzy/cms-db:0.2.0a

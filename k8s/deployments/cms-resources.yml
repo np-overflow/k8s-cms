@@ -22,6 +22,7 @@ spec:
         app: k8s-cms
         component: resources
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-resource
           image: mrzzy/cms-resource:0.2.0a
