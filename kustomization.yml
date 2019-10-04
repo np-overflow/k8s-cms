@@ -86,6 +86,34 @@ resources:
   # ingress
   - "k8s/ingress.yml"
   
-
 patchesStrategicMerge:
   - "k8s/config/config-env.yml"
+
+# image versioning
+images:
+  - name: mrzzy/postgres
+    newTag: "11.5"
+  - name: mrzzy/cms-db
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-resource
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-log
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-scoring
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-evaluation
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-proxy
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-web-admin
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-printing
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-web-ranking
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-checker
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-web-contest
+    newTag: "0.2.1a"
+  - name: mrzzy/cms-worker
+    newTag: "0.2.1a"
