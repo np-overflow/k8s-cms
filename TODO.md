@@ -1,24 +1,17 @@
 # k8s-cms Roadmap
-## Version 0.2.1 alpha
-### Added
+## Version 0.3.0
+- helm v2 support
+    - migrate manifests to helm
 - securing k8s-cms:
-	- expose only required secrets instead of using env from exposing everything
-
-### Todo
-- securing k8s-cms:
-    - tighten cluster security using RBAC
-        - with service accounts and role bindings
-        - assign read only for secrets permissions to service accounts
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
-        - set up lets encrypt container to perform acme challenge for certificate
-	- read only filesystem
+        - set up lets encryptontainer to perform acme challenge for certificate
 - Quality of Service
     - limit worker resources to ensure quality of service.
     - set limits and requests for pods in kubernetes
 		- requires profiling of container performance. 
 	- ddos protection - conncurrent connections and rate limiting through nginx ingress.
 
-## Version 0.3.0 alpha
+## Version 0.4.0
 - k8s-cms-master 
     - bridge between CMS and k8s
     - exposes REST api used to control cms with `kcmscli` 
@@ -34,9 +27,9 @@
     - restart `Checker` and `EvaluationService` to load rescaled workers
     - lightweight version of `cms-worker` with limited language support.
 
-## Future Releases
 - multiple contests support
     - contests can be obtained from DB via `get_contest_list()`
     - spawn multiple `cms-proxy` to serve multiple contests
 
 - printing support.
+
