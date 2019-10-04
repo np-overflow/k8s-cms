@@ -3,7 +3,7 @@
 # Worker Container
 # 
 
-FROM mrzzy/cms-base:0.2.0a
+FROM mrzzy/cms-base:0.2.1b
 
 ## install packages for language support
 # no user interaction.
@@ -22,18 +22,20 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
     
-# install isolate sandbox
+# build &install isolate sandbox
 RUN python /cms/prerequisites.py --as-root -y build_isolate
 RUN python /cms/prerequisites.py --as-root -y install_isolate
 RUN rm -rf /cms/isolate/*.o /cms/isolate/isolate
 
 # copy container source
-COPY containers/cms-worker /scripts
-RUN chmod -R a+x /scripts
+COPY containers/cms-worker/worker-entrypoint.sh /scripts/
+RUN chown -R cmsuser /scripts/
+RUN chmod -R a+x /scripts/
 
 # copy config
 COPY config /cms/config
 
 # run worker
 EXPOSE 26000
-CMD /scripts/worker-entrypoint.sh
+ENTRYPOINT [ "/scripts/cms-entrypoint.sh", "/scripts/worker-entrypoint.sh" ]
+CMD [ "cmsWorker" ]

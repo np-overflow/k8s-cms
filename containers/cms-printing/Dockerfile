@@ -3,11 +3,11 @@
 # Printing Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.1b
 
 # copy config
 COPY config /cms/config
 
 # run ranking
 EXPOSE 25123
-CMD ./scripts/cmsPrintingService 0
+CMD [ "/cms/scripts/cmsPrintingService", "0" ] 

@@ -3,11 +3,11 @@
 # Scoring Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.1b
 
 # copy config
 COPY config /cms/config
 
 # run scoring service
 EXPOSE 28500
-CMD ./scripts/cmsScoringService 0
+CMD ["/cms/scripts/cmsScoringService", "0"]

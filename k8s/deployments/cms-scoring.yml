@@ -23,6 +23,7 @@ spec:
         app: k8s-cms
         component: scoring
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-scoring
           image: mrzzy/cms-scoring:0.2.0a
@@ -32,9 +33,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: cms-config-env
-            - secretRef:
-                name: cms-secrets
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required to listen properly
             - name: CMS_SCORING
               value: "0.0.0.0"

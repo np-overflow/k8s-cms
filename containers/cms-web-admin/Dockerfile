@@ -3,11 +3,12 @@
 # Admin Web Server Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.1b
 
 # copy source
-COPY /containers/cms-web-admin /scripts
-RUN chmod a+x /scripts
+COPY /containers/cms-web-admin/web-admin-entrypoint.sh /scripts
+RUN chown -R cmsuser /scripts
+RUN chmod -R u+x /scripts
 
 # copy config
 COPY config /cms/config
@@ -15,4 +16,5 @@ COPY config /cms/config
 # run admin web server
 EXPOSE 8889
 EXPOSE 21100
-CMD bash /scripts/web-admin-entrypoint.sh
+ENTRYPOINT [ "/scripts/cms-entrypoint.sh", "/scripts/web-admin-entrypoint.sh" ]
+CMD [ "cmsAdminWebServer" ]

@@ -24,6 +24,7 @@ spec:
         app: cms-log
         component: logging
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-log
           image: mrzzy/cms-log:0.2.0a
@@ -31,11 +32,14 @@ spec:
             - name: cmslog
               containerPort: 29000
           envFrom:
-            - secretRef:
-                name: cms-secrets
             - configMapRef:
                 name: cms-config-env
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
             # required to listen properly
             - name: CMS_LOG
               value: "0.0.0.0"

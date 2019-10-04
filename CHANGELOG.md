@@ -1,6 +1,11 @@
 # k8s-cms Changelog
+## Version 0.2.1 beta - 2019-10-04
+### Changed
+- securing k8s-cms:
+	- expose only required secrets instead of using envfrom exposing everything
+    - run cms pods with cms-services service account, with automount token disable.
 
-## Version 0.2.0 alpha
+## Version 0.2.0 alpha - 2019-09-30
 ### Added
 - database dependency - wait for database before starting CMS services
 - kubernetes support - write k8s deployment for YAMLs all these:

@@ -3,11 +3,11 @@
 # Log Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.1b
 
 # copy config
 COPY config /cms/config
 
 # run log service
 EXPOSE 29000
-CMD ./scripts/cmsLogService 0
+CMD [ "./scripts/cmsLogService", "0" ]

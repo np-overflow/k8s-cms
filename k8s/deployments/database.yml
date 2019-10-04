@@ -24,6 +24,7 @@ spec:
         app: k8s-cms
         component: database
     spec:
+      serviceAccountName: cms-service-sa
       containers:
         - name: cms-db
           image: mrzzy/cms-db:0.2.0a
@@ -31,14 +32,16 @@ spec:
             - name: postgres
               containerPort: 5432
           envFrom:
-            - secretRef:
-                name: cms-secrets
             - configMapRef:
                 name: cms-config-env
           env:
             - name: CMS_DB
               value: "0.0.0.0"
-          
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: POSTGRES_PASSWORD
           livenessProbe:
             exec:
               command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]

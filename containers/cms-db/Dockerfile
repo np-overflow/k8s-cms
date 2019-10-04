@@ -33,11 +33,11 @@ COPY containers/cms-base/cms-entrypoint.sh /scripts/cms-entrypoint.sh
 RUN chmod -R a+x /scripts
 # insert modified docker-entrypoint.sh
 RUN cp /scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
+ 
 # configure postgres db
 RUN mkdir -p /docker-entrypoint-initdb.d
 RUN cp /scripts/setup_db.sh /docker-entrypoint-initdb.d/
 
 # configure entrypoint script
-ENTRYPOINT ["/scripts/cms-entrypoint.sh"]
-CMD docker-entrypoint.sh postgres
+ENTRYPOINT ["/scripts/cms-entrypoint.sh", "docker-entrypoint.sh"]
+CMD ["postgres"]

@@ -3,11 +3,11 @@
 # Health Checker Container
 # 
 
-FROM mrzzy/cms-base:0.2.0a
+FROM mrzzy/cms-base:0.2.1b
 
 # copy config
 COPY config /cms/config
 
 # run scoring service
 EXPOSE 28500
-CMD ./scripts/cmsChecker 0
+CMD ["/cms/scripts/cmsChecker", "0"]
