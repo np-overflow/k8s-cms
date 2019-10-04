@@ -3,7 +3,7 @@
 # Log Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:0.2.1b
 
 # copy config
 COPY config /cms/config

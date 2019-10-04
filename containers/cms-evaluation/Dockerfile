@@ -3,7 +3,7 @@
 # Evaluation Service Container
 # 
 
-FROM mrzzy/cms-base:0.2.0a
+FROM mrzzy/cms-base:0.2.1b
 
 # copy config
 COPY config /cms/config
