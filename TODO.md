@@ -2,7 +2,11 @@
 ## Version 0.3.0
 - helm v2 support
     - migrate manifests to helm
+    - remove support for kustomize
+    - migrate postgres db service from in house manifest to postgres chart
+    - use ingress chart to setup nginx ingress
 - securing k8s-cms:
+    - setup cert manager chart to use lets encrypt to obtain certificates 
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
         - set up lets encryptontainer to perform acme challenge for certificate
 - Quality of Service
