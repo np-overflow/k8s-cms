@@ -3,44 +3,47 @@
 # Kubernetes Intergration
 # Database Deployment
 #
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cms-database
+  name: {{ include "k8s-cms.fullname" . }}-cms-database
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 -}}
     component: database
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 -}}
       component: database
   # database pod spec
   template:
     metadata:
       labels:
-        app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 8 -}}
         component: database
     spec:
-      serviceAccountName: cms-service-sa
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
-        - name: cms-db
-          image: mrzzy/cms-db
+        {{- with .Values.images.database }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
           ports:
             - name: postgres
               containerPort: 5432
           envFrom:
             - configMapRef:
-                name: cms-config-env
+                name: {{ include "k8s-cms.name" . }}-config-env
           env:
             - name: CMS_DB
               value: "0.0.0.0"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cms-secrets
+                  name: {{ include "k8s-cms.name" . }}-secrets
                   key: POSTGRES_PASSWORD
           livenessProbe:
             exec:
@@ -53,15 +56,14 @@ spec:
             periodSeconds: 2
 
           volumeMounts:
-            - name: database-data
+            - name: {{ include "k8s-cms.name" . }}-database-data
               mountPath: "/var/lib/postgresql/data"
-            - name: cms-config
+            - name: {{ include "k8s-cms.name" . }}-config
               mountPath: "/cms/config"
       volumes:
-        - name: database-data
+        - name: {{ include "k8s-cms.name" . }}-database-data
           persistentVolumeClaim:
-            claimName:
-              cms-database-data-pvc
-        - name: cms-config
+            claimName: {{ include "k8s-cms.name" . }}-database-data-pvc
+        - name: {{ include "k8s-cms.name" . }}-config
           configMap:
-            name: cms-config
+            name: {{ include "k8s-cms.name" . }}-config

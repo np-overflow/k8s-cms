@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "k8s.fullname" . }}
+  name: {{ include "k8s-cms.fullname" . }}
   labels:
-{{ include "k8s.labels" . | indent 4 }}
+{{ include "k8s-cms.labels" . | indent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.services.database.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.services.database.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "k8s.name" . }}
+    app.kubernetes.io/name: {{ include "k8s-cms.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "k8s.fullname" . }}
+  name: {{ include "k8s-cms.fullname" . }}
   labels:
-{{ include "k8s.labels" . | indent 4 }}
+{{ include "k8s-cms.labels" . | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "k8s.name" . }}
+      app.kubernetes.io/name: {{ include "k8s-cms.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "k8s.name" . }}
+        app.kubernetes.io/name: {{ include "k8s-cms.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
     {{- with .Values.imagePullSecrets }}
@@ -22,8 +22,8 @@ spec:
     {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: nginx
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
             - name: http
               containerPort: 80

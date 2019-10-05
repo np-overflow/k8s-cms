@@ -7,16 +7,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-database
+  name: {{ .Values.services.database.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 -}}
     component: database
 spec:
-  type: ClusterIP
+  type: {{ .Values.services.database.type }}
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 -}}
     component: database
   ports:
     - name: postgres
-      port: 5432
+      port: {{ .Values.services.database.port }}
       targetPort: 5432

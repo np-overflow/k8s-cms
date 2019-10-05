@@ -3,19 +3,38 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
-image:
-  repository: nginx
-  tag: stable
-  pullPolicy: IfNotPresent
-
 imagePullSecrets: []
-nameOverride: ""
+nameOverride: "k8s-cms"
 fullnameOverride: ""
 
-service:
-  type: ClusterIP
-  port: 80
+
+# cms configuration
+config:
+  configPath: /cms/config/cms.conf
+  proxyService:
+    pollInterval: 15
+  rankingService: 
+    configPath: /cms/config/cms.ranking.config
+    
+metadata:
+  # additional labels to apply
+  labels:
+    app: k8s-cms
+    release: alpha
+    environment: dev
+  
+images:
+  pullPolicy: IfNotPresent
+  database:
+    name: cms-db
+    repository: mrzzy/cms-db
+    tag: 0.2.1b
+
+services:
+  database:
+    name: cms-database
+    type: ClusterIP
+    port: 5432
 
 ingress:
   enabled: false
@@ -48,3 +67,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+security:
+  serviceAccount:
+    name: cms-service-sa
+
+credentials: {}
