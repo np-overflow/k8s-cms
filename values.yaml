@@ -49,12 +49,16 @@ images:
     repository: mrzzy/cms-porxy
     tag: latest
   admin:
-    name: cms-admin
+    name: cms-web-admin
     repository: mrzzy/cms-admin
     tag: latest
   printing:
     name: cms-printing
     repository: mrzzy/cms-printing
+    tag: latest
+  ranking:
+    name: cms-web-ranking
+    repository: mrzzy/cms-web-ranking
     tag: latest
 
 services:
@@ -82,9 +86,16 @@ services:
   printing:
     name: k8s-cms-printing
     type: ClusterIP
+  ranking:
+    name: k8s-cms-ranking
+    type: ClusterIP
+
   webAdmin:
     name: k8s-cms-web-admin
     type: LoadBalancer 
+  webRanking:
+    name: k8s-cms-web-ranking
+    type: LoadBalancer
 
 ingress:
   enabled: false

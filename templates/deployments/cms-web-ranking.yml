@@ -4,46 +4,50 @@
 # CMS Web Ranking Interface
 #
 
-apiVersion: apps/v1
+apiVersion:  apps/v1
 kind: Deployment
 metadata:
-  name: cms-web-ranking
+  name: {{ include "k8s-cms.fullname" . }}-web-ranking
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: ranking
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 6 }}
       component: ranking
   template:
     metadata:
       labels:
-        app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 8 }}
         component: ranking
     spec:
-      serviceAccountName: cms-service-sa
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
-        - name: cms-web-ranking
-          image: mrzzy/cms-web-ranking
+        {{- with .Values.images.ranking }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
           ports:
             - name: cmsrank
               containerPort: 8890
           envFrom:
             - configMapRef:
-                name: cms-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             # inject ranking credentials
             - name: CMS_RANKING_USER
               valueFrom:
                 secretKeyRef:
-                  name: cms-secrets
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: CMS_RANKING_USER
             - name: CMS_RANKING_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cms-secrets
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: CMS_RANKING_PASSWORD
           livenessProbe:
             httpGet:
@@ -56,9 +60,9 @@ spec:
             periodSeconds: 3
 
           volumeMounts:
-            - name: cms-config
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: cms-config
+        - name: {{ include "k8s-cms.fullname" . }}-config
           configMap:
-            name: cms-config
+            name: {{ include "k8s-cms.fullname" . }}-config-file

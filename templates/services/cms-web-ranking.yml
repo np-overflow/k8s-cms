@@ -7,14 +7,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-web-ranking
+  name: {{ .Values.services.webRanking.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: ranking
 spec:
-  type: NodePort
+  type: {{ .Values.services.webRanking.type }}
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: ranking
   ports:
     - name: http
