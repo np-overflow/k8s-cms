@@ -8,9 +8,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "k8s-cms.fullname" . }}-database-data-pvc
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
 spec:
   resources:
     requests:
-      storage: 5Gi
+      storage: 8Gi
   accessModes:
     - ReadWriteOnce

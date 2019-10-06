@@ -1,13 +1,15 @@
 #
 # k8s-cms
 # Kubernetes Intergration
-# Configuration Overrides
+# Envrionment Configuration
 #
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{include "k8s-cms.fullname" . }}-config-env
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
 data:
   CMS_DB: {{ .Values.services.database.name }}
   CMS_LOG: cms-logging
