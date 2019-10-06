@@ -7,16 +7,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-resources
+  name: {{ .Values.services.resources.name }}
   labels:
     app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: resources
 spec:
   type: ClusterIP
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: resources
   ports:
     - name: cmsres
-      port: 28000
+      port: {{ .Values.services.resources.port }}
       targetPort: 28000

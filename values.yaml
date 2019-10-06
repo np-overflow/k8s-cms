@@ -27,21 +27,29 @@ images:
   database:
     name: cms-db
     repository: mrzzy/cms-db
-    tag: 0.2.1b
+    tag: latest
   logging:
     name: cms-log
     repository: mrzzy/cms-log
-    tag: 0.2.1b
+    tag: latest
+  resources:
+    name: cms-resource
+    repository: mrzzy/cms-resources
+    tag: latest
 
 services:
   database:
-    name: k8s-cms-database
+    name: postgresql
     type: ClusterIP
     port: 5432
   logging:
-    name: k8s-cms-database
+    name: k8s-cms-logging
     type: ClusterIP
-    port: 5432
+    port: 29000
+  resources:
+    name: k8s-cms-resources
+    type: ClusterIP
+    port: 28000
 
 ingress:
   enabled: false

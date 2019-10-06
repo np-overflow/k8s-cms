@@ -7,31 +7,35 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: cms-resources
+  name: {{ include "k8s-cms.fullname" . }}-resources
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: resources
 spec:
   selector:
     matchLabels:
-      app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 6 }}
       component: resources
   template:
     metadata:
       labels:
-        app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 8 }}
         component: resources
     spec:
-      serviceAccountName: cms-service-sa
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
-        - name: cms-resource
-          image: mrzzy/cms-resource
+        {{- with .Values.images.resources }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
           ports:
             - name: cmsres
               containerPort: 28000
           envFrom:
             - configMapRef:
-                name: cms-config-env
+              name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -52,9 +56,9 @@ spec:
             periodSeconds: 3
 
           volumeMounts:
-            - name: cms-config
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: cms-config
+        - name: {{ include "k8s-cms.fullname" . }}-config
           configMap:
-            name: cms-config
+            name: {{ include "k8s-cms.fullname" . }}-config-file
