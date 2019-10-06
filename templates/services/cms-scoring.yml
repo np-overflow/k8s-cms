@@ -7,16 +7,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-scoring
+  name: {{ .Values.services.scoring.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: scoring
 spec:
   type: ClusterIP
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: scoring
   ports:
     - name: cmsscore
-      port: 28500
+      port: {{ .Values.services.scoring.port }}
       targetPort: 28500

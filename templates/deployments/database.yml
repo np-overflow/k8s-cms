@@ -37,7 +37,7 @@ spec:
               containerPort: 5432
           envFrom:
             - configMapRef:
-              name: {{ include "k8s-cms.fullname" . }}-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             - name: CMS_DB
               value: "0.0.0.0"

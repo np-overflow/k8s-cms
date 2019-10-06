@@ -7,11 +7,10 @@
 apiVersion:  apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "k8s-cms.fullname" . }}-cms-log
+  name: {{ include "k8s-cms.fullname" . }}-logging
   labels:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: logging
-  
 spec:
   replicas: 1
   selector:
@@ -37,7 +36,7 @@ spec:
               containerPort: 29000
           envFrom:
             - configMapRef:
-              name: {{ include "k8s-cms.fullname" . }}-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:

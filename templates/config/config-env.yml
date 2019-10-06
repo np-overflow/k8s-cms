@@ -14,6 +14,7 @@ data:
   CMS_DB: {{ .Values.services.database.name }}
   CMS_LOG: {{ .Values.services.logging.name }}
   CMS_RESOURCE: {{ .Values.services.resources.name }}
+  CMS_SCORING: {{ .Values.services.resources.name }}  
   CMS_ADMIN: cms-admin
   CMS_RANKING: cms-ranking
   CMS_CONTEST: cms-contest

@@ -33,8 +33,16 @@ images:
     repository: mrzzy/cms-log
     tag: latest
   resources:
-    name: cms-resource
-    repository: mrzzy/cms-resources
+    name: cms-resources
+    repository: mrzzy/cms-resource
+    tag: latest
+  scoring:
+    name: cms-scoring
+    repository: mrzzy/cms-scoring
+    tag: latest
+  evaluation:
+    name: cms-evaluation
+    repository: mrzzy/cms-evaluation
     tag: latest
 
 services:
@@ -50,6 +58,12 @@ services:
     name: k8s-cms-resources
     type: ClusterIP
     port: 28000
+  scoring:
+    name: k8s-cms-scoring
+    type: ClusterIP
+  evaluation:
+    name: k8s-cms-evaluation
+    
 
 ingress:
   enabled: false
