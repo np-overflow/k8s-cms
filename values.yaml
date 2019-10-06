@@ -75,9 +75,9 @@ services:
   admin:
     name: k8s-cms-admin
     type: ClusterIP
-  web-admin:
+  webAdmin:
     name: k8s-cms-web-admin
-    type: ClusterIP 
+    type: LoadBalancer 
 
 ingress:
   enabled: false

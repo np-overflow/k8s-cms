@@ -7,14 +7,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-web-admin
+  name: {{ .Values.services.webAdmin.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: admin
 spec:
-  type: NodePort
+  name: {{ .Values.services.webAdmin.type }}
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: admin
   ports:
     - name: http

@@ -17,7 +17,7 @@ data:
   CMS_SCORING: {{ .Values.services.resources.name }}  
   CMS_EVALUATION: {{ .Values.services.evaluation.name }}  
   CMS_PROXY: {{ .Values.services.proxy.name }}
-  CMS_ADMIN: cms-admin
+  CMS_ADMIN: {{ .Values.services.admin.name }}
   CMS_RANKING: cms-ranking
   CMS_CONTEST: cms-contest
 
