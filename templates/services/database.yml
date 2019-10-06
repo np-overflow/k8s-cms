@@ -18,5 +18,5 @@ spec:
     component: database
   ports:
     - name: postgres
-      port: {{ .Values.services.database.port }}
+      port: 5432
       targetPort: 5432
