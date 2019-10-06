@@ -44,12 +44,19 @@ images:
     name: cms-evaluation
     repository: mrzzy/cms-evaluation
     tag: latest
+  proxy:
+    name: cms-proxy
+    repository: mrzzy/cms-porxy
+    tag: latest
+  admin:
+    name: cms-admin
+    repository: mrzzy/cms-admin
+    tag: latest
 
 services:
   database:
     name: postgresql
     type: ClusterIP
-    port: 5432
   logging:
     name: k8s-cms-logging
     type: ClusterIP
@@ -62,7 +69,15 @@ services:
   evaluation:
     name: k8s-cms-evaluation
     type: ClusterIP
-    
+  proxy:
+    name: k8s-cms-proxy
+    type: ClusterIP
+  admin:
+    name: k8s-cms-admin
+    type: ClusterIP
+  web-admin:
+    name: k8s-cms-web-admin
+    type: ClusterIP 
 
 ingress:
   enabled: false
