@@ -4,41 +4,46 @@
 # CMS Checker Service
 #
 
-apiVersion: apps/v1
+apiVersion:  apps/v1
 kind: Deployment
 metadata:
-  name: cms-checker
+  name: {{ include "k8s-cms.fullname" . }}-checker
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: checker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 6 }}
       component: checker
-  # checker pod spec
   template:
     metadata:
       labels:
-        app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 8 }}
         component: checker
     spec:
-      serviceAccountName: cms-service-sa
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
-        - name: cms-checker
-          image: mrzzy/cms-checker
+        {{- with .Values.images.checker }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
           ports:
-            # port used by admin service
+            # port used by checker
             - name: cmscheck
               containerPort: 22000
-            # port used to displa          
           envFrom:
-            - secretRef:
-                name: cms-secrets
             - configMapRef:
-                name: cms-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_CHECKER
               value: "0.0.0.0"
@@ -54,9 +59,9 @@ spec:
             periodSeconds: 3
 
           volumeMounts:
-            - name: cms-config
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: cms-config
+        - name: {{ include "k8s-cms.fullname" . }}-config
           configMap:
-            name: cms-config
+            name: {{ include "k8s-cms.fullname" . }}-config-file

@@ -7,14 +7,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-checker
+  name: {{ .Values.services.checker.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: checker
 spec:
-  type: ClusterIP
+  name: {{ .Values.services.checker.type }}
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: checker
   ports:
     - name: cmscheck

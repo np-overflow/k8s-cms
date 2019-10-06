@@ -19,6 +19,7 @@ data:
   CMS_PROXY: {{ .Values.services.proxy.name }}
   CMS_ADMIN: {{ .Values.services.admin.name }}
   CMS_PRINTING: {{ .Values.services.printing.name }}
+  CMS_CHECKER: {{ .Values.services.checker.name }}
   CMS_RANKING: cms-ranking
   CMS_CONTEST: cms-contest
 

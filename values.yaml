@@ -46,11 +46,11 @@ images:
     tag: latest
   proxy:
     name: cms-proxy
-    repository: mrzzy/cms-porxy
+    repository: mrzzy/cms-proxy
     tag: latest
   admin:
     name: cms-web-admin
-    repository: mrzzy/cms-admin
+    repository: mrzzy/cms-web-admin
     tag: latest
   printing:
     name: cms-printing
@@ -59,6 +59,10 @@ images:
   ranking:
     name: cms-web-ranking
     repository: mrzzy/cms-web-ranking
+    tag: latest
+  checker:
+    name: cms-checker
+    repository: mrzzy/cms-checker
     tag: latest
 
 services:
@@ -88,6 +92,9 @@ services:
     type: ClusterIP
   ranking:
     name: k8s-cms-ranking
+    type: ClusterIP
+  checker:
+    name: k8s-cms-checker
     type: ClusterIP
 
   webAdmin:
