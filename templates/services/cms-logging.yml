@@ -12,11 +12,11 @@ metadata:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: logging
 spec:
-  type: ClusterIP
+  type: {{ .Values.services.logging.type }}
   selector:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: logging
   ports:
     - name: cmsres
-      port: {{ .Values.services.logging.port }}
+      port: 29000
       targetPort: 29000

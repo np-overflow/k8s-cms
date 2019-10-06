@@ -53,16 +53,15 @@ services:
   logging:
     name: k8s-cms-logging
     type: ClusterIP
-    port: 29000
   resources:
     name: k8s-cms-resources
     type: ClusterIP
-    port: 28000
   scoring:
     name: k8s-cms-scoring
     type: ClusterIP
   evaluation:
     name: k8s-cms-evaluation
+    type: ClusterIP
     
 
 ingress:

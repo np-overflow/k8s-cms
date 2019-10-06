@@ -19,5 +19,5 @@ spec:
     component: resources
   ports:
     - name: cmsres
-      port: {{ .Values.services.resources.port }}
+      port: 28000
       targetPort: 28000
