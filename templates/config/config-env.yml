@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{include "k8s-cms.name" . }}-config-env
+  name: {{include "k8s-cms.fullname" . }}-config-env
 data:
   CMS_DB: {{ .Values.services.database.name }}
   CMS_LOG: cms-logging

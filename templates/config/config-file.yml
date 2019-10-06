@@ -3,13 +3,15 @@
 # Kubernetes Intergration
 # ConfigMap with configuration files
 # 
-{{ .Files.Glob "*" }}
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "k8s-cms.name" . }}-config-file
+  name: {{ include "k8s-cms.fullname" . }}-config-file
   labels:
 {{ include "k8s-cms.labels" . | indent 4 -}}
 data:
   - "cms.conf": | -
+{{ .Files.Get "config/cms.conf" | indent 2 -}}
+  - "cms.ranking.conf": | -
+{{ .Files.Get "config/cms.ranking.conf" | indent 2 -}}
