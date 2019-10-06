@@ -7,7 +7,6 @@ imagePullSecrets: []
 nameOverride: "k8s-cms"
 fullnameOverride: ""
 
-
 # cms configuration
 config:
   configPath: /cms/config/cms.conf
@@ -29,9 +28,17 @@ images:
     name: cms-db
     repository: mrzzy/cms-db
     tag: 0.2.1b
+  logging:
+    name: cms-log
+    repository: mrzzy/cms-log
+    tag: 0.2.1b
 
 services:
   database:
+    name: k8s-cms-database
+    type: ClusterIP
+    port: 5432
+  logging:
     name: k8s-cms-database
     type: ClusterIP
     port: 5432

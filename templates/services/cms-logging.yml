@@ -9,15 +9,14 @@ kind: Service
 metadata:
   name: cms-logging
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 -}}
     component: logging
 spec:
   type: ClusterIP
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 -}}
     component: logging
   ports:
     - name: cmsres
-      port: 29000
+      port: {{ .Values.services.logging.name }}
       targetPort: 29000
-

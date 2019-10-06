@@ -8,19 +8,19 @@ kind: Deployment
 metadata:
   name: {{ include "k8s-cms.fullname" . }}-cms-database
   labels:
-{{ include "k8s-cms.labels" . | indent 4 -}}
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: database
 spec:
   replicas: 1
   selector:
     matchLabels:
-{{ include "k8s-cms.labels" . | indent 4 -}}
+{{ include "k8s-cms.labels" . | indent 6 }}
       component: database
   # database pod spec
   template:
     metadata:
       labels:
-{{ include "k8s-cms.labels" . | indent 8 -}}
+{{ include "k8s-cms.labels" . | indent 8 }}
         component: database
     spec:
       imagePullSecrets:
