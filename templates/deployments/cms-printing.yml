@@ -7,36 +7,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cms-printing
+  name: {{ include "k8s-cms.fullname" . }}-printing
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: printing
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 6 }}
       component: printing
   template:
     metadata:
       labels:
-        app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 8 }}
         component: printing
     spec:
-      serviceAccountName: cms-service-sa
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
-        - name: cms-printing
-          image: mrzzy/cms-printing
+        {{- with .Values.images.printing }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
           ports:
             - name: cmsprint
               containerPort: 25123
           envFrom:
             - configMapRef:
-                name: cms-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cms-secrets
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_PRINTING
@@ -52,9 +57,9 @@ spec:
             periodSeconds: 3
 
           volumeMounts:
-            - name: cms-config
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: cms-config
+        - name: {{ include "k8s-cms.fullname" . }}-config
           configMap:
-            name: cms-config
+            name: {{ include "k8s-cms.fullname" . }}-config-file

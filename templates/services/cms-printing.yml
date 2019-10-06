@@ -7,14 +7,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-printing
+  name: {{ .Values.services.printing.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: printing
 spec:
-  type: ClusterIP
+  type: {{ .Values.services.printing.type }}
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: printing
   ports:
     # port used by service communication

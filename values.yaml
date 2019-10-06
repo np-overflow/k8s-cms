@@ -52,6 +52,10 @@ images:
     name: cms-admin
     repository: mrzzy/cms-admin
     tag: latest
+  printing:
+    name: cms-printing
+    repository: mrzzy/cms-printing
+    tag: latest
 
 services:
   database:
@@ -74,6 +78,9 @@ services:
     type: ClusterIP
   admin:
     name: k8s-cms-admin
+    type: ClusterIP
+  printing:
+    name: k8s-cms-printing
     type: ClusterIP
   webAdmin:
     name: k8s-cms-web-admin
