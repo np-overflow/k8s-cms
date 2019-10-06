@@ -20,8 +20,8 @@ data:
   CMS_ADMIN: {{ .Values.services.admin.name }}
   CMS_PRINTING: {{ .Values.services.printing.name }}
   CMS_CHECKER: {{ .Values.services.checker.name }}
-  CMS_RANKING: cms-ranking
-  CMS_CONTEST: cms-contest
+  CMS_RANKING: {{ .Values.services.ranking.name }}
+  CMS_CONTEST: {{ .Values.services.contest.name }}
 
   CMS_WORKER_0: cms-worker-0.cms-worker
   CMS_WORKER_1: cms-worker-1.cms-worker

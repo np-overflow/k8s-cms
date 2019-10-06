@@ -7,14 +7,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cms-contest
+  name: {{ .Values.services.contest.name }}
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: contest
 spec:
-  type: ClusterIP
+  type: {{ .Values.services.contest.type }}
   selector:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: contest
   ports:
     - name: cmscontest

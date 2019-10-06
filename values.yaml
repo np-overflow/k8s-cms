@@ -48,21 +48,25 @@ images:
     name: cms-proxy
     repository: mrzzy/cms-proxy
     tag: latest
-  admin:
-    name: cms-web-admin
-    repository: mrzzy/cms-web-admin
-    tag: latest
   printing:
     name: cms-printing
     repository: mrzzy/cms-printing
+    tag: latest
+  checker:
+    name: cms-checker
+    repository: mrzzy/cms-checker
+    tag: latest
+  admin:
+    name: cms-web-admin
+    repository: mrzzy/cms-web-admin
     tag: latest
   ranking:
     name: cms-web-ranking
     repository: mrzzy/cms-web-ranking
     tag: latest
-  checker:
-    name: cms-checker
-    repository: mrzzy/cms-checker
+  contest:
+    name: cms-web-contest
+    repository: mrzzy/cms-web-contest
     tag: latest
 
 services:
@@ -96,14 +100,21 @@ services:
   checker:
     name: k8s-cms-checker
     type: ClusterIP
+  contest:
+    name: k8s-cms-contest
+    type: ClusterIP
+
 
   webAdmin:
     name: k8s-cms-web-admin
-    type: LoadBalancer 
+    type: NodePort
   webRanking:
     name: k8s-cms-web-ranking
-    type: LoadBalancer
-
+    type: NodePort
+  webContest:
+    name: k8s-cms-web-ranking
+    type: NodePort
+  
 ingress:
   enabled: false
   annotations: {}

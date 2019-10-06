@@ -61,6 +61,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: CMS_ADMIN_PASSWORD
+
           livenessProbe:
             httpGet:
               port: http
