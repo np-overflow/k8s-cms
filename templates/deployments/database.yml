@@ -31,19 +31,20 @@ spec:
         - name: {{ .name }}
           image: {{ .repository }}:{{ .tag }}
         {{- end }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
           ports:
             - name: postgres
               containerPort: 5432
           envFrom:
             - configMapRef:
-                name: {{ include "k8s-cms.name" . }}-config-env
+              name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             - name: CMS_DB
               value: "0.0.0.0"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "k8s-cms.name" . }}-secrets
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: POSTGRES_PASSWORD
           livenessProbe:
             exec:
@@ -56,14 +57,14 @@ spec:
             periodSeconds: 2
 
           volumeMounts:
-            - name: {{ include "k8s-cms.name" . }}-database-data
+            - name: {{ include "k8s-cms.fullname" . }}-database-data
               mountPath: "/var/lib/postgresql/data"
-            - name: {{ include "k8s-cms.name" . }}-config
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
         - name: {{ include "k8s-cms.name" . }}-database-data
           persistentVolumeClaim:
-            claimName: {{ include "k8s-cms.name" . }}-database-data-pvc
-        - name: {{ include "k8s-cms.name" . }}-config
+            claimName: {{ include "k8s-cms.fullname" . }}-database-data-pvc
+        - name: {{ include "k8s-cms.fullname" . }}-config
           configMap:
-            name: {{ include "k8s-cms.name" . }}-config
+            name: {{ include "k8s-cms.fullname" . }}-config-file

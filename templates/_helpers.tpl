@@ -19,7 +19,7 @@ If release name contains chart name it will be used as a full name.
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-rev%s" $name .Release.Revision | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -38,6 +38,7 @@ Common labels
 {{- toYaml .Values.metadata.labels -}}
 version: {{ .Chart.Version }}
 app.kubernetes.io/name: {{ include "k8s-cms.name" . }}
+app.kubernetes.io/fullname: {{ include "k8s-cms.fullname" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
