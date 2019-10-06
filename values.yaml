@@ -32,7 +32,7 @@ images:
 
 services:
   database:
-    name: cms-database
+    name: k8s-cms-database
     type: ClusterIP
     port: 5432
 

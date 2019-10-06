@@ -1,0 +1,15 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# ConfigMap with configuration files
+# 
+{{ .Files.Glob "*" }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "k8s-cms.name" . }}-config-file
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 -}}
+data:
+  - "cms.conf": | -
