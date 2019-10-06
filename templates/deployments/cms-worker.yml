@@ -7,41 +7,47 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: cms-worker
+  name: {{ include "k8s-cms.fullname" . }}-worker
   labels:
-    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
     component: worker
 spec:
-  serviceName: cms-worker
+  serviceName: {{ include "k8s-cms.fullname" . }}-worker
   podManagementPolicy: Parallel
   replicas: 6
   selector:
     matchLabels:
-      app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 6 }}
       component: worker
   template:
     metadata:
       labels:
-        app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 8 }}
         component: worker
     spec:
-      serviceAccountName: cms-service-sa
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
-        - name: cms-worker
-          image: mrzzy/cms-worker
+        {{- with .Values.images.worker }}
+        - name: {{ .name }}
+          securityContext:
+            privileged: true
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
           ports:
             - name: cmswork
               containerPort: 26000
           envFrom:
             - configMapRef:
-                name: cms-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
             - configMapRef:
-                name: cms-config-worker-env
+                name: {{ include "k8s-cms.fullname" . }}-config-worker-env
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cms-secrets
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_RESOURCE
@@ -50,6 +56,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+
           livenessProbe:
             tcpSocket:
               port: cmswork
@@ -59,14 +66,11 @@ spec:
             tcpSocket:
               port: cmswork
             periodSeconds: 3
-          securityContext:
-            privileged: true
+
           volumeMounts:
-            - name: cms-config
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: cms-config
+        - name: {{ include "k8s-cms.fullname" . }}-config
           configMap:
-            name: cms-config
-      terminationGracePeriodSeconds: 5
-  volumeClaimTemplates: []
+            name: {{ include "k8s-cms.fullname" . }}-config-file
