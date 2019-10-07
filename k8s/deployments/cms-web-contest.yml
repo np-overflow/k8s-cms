@@ -44,6 +44,11 @@ spec:
                 secretKeyRef:
                   name: cms-secrets
                   key: POSTGRES_PASSWORD
+            - name: CMS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_SECRET_KEY
             # required for container to listen
             - name: CMS_CONTEST
               value: "0.0.0.0"
