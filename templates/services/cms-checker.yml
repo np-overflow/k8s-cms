@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Checker Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.checker.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: checker
+spec:
+  type: {{ .Values.services.checker.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: checker
+  ports:
+    - name: cmscheck
+      port: 22000
+      targetPort: 22000

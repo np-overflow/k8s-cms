@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Admin Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.admin.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: admin
+spec:
+  type: {{ .Values.services.admin.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: admin
+  ports:
+    - name: cmsadmin
+      port: 21100
+      targetPort: 21100

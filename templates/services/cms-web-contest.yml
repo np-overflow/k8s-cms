@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Web Contest Interface Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.webContest.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: contest
+spec:
+  type: {{ .Values.services.contest.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: contest
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8888

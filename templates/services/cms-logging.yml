@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Logging Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.logging.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: logging
+spec:
+  type: {{ .Values.services.logging.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: logging
+  ports:
+    - name: cmsres
+      port: 29000
+      targetPort: 29000

@@ -1,0 +1,160 @@
+# Default values for k8s.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: "k8s-cms"
+fullnameOverride: ""
+
+metadata:
+  # additional labels to apply to all deployed objects
+  labels:
+    app: k8s-cms
+    release: alpha
+    environment: dev
+
+# cms configuration
+config:
+  configPath: /cms/config/cms.conf
+  proxyService:
+    pollInterval: 15
+  rankingService: 
+    configPath: /cms/config/cms.ranking.config
+
+replicas:
+  workersCount: 6
+  
+# configure the images to deploy
+images:
+  pullPolicy: IfNotPresent
+  database:
+    name: cms-db
+    repository: mrzzy/cms-db
+    tag: latest
+  logging:
+    name: cms-log
+    repository: mrzzy/cms-log
+    tag: latest
+  resources:
+    name: cms-resources
+    repository: mrzzy/cms-resource
+    tag: latest
+  scoring:
+    name: cms-scoring
+    repository: mrzzy/cms-scoring
+    tag: latest
+  evaluation:
+    name: cms-evaluation
+    repository: mrzzy/cms-evaluation
+    tag: latest
+  proxy:
+    name: cms-proxy
+    repository: mrzzy/cms-proxy
+    tag: latest
+  printing:
+    name: cms-printing
+    repository: mrzzy/cms-printing
+    tag: latest
+  checker:
+    name: cms-checker
+    repository: mrzzy/cms-checker
+    tag: latest
+  admin:
+    name: cms-web-admin
+    repository: mrzzy/cms-web-admin
+    tag: latest
+  ranking:
+    name: cms-web-ranking
+    repository: mrzzy/cms-web-ranking
+    tag: latest
+  contest:
+    name: cms-web-contest
+    repository: mrzzy/cms-web-contest
+    tag: latest
+  worker:
+    name: cms-worker
+    repository: mrzzy/cms-worker
+    tag: latest
+
+services:
+  database:
+    name: postgresql
+    type: ClusterIP
+  logging:
+    name: k8s-cms-logging
+    type: ClusterIP
+  resources:
+    name: k8s-cms-resources
+    type: ClusterIP
+  scoring:
+    name: k8s-cms-scoring
+    type: ClusterIP
+  evaluation:
+    name: k8s-cms-evaluation
+    type: ClusterIP
+  proxy:
+    name: k8s-cms-proxy
+    type: ClusterIP
+  admin:
+    name: k8s-cms-admin
+    type: ClusterIP
+  printing:
+    name: k8s-cms-printing
+    type: ClusterIP
+  ranking:
+    name: k8s-cms-ranking
+    type: ClusterIP
+  checker:
+    name: k8s-cms-checker
+    type: ClusterIP
+  contest:
+    name: k8s-cms-contest
+    type: ClusterIP
+  worker:
+    name: k8s-cms-worker
+
+  webAdmin:
+    name: k8s-cms-web-admin
+    type: NodePort
+  webRanking:
+    name: k8s-cms-web-ranking
+    type: NodePort
+  webContest:
+    name: k8s-cms-web-contest
+    type: NodePort
+  
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+security:
+  serviceAccount:
+    name: cms-service-sa

@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Ranking Web Interface Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.webRanking.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: ranking
+spec:
+  type: {{ .Values.services.webRanking.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: ranking
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8890

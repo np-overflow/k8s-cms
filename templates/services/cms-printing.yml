@@ -1,0 +1,23 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Printing Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.printing.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: printing
+spec:
+  type: {{ .Values.services.printing.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: printing
+  ports:
+    # port used by service communication
+    - name: cmsprint
+      port: 25123
+      targetPort: 25123

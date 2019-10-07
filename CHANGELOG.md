@@ -1,4 +1,28 @@
 # k8s-cms Changelog
+## Version 0.3.0 - Unreleased
+### Changed
+- migrate kubernetes yaml to helm v2
+    - config maps:
+        - cms-config-env
+        - cms-config
+    - secrets
+        - cms-secrets
+    - Database service and depolyment
+    - LogService service and deployment
+    - ResourceService service and deployment
+    - ScoringService service and deployment
+    - EvaluationService service and deployment
+    - ProxyService service and deployment
+    - AdminWebServer service and deployment
+    - PrintingService service and deployment
+    - RankingWebServer service and deployment
+    - Checker service and deployment
+    - ContestWebServer service and deployment
+    - Worker service and deployment
+
+### Removed
+- remove support for kustomize under k8s/
+
 ## Version 0.2.2 beta - 2019-10-07
 ### Changed
 - fixed images deployed using kustomize tagged 'latest' instead of 'v0.2.1b'

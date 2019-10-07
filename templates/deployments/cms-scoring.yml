@@ -1,0 +1,66 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Scoring Deployment
+#
+
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-cms.fullname" . }}-scoring
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: scoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+{{ include "k8s-cms.labels" . | indent 6 }}
+      component: scoring
+  template:
+    metadata:
+      labels:
+{{ include "k8s-cms.labels" . | indent 8 }}
+        component: scoring
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
+      containers:
+        {{- with .Values.images.scoring }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
+          ports:
+            - name: cmsscore
+              containerPort: 28500
+          envFrom:
+            - configMapRef:
+                name: {{ include "k8s-cms.fullname" . }}-config-env
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: POSTGRES_PASSWORD
+            # required to listen properly
+            - name: CMS_SCORING
+              value: "0.0.0.0"
+
+          livenessProbe:
+            tcpSocket:
+              port: cmsscore
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmsscore
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
+              mountPath: "/cms/config"
+      volumes:
+        - name: {{ include "k8s-cms.fullname" . }}-config-file
+          configMap:
+            name: {{ include "k8s-cms.fullname" . }}-config-file

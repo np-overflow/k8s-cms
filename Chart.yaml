@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: "1.4.rc1"
+name: k8s-cms
+description: Chart to deploy Contest Managment System on Kubernetes.
+version: 0.3.0
+sources:
+- "https://github.com/mrzzy/cms.git"
+- "https://github.com/cms-dev/con_test.git"
+- "https://github.com/vishnubob/wait-for-it.git"

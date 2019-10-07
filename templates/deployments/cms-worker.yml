@@ -1,0 +1,76 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Workers Deployment
+#
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "k8s-cms.fullname" . }}-worker
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: worker
+spec:
+  serviceName: {{ include "k8s-cms.fullname" . }}-worker
+  podManagementPolicy: Parallel
+  replicas: 6
+  selector:
+    matchLabels:
+{{ include "k8s-cms.labels" . | indent 6 }}
+      component: worker
+  template:
+    metadata:
+      labels:
+{{ include "k8s-cms.labels" . | indent 8 }}
+        component: worker
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
+      containers:
+        {{- with .Values.images.worker }}
+        - name: {{ .name }}
+          securityContext:
+            privileged: true
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
+          ports:
+            - name: cmswork
+              containerPort: 26000
+          envFrom:
+            - configMapRef:
+                name: {{ include "k8s-cms.fullname" . }}-config-env
+            - configMapRef:
+                name: {{ include "k8s-cms.fullname" . }}-config-worker-env
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: POSTGRES_PASSWORD
+            # required for container to listen
+            - name: CMS_RESOURCE
+              value: "0.0.0.0"
+            - name: CMS_WORKER_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+          livenessProbe:
+            tcpSocket:
+              port: cmswork
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: cmswork
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
+              mountPath: "/cms/config"
+      volumes:
+        - name: {{ include "k8s-cms.fullname" . }}-config-file
+          configMap:
+            name: {{ include "k8s-cms.fullname" . }}-config-file

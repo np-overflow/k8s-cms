@@ -1,0 +1,23 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Worker Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.worker.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: worker
+spec:
+  # define worker service as headless
+  clusterIP: None 
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: worker
+  ports:
+    - name: cmswork
+      port: 26000
+      targetPort: 26000

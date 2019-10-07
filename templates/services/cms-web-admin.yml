@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Admin Web Interface Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.webAdmin.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: admin
+spec:
+  type: {{ .Values.services.webAdmin.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: admin
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8889

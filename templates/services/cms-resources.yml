@@ -1,0 +1,23 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Resources Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.resources.name }}
+  labels:
+    app: k8s-cms
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: resources
+spec:
+  type: ClusterIP
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: resources
+  ports:
+    - name: cmsres
+      port: 28000
+      targetPort: 28000

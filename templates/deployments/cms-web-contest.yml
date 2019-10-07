@@ -1,0 +1,77 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Contest Web Interface Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-cms.fullname" . }}-web-contest
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: contest
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+{{ include "k8s-cms.labels" . | indent 6 }}
+      component: contest
+  # web-contest pod spec
+  template:
+    metadata:
+      labels:
+{{ include "k8s-cms.labels" . | indent 8 }}
+        component: contest
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
+      containers:
+        {{- with .Values.images.contest }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
+          ports:
+            # port used by contest service
+            - name: cmscontest
+              containerPort: 21000
+            # port used to display the contest interface
+            - name: http
+              containerPort: 8888
+          envFrom:
+            - configMapRef:
+                name: {{ include "k8s-cms.fullname" . }}-config-env
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: POSTGRES_PASSWORD
+            - name: CMS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: CMS_SECRET_KEY
+            # required for container to listen
+            - name: CMS_CONTEST
+              value: "0.0.0.0"
+          
+          livenessProbe:
+            httpGet:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: http
+            periodSeconds: 3
+
+
+          volumeMounts:
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
+              mountPath: "/cms/config"
+      volumes:
+        - name: {{ include "k8s-cms.fullname" . }}-config-file
+          configMap:
+            name: {{ include "k8s-cms.fullname" . }}-config-file

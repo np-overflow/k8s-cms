@@ -1,0 +1,22 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Database Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.database.name }}
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: database
+spec:
+  type: {{ .Values.services.database.type }}
+  selector:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: database
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432

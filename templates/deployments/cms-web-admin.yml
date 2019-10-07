@@ -1,0 +1,81 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# CMS Admin Web Interface Deployment
+#
+
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-cms.fullname" . }}-web-admin
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+{{ include "k8s-cms.labels" . | indent 6 }}
+      component: admin
+  template:
+    metadata:
+      labels:
+{{ include "k8s-cms.labels" . | indent 8 }}
+        component: admin
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
+      containers:
+        {{- with .Values.images.admin }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
+          ports:
+            # port used by admin service
+            - name: cmsadmin
+              containerPort: 21100
+            # port used to display the admin interface
+            - name: http
+              containerPort: 8889
+          envFrom:
+            - configMapRef:
+                name: {{ include "k8s-cms.fullname" . }}-config-env
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: POSTGRES_PASSWORD
+            # required for container to listen
+            - name: CMS_ADMIN
+              value: "0.0.0.0"
+            # inject credentials for admin web server
+            - name: CMS_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: CMS_ADMIN_USER
+            - name: CMS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
+                  key: CMS_ADMIN_PASSWORD
+
+          livenessProbe:
+            httpGet:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: http
+            periodSeconds: 3
+
+          volumeMounts:
+            - name: {{ include "k8s-cms.fullname" . }}-config-file
+              mountPath: "/cms/config"
+      volumes:
+        - name: {{ include "k8s-cms.fullname" . }}-config-file
+          configMap:
+            name: {{ include "k8s-cms.fullname" . }}-config-file

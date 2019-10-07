@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "k8s-cms.fullname" . }}-test-connection"
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget-{{ .Values.services.database.port }}
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "k8s-cms.fullname" . }}:{{ .Values.services.database.port }}']
+  restartPolicy: Never

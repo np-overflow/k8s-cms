@@ -74,7 +74,7 @@ Limitations:
 - printing - hooking up printers to print stuff has not been implemented yet.
 - importing contests - importing contests has not been  implmemented yet.
 - scaling more than 24 instances - only supports scaling up to  24 worker instances
-- requires the cluster (`kube-apiserver` and `kubelet`) to support privileged containers
+- requires the cluster to support privileged containers
 
 ## Contributing
 Guidelines for contributors:

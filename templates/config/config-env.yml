@@ -1,0 +1,35 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Envrionment Configuration
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{include "k8s-cms.fullname" . }}-config-env
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+data:
+  {{- with .Values.services }}
+  CMS_DB: {{ .database.name }}
+  CMS_LOG: {{ .logging.name }}
+  CMS_RESOURCE: {{ .resources.name }}
+  CMS_SCORING: {{ .resources.name }}  
+  CMS_EVALUATION: {{ .evaluation.name }}  
+  CMS_PROXY: {{ .proxy.name }}
+  CMS_ADMIN: {{ .admin.name }}
+  CMS_PRINTING: {{ .printing.name }}
+  CMS_CHECKER: {{ .checker.name }}
+  CMS_RANKING: {{ .ranking.name }}
+  CMS_CONTEST: {{ .contest.name }}
+  {{- end -}}
+
+
+  {{- $services := .Values.services -}}
+  {{- $replicas := .Values.replicas.workersCount | int -}}
+  {{- $fullname := include "k8s-cms.fullname" . }}
+  
+  {{ range $i, $e := until $replicas -}}
+  CMS_WORKER_{{$i}}: {{ $fullname }}-{{$e}}.{{$services.worker.name}}
+  {{ end -}}
