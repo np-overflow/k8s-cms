@@ -7,7 +7,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: cms-web
+  name: {{ include "k8s-cms.fullname" . }}-web
   labels:
     app: k8s-cms
 spec:
