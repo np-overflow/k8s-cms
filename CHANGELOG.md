@@ -1,4 +1,8 @@
 # k8s-cms Changelog
+## Version 0.2.2 beta - 2019-10-07
+### Changed
+- fixed images deployed using kustomize tagged 'latest' instead of 'v0.2.1b'
+
 ## Version 0.2.1 beta - 2019-10-04
 ### Changed
 - securing k8s-cms:
