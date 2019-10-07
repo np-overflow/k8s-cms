@@ -39,6 +39,17 @@ spec:
                 secretKeyRef:
                   name: cms-secrets
                   key: POSTGRES_PASSWORD
+            # inject ranking credentials
+            - name: CMS_RANKING_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_RANKING_USER
+            - name: CMS_RANKING_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cms-secrets
+                  key: CMS_RANKING_PASSWORD
             # required to listen properly
             - name: CMS_PROXY
               value: "0.0.0.0"
