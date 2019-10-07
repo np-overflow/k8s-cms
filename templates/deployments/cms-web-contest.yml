@@ -7,7 +7,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "k8s-cms.fullname" . }}-web-admin
+  name: {{ include "k8s-cms.fullname" . }}-web-contest
   labels:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: contest

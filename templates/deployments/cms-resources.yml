@@ -35,7 +35,7 @@ spec:
               containerPort: 28000
           envFrom:
             - configMapRef:
-              name: {{ include "k8s-cms.fullname" . }}-config-env
+                name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:

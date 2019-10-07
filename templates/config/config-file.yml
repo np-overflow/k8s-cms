@@ -11,7 +11,7 @@ metadata:
   labels:
 {{ include "k8s-cms.labels" . | indent 4 }}
 data:
-  - "cms.conf": | -
-{{ .Files.Get "config/cms.conf" | indent 2 -}}
-  - "cms.ranking.conf": | -
-{{ .Files.Get "config/cms.ranking.conf" | indent 2 -}}
+  "cms.conf": |-
+{{ .Files.Get "config/cms.conf" | indent 4 -}}
+  "cms.ranking.conf": |-
+{{ .Files.Get "config/cms.ranking.conf" | indent 4 -}}

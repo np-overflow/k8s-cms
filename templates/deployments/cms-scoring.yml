@@ -7,7 +7,7 @@
 apiVersion:  apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "k8s-cms.fullname" . }}-cms-scoring
+  name: {{ include "k8s-cms.fullname" . }}-scoring
   labels:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: scoring
