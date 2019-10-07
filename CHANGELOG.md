@@ -23,6 +23,13 @@
 ### Removed
 - remove support for kustomize under k8s/
 
+## Version 0.2.2 beta - 2019-10-07
+### Changed
+- fixed images deployed using kustomize tagged 'latest' instead of 'v0.2.1b'
+- fixed missing cms secret key required for contest web server
+- fixed missing ranking server credentials required for proxy server to access 
+    ranking server
+
 ## Version 0.2.1 beta - 2019-10-04
 ### Changed
 - securing k8s-cms:
