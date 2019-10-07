@@ -5,6 +5,7 @@
 # Common VCS dirs
 .git/
 .gitignore
+.gitmodules
 .bzr/
 .bzrignore
 .hg/
@@ -20,3 +21,11 @@
 .idea/
 *.tmproj
 .vscode/
+tags*
+makefile
+
+# project dependencies
+deps/
+
+# container dockerfiles
+containers/

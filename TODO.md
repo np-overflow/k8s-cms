@@ -1,12 +1,10 @@
 # k8s-cms Roadmap
 ## Version 0.3.0
-- migrate kubernetes yaml to helm v2 
 - use ingress chart to setup nginx ingress
 - migrate postgres db service from in house manifest to postgres chart
 - securing k8s-cms:
-    - setup cert manager chart to use lets encrypt to obtain certificates 
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
-        - set up lets encryptontainer to perform acme challenge for certificate
+        - setup cert manager chart to use lets encrypt to obtain certificates 
 - Quality of Service
     - limit worker resources to ensure quality of service.
     - set limits and requests for pods in kubernetes
