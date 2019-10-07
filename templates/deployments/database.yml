@@ -62,9 +62,9 @@ spec:
             - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: {{ include "k8s-cms.name" . }}-database-data
+        - name: {{ include "k8s-cms.fullname" . }}-database-data
           persistentVolumeClaim:
             claimName: {{ include "k8s-cms.fullname" . }}-database-data-pvc
-        - name: {{ include "k8s-cms.fullname" . }}-config
+        - name: {{ include "k8s-cms.fullname" . }}-config-file
           configMap:
             name: {{ include "k8s-cms.fullname" . }}-config-file

@@ -70,6 +70,6 @@ spec:
             - name: {{ include "k8s-cms.fullname" . }}-config-file
               mountPath: "/cms/config"
       volumes:
-        - name: {{ include "k8s-cms.fullname" . }}-config
+        - name: {{ include "k8s-cms.fullname" . }}-config-file
           configMap:
             name: {{ include "k8s-cms.fullname" . }}-config-file

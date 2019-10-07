@@ -120,7 +120,7 @@ services:
     name: k8s-cms-web-ranking
     type: NodePort
   webContest:
-    name: k8s-cms-web-ranking
+    name: k8s-cms-web-contest
     type: NodePort
   
 ingress:
