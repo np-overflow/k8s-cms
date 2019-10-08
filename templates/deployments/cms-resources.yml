@@ -40,7 +40,7 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cms-secrets
+                  name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: POSTGRES_PASSWORD
             # required for container to listen
             - name: CMS_RESOURCE
@@ -56,9 +56,9 @@ spec:
             periodSeconds: 3
 
           volumeMounts:
-            - name: {{ include "k8s-cms.fullname" . }}-config-file
+            - name: config-file
               mountPath: "/cms/config"
       volumes:
-        - name: {{ include "k8s-cms.fullname" . }}-config-file
+        - name: config-file
           configMap:
             name: {{ include "k8s-cms.fullname" . }}-config-file

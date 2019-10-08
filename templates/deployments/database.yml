@@ -57,14 +57,14 @@ spec:
             periodSeconds: 2
 
           volumeMounts:
-            - name: {{ include "k8s-cms.fullname" . }}-database-data
+            - name: database-data
               mountPath: "/var/lib/postgresql/data"
-            - name: {{ include "k8s-cms.fullname" . }}-config-file
+            - name: config-file
               mountPath: "/cms/config"
       volumes:
-        - name: {{ include "k8s-cms.fullname" . }}-database-data
+        - name: database-data
           persistentVolumeClaim:
             claimName: {{ include "k8s-cms.fullname" . }}-database-data-pvc
-        - name: {{ include "k8s-cms.fullname" . }}-config-file
+        - name: config-file
           configMap:
             name: {{ include "k8s-cms.fullname" . }}-config-file

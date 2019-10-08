@@ -69,9 +69,9 @@ spec:
 
 
           volumeMounts:
-            - name: {{ include "k8s-cms.fullname" . }}-config-file
+            - name: config-file
               mountPath: "/cms/config"
       volumes:
-        - name: {{ include "k8s-cms.fullname" . }}-config-file
+        - name: config-file
           configMap:
             name: {{ include "k8s-cms.fullname" . }}-config-file
