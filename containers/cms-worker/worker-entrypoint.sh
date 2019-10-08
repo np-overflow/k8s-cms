@@ -16,7 +16,7 @@ if [ -n "$CMS_WORKER_NAME" ]
 then
     # extract worker shard no. from worker name
     CMS_WORKER_SHARD=$(printf "$CMS_WORKER_NAME" | \
-        sed -e 's/cms-worker-\([0-9]*\)\(.cms-worker\)*/\1/g')
+        sed -e 's/.*worker-\([0-9]*\).*/\1/g')
 else
     CMS_WORKER_SHARD=${CMS_WORKER_SHARD:-"0"}
 fi
