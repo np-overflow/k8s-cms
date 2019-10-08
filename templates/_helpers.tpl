@@ -37,6 +37,7 @@ Common labels
 {{- define "k8s-cms.labels" -}}
 {{- toYaml .Values.metadata.labels -}}
 version: {{ .Chart.Version }}
+instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "k8s-cms.name" . }}
 app.kubernetes.io/fullname: {{ include "k8s-cms.fullname" . }}
 {{- if .Chart.AppVersion }}

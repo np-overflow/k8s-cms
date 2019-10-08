@@ -157,4 +157,4 @@ affinity: {}
 
 security:
   serviceAccount:
-    name: cms-service-sa
+    name: k8s-cms-service-sa
