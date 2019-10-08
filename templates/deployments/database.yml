@@ -6,7 +6,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "k8s-cms.fullname" . }}-cms-database
+  name: {{ include "k8s-cms.fullname" . }}-database
   labels:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: database

@@ -12,7 +12,7 @@ metadata:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: admin
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas.adminWebCount }}
   selector:
     matchLabels:
 {{ include "k8s-cms.labels" . | indent 6 }}
