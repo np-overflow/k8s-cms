@@ -4,7 +4,7 @@
 # Certificate Issuer
 # 
 
-{{if ".Values.certificates.enabled" -}}
+{{if ".Values.certGenerate.enabled" -}}
 
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Issuer
@@ -23,7 +23,7 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     {{- end }}
     # Email address used for ACME registration
-    email: {{ .Values.certificates.email }}
+    email: {{ .Values.certGenerate.email }}
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: issuer-letsencrypt-staging-key
