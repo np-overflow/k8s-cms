@@ -4,3 +4,5 @@ tags*
 .env
 # vim sessions
 .session.vim
+# dependency helm charts
+charts/

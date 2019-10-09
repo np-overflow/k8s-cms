@@ -22,7 +22,7 @@ config:
     configPath: /cms/config/cms.ranking.config
 
 replicas:
-  workersCount: 6
+  workersCount: 6 # max 24
   contestWebCount: 3
   adminWebCount: 1
   
@@ -167,3 +167,9 @@ affinity: {}
 security:
   serviceAccount:
     name: k8s-cms-service-sa
+
+# addons
+nginx-ingress: 
+  enabled: true
+    metrics:
+      enabled: false # prometheus metrics
