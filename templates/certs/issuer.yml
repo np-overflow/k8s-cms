@@ -10,9 +10,9 @@ apiVersion: certmanager.k8s.io/v1alpha1
 kind: Issuer
 metadata:
   {{- if ne .Values.environment "production" }}
-  name: letsencrypt-staging
+  name: {{ .Release.Name }}-letsencrypt-staging
   {{- else }}
-  name: letsencrypt-production
+  name: {{ .Release.Name }}-letsencrypt-production
   {{- end }}
 spec:
   acme:
