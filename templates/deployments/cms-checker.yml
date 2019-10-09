@@ -22,6 +22,8 @@ spec:
       labels:
 {{ include "k8s-cms.labels" . | indent 8 }}
         component: checker
+      annotations:
+{{ include "k8s-cms.annotations" . | indent 8 }}
     spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}

@@ -46,3 +46,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
+
+{{/*
+Common annotations
+Checksum annotations to force pods to reload configuration on update.
+or secrets reload.
+*/}}
+{{- define "k8s-cms.annotations" -}}
+{{- if.Values.metadata.annotations }}
+{{- toYaml .Values.metadata.annotations -}}
+{{- end -}}
+checksum/{{ include "k8s-cms.fullname" . }}-secrets: {{ include (print $.Template.BasePath "/secrets.yml") . | sha256sum }}
+checksum/{{ include "k8s-cms.fullname" . }}-config-env: {{ include (print $.Template.BasePath "/config/config-env.yml") . | sha256sum }}
+checksum/{{ include "k8s-cms.fullname" . }}-config-file: {{ include (print $.Template.BasePath "/config/config-file.yml") . | sha256sum }}
+{{- end -}}
+

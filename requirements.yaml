@@ -8,4 +8,4 @@ dependencies:
   - name: nginx-ingress
     version: 1.24.0
     repository: https://kubernetes-charts.storage.googleapis.com
-    condition: addons.nginxIngress.enabled
+    condition: nginx-ingress.enabled

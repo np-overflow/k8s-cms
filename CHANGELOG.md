@@ -1,5 +1,8 @@
 # k8s-cms Changelog
 ## Version 0.3.0 - Unreleased
+### Added
+- checksum configmaps and secrets to restart pods on updates
+
 ### Changed
 - migrate kubernetes yaml to helm v2
     - config maps:

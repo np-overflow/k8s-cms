@@ -24,6 +24,9 @@ spec:
       labels:
 {{ include "k8s-cms.labels" . | indent 8 }}
         component: worker
+      annotations:
+{{ include "k8s-cms.annotations" . | indent 8 }}
+        checksum/{{ include "k8s-cms.fullname" . }}-config-worker-env: {{ include (print $.Template.BasePath "/config/config-worker-env.yml") . | sha256sum }}
     spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}

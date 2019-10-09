@@ -1,10 +1,10 @@
 # k8s-cms Roadmap
 ## Version 0.3.0
-- use ingress chart to setup nginx ingress
-- migrate postgres db service from in house manifest to postgres chart
 - securing k8s-cms:
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
         - setup cert manager chart to use lets encrypt to obtain certificates 
+- migrate postgres db service from in house manifest to postgres chart
+- setup prometheus & garfarna for monitoring.
 - Quality of Service
     - limit worker resources to ensure quality of service.
     - set limits and requests for pods in kubernetes
@@ -32,4 +32,3 @@
     - spawn multiple `cms-proxy` to serve multiple contests
 
 - printing support.
-
