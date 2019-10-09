@@ -1,6 +1,8 @@
-# Default values for k8s.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+#
+# k8s-cms
+# Kubernetes Intergration
+# Helm Values
+# 
 
 imagePullSecrets: []
 nameOverride: "k8s-cms"
@@ -174,3 +176,6 @@ nginx-ingress:
   controller:
     metrics:
       enabled: true # prometheus metrics
+
+cert-manager:
+  enabled: true

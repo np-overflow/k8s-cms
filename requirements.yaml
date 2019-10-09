@@ -5,7 +5,10 @@
 # 
 
 dependencies:
-  - name: nginx-ingress
-    version: 1.24.0
-    repository: https://kubernetes-charts.storage.googleapis.com
-    condition: nginx-ingress.enabled
+- name: nginx-ingress
+  version: 1.24.0
+  repository: https://kubernetes-charts.storage.googleapis.com
+  condition: nginx-ingress.enabled
+- name: cert-manager
+  version: 0.10.1
+  repository: https://charts.jetstack.io
