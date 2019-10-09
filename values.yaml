@@ -7,7 +7,7 @@
 imagePullSecrets: []
 nameOverride: "k8s-cms"
 fullnameOverride: ""
-environment: dev
+environment: develop
 
 metadata:
   # additional labels to apply to all deployed objects
@@ -167,19 +167,19 @@ ingress:
   # configure tls certificate secrets for HTTps
   # if using certificate generation, the sercrets do not have to exist
   tls: 
-    - secretName: k8s-cms-contest-tls-cert
+    - secretName: k8s-cms-tls-cert
       hosts:
         - k8s-cms.io
-    - secretName: k8s-cms-admin-tls-cert
-      hosts:
         - admin.k8s-cms.io
-    - secretName: k8s-cms-ranking-tls-cert
-      hosts:
         - ranking.k8s-cms.io
   
 # config for cert generation.
 # Requires cert-manager to be enabled and ingress to be configured 
 # correctly to work (ie. manually check dns hosts resolves to  ingress ip)
+# When environment!=production, certGenerate generates untrusted certifcates for testing
+# When environment=production, certGenerate trusted certifcates with letsencrypt
+# NOTE: ensure that cert generation works before using production environment
+# as there are low rate limits on trust certifcate generation.
 certGenerate:
   # whether to enable certificate generation
   enabled: false 
