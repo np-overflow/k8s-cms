@@ -1,0 +1,14 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Configuration Overrides for CMS worker
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "k8s-cms.fullname" . }}-config-worker-env
+data:
+  {{ range $i, $e := until 24 -}}
+  CMS_WORKER_{{$i}}: 0.0.0.0
+  {{ end -}}
