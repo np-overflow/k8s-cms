@@ -7,13 +7,13 @@
 imagePullSecrets: []
 nameOverride: "k8s-cms"
 fullnameOverride: ""
+environment: dev
 
 metadata:
   # additional labels to apply to all deployed objects
   labels:
     app: k8s-cms
     release: alpha
-    environment: dev
 
 # cms configuration
 config:
@@ -169,6 +169,12 @@ affinity: {}
 security:
   serviceAccount:
     name: k8s-cms-service-sa
+  
+certificates:
+  enabled: false
+  # Email address used for ACME registration
+  email: program.nom@gmail.com
+
 
 # addons
 nginx-ingress: 
