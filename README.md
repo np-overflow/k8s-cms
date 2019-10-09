@@ -12,7 +12,6 @@ Adopting CMS to run on kubernetes brings the following benefits:
     - supports running multiple contest web servers
 
 ## Deploy
-
 Common instructions:
 1. Clone or Download the repository
 2. Fill `env` file with credentials
@@ -21,13 +20,17 @@ cp env .env
 nano .env # use your favourite editor
 ```
 
-### Kubernetes Cluster
+### Kubernetes
 Runs CMS on Kubernetes cluster. Suitable for hosting actual contests:
 - Requires Kubernetes Cluster with the following:
     - preconfigured default storage class (check with `kubectl get sc`)
     - ingress controller optional for ingress support.
+- Requires [Helm](https://helm.sh/docs/using_helm/#installing-helm) to be up and running. 
+    - For security use [Tillerless Helm](https://github.com/rimusz/helm-tiller)
 ```sh
-kubectl apply -k .
+helm tiller start # tillerless helm only
+helm install .
+helm tiller stop # tillerless helm only
 ```
 
 ### Docker-Compose
@@ -36,7 +39,7 @@ Runs CMS on a single machine. Suitable for testing:
 - Limited to only 2 workers.
 ```sh
 docker-compose pull 
-docker-compose up 
+docker-compose up
 ```
 
 ## Design
@@ -67,20 +70,22 @@ Security Measures:
 Security Concerns:
 - `cms-worker` runs as a privileged container as the `isolate` sandbox requires 
     privileged access to the system.
-
+- `helm`'s Tiller uses an exposes a insecure GRPC port with cluster wide admin 
+    rights. Use [Tillerless Helm](https://github.com/rimusz/helm-tiller) to run
+    Tiller locally for security.
 ### Limitations
 Limitations:
 - multiple contests - only supports running one contest at a time
 - printing - hooking up printers to print stuff has not been implemented yet.
 - importing contests - importing contests has not been  implmemented yet.
-- scaling more than 24 instances - only supports scaling up to  24 worker instances
+- scaling more than 24 instances - only supports scaling up to 24 worker instances
 - requires the cluster to support privileged containers
 
 ## Contributing
 Guidelines for contributors:
 - proposed changes: `TODO.md`
 - project changelog: `CHANGELOG.md`
-
+ 
 Development setup for contributors:
 1. Resolve submodules after cloning;
 ```sh
@@ -94,5 +99,9 @@ nano .env # use your favourite editor
 3. Run the stack
 ```sh
 docker-compose up # use docker-compose OR
-kubectl apply -k . # use kubernetes
+
+# use kubernetes
+helm tiller start # tillerless helm only
+helm install .
+helm tiller stop # tillerless helm only
 ```
