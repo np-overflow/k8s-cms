@@ -22,6 +22,9 @@
     - Checker service and deployment
     - ContestWebServer service and deployment
     - Worker service and deployment
+- securing k8s-cms:
+    - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
+        - setup cert manager chart to use lets encrypt to obtain certificates 
 
 ### Removed
 - remove support for kustomize under k8s/
