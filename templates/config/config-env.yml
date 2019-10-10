@@ -31,5 +31,5 @@ data:
   {{- $fullname := include "k8s-cms.fullname" . }}
   
   {{ range $i, $e := until $replicas -}}
-  CMS_WORKER_{{$i}}: {{ $fullname }}-{{$e}}.{{$services.worker.name}}
+  CMS_WORKER_{{$i}}: {{ $fullname }}-worker-{{$e}}.{{$services.worker.name}}
   {{ end -}}

@@ -12,7 +12,7 @@ metadata:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: worker
 spec:
-  serviceName: {{ .Values.service.worker.name }}
+  serviceName: {{ .Values.services.worker.name }}
   podManagementPolicy: Parallel
   replicas: 6
   selector:
