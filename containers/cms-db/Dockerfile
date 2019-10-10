@@ -40,5 +40,5 @@ RUN cp /scripts/setup_db.sh /docker-entrypoint-initdb.d/
 
 # configure entrypoint script
 ENV CMS_DB=0.0.0.0
-ENTRYPOINT ["/scripts/cms-entrypoint.sh", "docker-entrypoint.sh"]
-CMD ["postgres"]
+ENTRYPOINT ["/scripts/cms-entrypoint.sh"]
+CMD [ "docker-entrypoint.sh", "postgres" ]

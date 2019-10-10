@@ -1,25 +1,32 @@
 #!/bin/bash
-set -e
 #
 # k8s-cms
 # Docker Entrypoint
 #
 
-## setup config
+## configuable env var
 # determine path of configuration
 CMS_CONFIG=${CMS_CONFIG:-"/cms/config/cms.conf"}
 CMS_RANKING_CONFIG=${CMS_RANKING_CONFIG:-"/cms/config/cms.ranking.conf"}
+ORIG_CMS_CONFIG="$CMS_CONFIG"
+ORIG_CMS_RANKING_CONFIG="$CMS_RANKING_CONFIG"
+# defaults
+export POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-"YWaEjprTaRn3XGKuf5K3oB4vmVUrtCvh"}
+
+## setup config
 # populates configuration with environment values
-envsubst < $CMS_CONFIG > "/etc/$(basename $CMS_CONFIG)"
-envsubst < $CMS_RANKING_CONFIG > "/etc/$(basename $CMS_RANKING_CONFIG)"
+envsubst < $ORIG_CMS_CONFIG > "/etc/$(basename $CMS_CONFIG)"
+envsubst < $ORIG_CMS_RANKING_CONFIG > "/etc/$(basename $CMS_RANKING_CONFIG)"
 # update env vars pointing to populated config path
 export CMS_CONFIG="/etc/$(basename $CMS_CONFIG)"
 export CMS_RANKING_CONFIG="/etc/$(basename $CMS_RANKING_CONFIG)"
 
 if [ "$CMS_DB" = "0.0.0.0" ] 
 then
+    # DB requires connection to print
+    env CMS_DB="localhost" envsubst < "$ORIG_CMS_CONFIG" > "/etc/$(basename $CMS_CONFIG)"
     # running as DB - require root permissions
-    exec sh -c "$*"
+    exec bash -c "$*"
 elif [ -n "$CMS_DB" ] 
 then
     # not running as DB but db present
