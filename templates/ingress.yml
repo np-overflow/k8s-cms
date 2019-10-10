@@ -14,7 +14,14 @@ metadata:
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+  {{- end -}}
+    {{- if .Values.certGenerate.enabled -}}
+    {{- if ne .Values.environment "production" -}}
+    certmanager.k8s.io/issuer: {{ .Release.Name }}-letsencrypt-staging
+    {{- else -}}
+    certmanager.k8s.io/issuer: {{ .Release.Name }}-letsencrypt-production
+    {{- end }}
+    {{- end }}
 spec:
 {{- if .Values.ingress.tls }}
   tls:

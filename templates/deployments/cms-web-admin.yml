@@ -15,7 +15,7 @@ spec:
   replicas: {{ .Values.replicas.adminWebCount }}
   selector:
     matchLabels:
-{{ include "k8s-cms.labels" . | indent 6 }}
+{{ include "k8s-cms.selectors" . | indent 6 }}
       component: admin
   template:
     metadata:

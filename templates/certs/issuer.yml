@@ -1,0 +1,36 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# Certificate Issuer
+# 
+
+{{if ".Values.certGenerate.enabled" -}}
+
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  {{- if ne .Values.environment "production" }}
+  name: {{ .Release.Name }}-letsencrypt-staging
+  {{- else }}
+  name: {{ .Release.Name }}-letsencrypt-production
+  {{- end }}
+spec:
+  acme:
+    # The ACME server URL
+    {{- if ne .Values.environment "production" }}
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    {{- else }}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    {{- end }}
+    # Email address used for ACME registration
+    email: {{ .Values.certGenerate.email }}
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: issuer-letsencrypt-staging-key
+    # Enable the HTTP-01 challenge provider
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+
+{{- end -}}

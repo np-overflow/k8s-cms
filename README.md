@@ -27,11 +27,21 @@ Runs CMS on Kubernetes cluster. Suitable for hosting actual contests:
     - ingress controller optional for ingress support.
 - Requires [Helm](https://helm.sh/docs/using_helm/#installing-helm) to be up and running. 
     - For security use [Tillerless Helm](https://github.com/rimusz/helm-tiller)
+
 ```sh
 helm tiller start # tillerless helm only
 helm install .
 helm tiller stop # tillerless helm only
 ```
+
+#### Optional Addons
+Optionally configure addons the following in `values.yaml` before `helm install .`
+- Expose services with ingress:
+    - deploy a Nginx ingress controller setting `nginx-ingress.enabled`
+    - set `ingress.enabled` to `true` and configure dns hosts
+- Automatically provision TLS certificates for HTTPs
+    - deploy a Nginx ingress controller setting `nginx-ingress.enabled`
+    - set `certGenerate.enabled` to `true` and configure email
 
 ### Docker-Compose
 Runs CMS on a single machine. Suitable for testing:
@@ -73,6 +83,7 @@ Security Concerns:
 - `helm`'s Tiller uses an exposes a insecure GRPC port with cluster wide admin 
     rights. Use [Tillerless Helm](https://github.com/rimusz/helm-tiller) to run
     Tiller locally for security.
+
 ### Limitations
 Limitations:
 - multiple contests - only supports running one contest at a time
