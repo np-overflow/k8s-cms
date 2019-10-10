@@ -11,7 +11,7 @@ then
 fi
 
 # add admin user if not prosent present
-python3 ./cmscontrib/AddAdmin.py -p "$CMS_ADMIN_PASSWORD" "$CMS_ADMIN_USER"
+python3 /cms/cmscontrib/AddAdmin.py -p "$CMS_ADMIN_PASSWORD" "$CMS_ADMIN_USER"
 
 # run admin web server
-exec ./scripts/cmsAdminWebServer 0
+exec /cms/scripts/cmsAdminWebServer 0
