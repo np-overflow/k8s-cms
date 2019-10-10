@@ -15,7 +15,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-{{ include "k8s-cms.labels" . | indent 6 }}
+{{ include "k8s-cms.selectors" . | indent 6 }}
       component: printing
   template:
     metadata:
