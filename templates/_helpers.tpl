@@ -49,6 +49,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
+Label Selectors
+Used by services and deployments to figure out which pods to manage/direct to.
+*/}}
+{{- define "k8s-cms.selectors" -}}
+app.kubernetes.io/name: {{ include "k8s-cms.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Common annotations
 Checksum annotations to force pods to reload configuration on update.
 or secrets reload.
