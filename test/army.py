@@ -1,3 +1,9 @@
+#
+# k8s-cms
+# Contest Web Server Testing 
+# Submission Script
+#
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -8,7 +14,7 @@ import os
 def main():
     # Load Browser
     browser = webdriver.Firefox()
-    browser.get("http://demo-npio.np-overflow.club/OverloadingServer")
+    browser.get("https://demo-npio.np-overflow.club/OverloadingServer")
 
     # Log In
     browser.find_element_by_id("username").send_keys("Army")
@@ -28,3 +34,6 @@ def main():
     except:
         browser.quit()
         print("Page not loading")
+
+if __name__ == "__main__":
+    main()
