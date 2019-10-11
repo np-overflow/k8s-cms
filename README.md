@@ -37,11 +37,15 @@ helm tiller stop # tillerless helm only
 #### Optional Addons
 Optionally configure addons the following in `values.yaml` before `helm install .`
 - Expose services with ingress:
-    - deploy a Nginx ingress controller setting `nginx-ingress.enabled`
+    - deploy nginx ingress controller setting `nginx-ingress.enabled` to `true`
     - set `ingress.enabled` to `true` and configure dns hosts
-- Automatically provision TLS certificates for HTTPs
-    - deploy a Nginx ingress controller setting `nginx-ingress.enabled`
+- Automatically provision TLS certificates for HTTPs:
+    - expose services and test services with ingress first
+    - deploy cert-manage by setting `cert-manager.enabled` to `true`
     - set `certGenerate.enabled` to `true` and configure email
+- Mointoring with monitoring and alerts and prometheus and grafana 
+    - deploy cert-manage by setting `prometheus-operato.enabled` to `true`
+    - Port forward the grafana service to access monitoing dashboards.
 
 ### Docker-Compose
 Runs CMS on a single machine. Suitable for testing:
