@@ -184,9 +184,10 @@ certGenerate:
   # whether to enable certificate generation
   enabled: false 
   # Email address used for ACME registration
-  email: yr.email.address.here@gmail.com
+  email: yr.email.address.here@gmaild.om
 
 # addons
+# nginx inresss controller
 nginx-ingress: 
   # whether to deploy a ingress controller
   enabled: true 
@@ -194,5 +195,9 @@ nginx-ingress:
     metrics:
       enabled: true # prometheus metrics
 
+# nginx nginx controller
 cert-manager:
-  enabled: true # whether to deploy
+  enabled: true # whether to deploy cert manager 
+
+prometheus-operator:
+  enabled: true # whether to deploy prometheus-opert

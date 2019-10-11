@@ -5,5 +5,8 @@ dependencies:
 - name: cert-manager
   repository: https://charts.jetstack.io
   version: v0.10.1
-digest: sha256:f71368d3f988b60cc24625df811cca08d403d41ad2448a5b6fdd3b269beaabcd
-generated: "2019-10-09T18:55:25.557348054+08:00"
+- name: prometheus-operator
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 6.14.2
+digest: sha256:5fd8177e3ebbffc3cd9e8c054ad237679fc32d6e5caa5dbc51f2ff9ec1b05aea
+generated: "2019-10-11T11:15:49.265926501+08:00"
