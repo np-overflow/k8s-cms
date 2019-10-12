@@ -74,7 +74,7 @@ def submit(browser):
     wait(browser, 10, EC.presence_of_element_located((By.CLASS_NAME, "task_submissions")))
 
     # Submit
-    browser.find_element_by_id("input0").send_keys("/home/seluser/project/run.c")
+    browser.find_element_by_id("input0").send_keys(str(os.getcwd()) + "/num.c")
     browser.find_element_by_class_name("btn-success").click()
 
 def main():
