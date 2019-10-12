@@ -15,7 +15,7 @@ data:
   CMS_DB: {{ .database.name }}
   CMS_LOG: {{ .logging.name }}
   CMS_RESOURCE: {{ .resources.name }}
-  CMS_SCORING: {{ .resources.name }}  
+  CMS_SCORING: {{ .scoring.name }}  
   CMS_EVALUATION: {{ .evaluation.name }}  
   CMS_PROXY: {{ .proxy.name }}
   CMS_ADMIN: {{ .admin.name }}

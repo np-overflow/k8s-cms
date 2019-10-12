@@ -200,4 +200,4 @@ cert-manager:
   enabled: true # whether to deploy cert manager 
 
 prometheus-operator:
-  enabled: true # whether to deploy prometheus-opert
+  enabled: true # whether to deploy prometheus-operator
