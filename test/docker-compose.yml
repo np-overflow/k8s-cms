@@ -1,0 +1,26 @@
+#
+# k8s-cms
+# Docker Compose
+# Contest Web Server Testing 
+#
+
+version: "3"
+services:
+  selenium:
+    image: mrzzy/cms-test-selenium
+    build:
+      context: "selenium"
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+    volumes:
+      - ".run.c:/run.c"
+  submit:
+    image: mrzzy/cms-test-submit 
+    build:
+      context: "submit"
+    depends_on:
+      - selenium
+    volumes:
+      - ".:/project"
+    command: sleep 99999d
