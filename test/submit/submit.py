@@ -1,14 +1,14 @@
 #
 # k8s-cms
 # Contest Web Server Testing 
-# Submission Script
+# Submission Script to simulate load
 #
 
 import os
 import time
 import socket
+import numpy as np
 
-from random import random
 from multiprocessing import Process
 
 from selenium import webdriver
@@ -64,7 +64,7 @@ def login(browser):
     wait(browser, 10, EC.presence_of_element_located((By.ID, "countdown_box")))
     assert is_login(browser)
 
-# submission test
+# perform a single submission
 def submit(browser):
     # get contest page
     browser.get("https://demo-npio.np-overflow.club/test")
@@ -80,33 +80,56 @@ def submit(browser):
     browser.find_element_by_id("input0").send_keys("/home/seluser/project/test.c")
     browser.find_element_by_class_name("btn-success").click()
 
-def main():
+
+# wait for random duration sampled from a normal distribtion governed by the args:
+# hit_mean - average wait time when submitting
+# hit_deviation - standard deviation of wait time before submitting
+def random_wait(mean, deviation):
+    # wait for a random normal distribution before first submission
+    wait_time = np.random.normal(mean, deviation)
+    wait_time = max([wait_time, 0])
+    time.sleep(wait_time)
+
+# perform the submission test with the given arguments;
+# seed - random no. genertor seed.
+# hit_mean - average wait time when submitting
+# hit_deviation - standard deviation of wait time before submitting
+# selenium - the host that exposes a selenium servicef
+# port - port of the seleniums service
+def main(seed, hit_mean=60, hit_deviation=30, selenium_host="selenium", port=4444):
     # wait for selenium service to become available
-    wait_for_port("selenium", 4444)
+    wait_for_port(selenium_host, port)
 
+    # seed random no. generator
+    np.random.seed(seed)
 
-    # Load Browser
-    success = True
+    # wait for a random duration before starting to submit
+    random_wait(hit_mean, hit_deviation)
     while True:
-        if success == True:
-            time.sleep(random() * 60)
 
         try:
-            browser = webdriver.Remote(command_executor='http://selenium:4444/wd/hub',
+            # perform submission hit
+            browser = webdriver.Remote(command_executor=f"http://{selenium_host}:{port}/wd/hub",
                                        desired_capabilities=DesiredCapabilities.FIREFOX)
             submit(browser)
             browser.quit()
+            print(".", end="", flush=True)
+
+            # wait for a random duration before submitting again
+            random_wait(hit_mean, hit_deviation)
         except:
-            print("error")
-            success = False
-        finally:
-            print("submitted.")
-            success = True
+            print("E", end="", flush=True)
+            # wait for up to 5s before retrying
+            time.sleep(np.random.random() * 5)
 
 if __name__ == "__main__":
-    processes = [ Process(target=main) for i in range(16) ]
-    for process in processes:
+    n_processes = 12
+    processes = []
+    for i in range(n_processes):
+        seed = np.random.randint(0, 2**32 -1)
+        process = Process(target=main, kwargs={ "seed": seed })
         process.start()
+        processes.append(process)
 
     try:
         while True:

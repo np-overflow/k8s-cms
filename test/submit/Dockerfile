@@ -3,7 +3,7 @@
 # Contest Web Server Testing 
 #
 
-FROM python:3.7.4-alpine
+FROM python:3.7.4
 
 # install module requirements
 RUN mkdir /project
