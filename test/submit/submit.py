@@ -8,6 +8,9 @@ import os
 import time
 import socket
 
+from random import random
+from multiprocessing import Process
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -74,19 +77,41 @@ def submit(browser):
     wait(browser, 10, EC.presence_of_element_located((By.CLASS_NAME, "task_submissions")))
 
     # Submit
-    browser.find_element_by_id("input0").send_keys(str(os.getcwd()) + "/num.c")
+    browser.find_element_by_id("input0").send_keys("/home/seluser/project/test.c")
     browser.find_element_by_class_name("btn-success").click()
 
 def main():
     # wait for selenium service to become available
     wait_for_port("selenium", 4444)
 
-    # Load Browser
-    browser = webdriver.Remote(command_executor='http://selenium:4444/wd/hub',
-                               desired_capabilities=DesiredCapabilities.FIREFOX)
-    submit(browser)
 
-    browser.quit()
+    # Load Browser
+    success = True
+    while True:
+        if success == True:
+            time.sleep(random() * 60)
+
+        try:
+            browser = webdriver.Remote(command_executor='http://selenium:4444/wd/hub',
+                                       desired_capabilities=DesiredCapabilities.FIREFOX)
+            submit(browser)
+            browser.quit()
+        except:
+            print("error")
+            success = False
+        finally:
+            print("submitted.")
+            success = True
 
 if __name__ == "__main__":
-    main()
+    processes = [ Process(target=main) for i in range(16) ]
+    for process in processes:
+        process.start()
+
+    try:
+        while True:
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        for process in processes:
+            process.kill()
+
