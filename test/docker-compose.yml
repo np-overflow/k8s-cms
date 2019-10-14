@@ -9,7 +9,7 @@ services:
   selenium:
     image: mrzzy/cms-test-selenium
     build:
-      context: "selenium"
+      context: "containers/selenium"
     ports:
       - "4444:4444"
       - "5900:5900"
@@ -18,7 +18,7 @@ services:
   submit:
     image: mrzzy/cms-test-submit 
     build:
-      context: "submit"
+      context: "containers/submit"
     depends_on:
       - selenium
     volumes:
