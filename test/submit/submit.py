@@ -10,6 +10,7 @@ import socket
 import numpy as np
 
 from multiprocessing import Process
+from argparse import ArgumentParser
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -49,37 +50,32 @@ def wait(browser, timeout, predicate):
         browser.quit()
         raise TimeoutError
 
-# perform login to the contest site
-def login(browser):
+# perform login to the contest site with given credentialf
+def login(browser, username, password):
     if is_login(browser): return # alreadly logged in
-
-    # get contest page
-    browser.get("https://demo-npio.np-overflow.club/test")
 
     # Log In
     wait(browser, 10, EC.presence_of_element_located((By.ID, "username")))
-    browser.find_element_by_id("username").send_keys("test" + Keys.TAB)
-    browser.find_element_by_id("password").send_keys("test" + Keys.ENTER)
+    browser.find_element_by_id("username").send_keys(username + Keys.TAB)
+    browser.find_element_by_id("password").send_keys(password + Keys.ENTER)
 
     wait(browser, 10, EC.presence_of_element_located((By.ID, "countdown_box")))
     assert is_login(browser)
 
-# perform a single submission
-def submit(browser):
+# perform a single submission to target_url using the given contest and task
+def submit(browser, target_url, contest, task):
     # get contest page
-    browser.get("https://demo-npio.np-overflow.club/test")
-
-    # if we are not already login, perform login first
-    if not is_login(browser): login(browser)
+    browser.get(f"{target_url}/{contest}")
+    # if we are not already authenticated, perform login first
+    if not is_login(browser): login(browser, args.username, args.password)
 
     # Load submission page
-    browser.get("https://demo-npio.np-overflow.club/test/tasks/test/submissions")
+    browser.get(f"{target_url}/{contest}/tasks/{task}/submissions")
     wait(browser, 10, EC.presence_of_element_located((By.CLASS_NAME, "task_submissions")))
 
     # Submit
     browser.find_element_by_id("input0").send_keys("/home/seluser/project/test.c")
     browser.find_element_by_class_name("btn-success").click()
-
 
 # wait for random duration sampled from a normal distribtion governed by the args:
 # hit_mean - average wait time when submitting
@@ -90,44 +86,79 @@ def random_wait(mean, deviation):
     wait_time = max([wait_time, 0])
     time.sleep(wait_time)
 
-# perform the submission test with the given arguments;
+# perform the submission test with the given arguments:
 # seed - random no. genertor seed.
-# hit_mean - average wait time when submitting
-# hit_deviation - standard deviation of wait time before submitting
-# selenium - the host that exposes a selenium servicef
-# port - port of the seleniums service
-def main(seed, hit_mean=60, hit_deviation=30, selenium_host="selenium", port=4444):
+# args.hit_mean - average wait time when submitting
+# args.hit_deviation - standard deviation of wait time before submitting
+# args.target_url - url of the contest web server to target
+# args.selenium_host - the host that exposes a selenium servicef
+# args.selenium_port - port of the seleniums service
+def main(seed, args):
     # wait for selenium service to become available
-    wait_for_port(selenium_host, port)
+    wait_for_port(args.selenium_host, args.selenium_port)
 
     # seed random no. generator
     np.random.seed(seed)
 
     # wait for a random duration before starting to submit
-    random_wait(hit_mean, hit_deviation)
+    random_wait(args.hit_mean, args.hit_deviation)
     while True:
 
         try:
             # perform submission hit
-            browser = webdriver.Remote(command_executor=f"http://{selenium_host}:{port}/wd/hub",
-                                       desired_capabilities=DesiredCapabilities.FIREFOX)
-            submit(browser)
+            browser = webdriver.Remote(
+                command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
+                desired_capabilities=DesiredCapabilities.FIREFOX)
+
+
+            submit(browser, args.target_url, args.contest, args.task)
             browser.quit()
             print(".", end="", flush=True)
 
             # wait for a random duration before submitting again
-            random_wait(hit_mean, hit_deviation)
-        except:
-            print("E", end="", flush=True)
-            # wait for up to 5s before retrying
-            time.sleep(np.random.random() * 5)
+            random_wait(args.hit_mean, args.hit_deviation)
+        finally:
+            pass
+
+# parse command line arguments for submit.py
+def parse_args():
+    parser = ArgumentParser(description="Simulates a submission load test on CMS")
+
+    # options
+    parser.add_argument("-u", "--username", dest="username",
+                        help="Username to use when authenticating with contest server", default="test")
+    parser.add_argument("-p", "--password", dest="password",
+                        help="password to use when authenticating with contest server", default="test")
+    parser.add_argument("-n", "--n-users", dest="processes", type=int,
+                        help="No. of users to simulate", default=4)
+    parser.add_argument("--hit-avg", type=float, dest="hit_mean",
+                        help="Average secs to wait before submitting", default=60)
+    parser.add_argument("--hit-stddev", type=float, dest="hit_deviation",
+                        help="Standard deviation of secs to wait before submitting", default=30)
+    parser.add_argument("-c", "--contest", help="The contest to select when testing",
+                        dest="contest", default="test")
+    parser.add_argument("-t", "--task", help="The task to select when testing",
+                        dest="task", default="test")
+    parser.add_argument("--selenium-port", type=float, dest="selenium_port",
+                        help="Port to use when talking to selenium", default=4444)
+
+    # required arguments
+    parser.add_argument("selenium_host",
+                        help="Selenium server to send requests to")
+    parser.add_argument("target_url", help="The url of the contest server to send load.")
+
+    return parser.parse_args()
+
 
 if __name__ == "__main__":
-    n_processes = 12
+    args = parse_args()
+
+    n_processes = args.processes
     processes = []
     for i in range(n_processes):
         seed = np.random.randint(0, 2**32 -1)
-        process = Process(target=main, kwargs={ "seed": seed })
+        process = Process(target=main, kwargs={ "seed": seed,
+                                                "args": args })
         process.start()
         processes.append(process)
 
