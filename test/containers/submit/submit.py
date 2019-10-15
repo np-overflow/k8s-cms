@@ -19,6 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+
 # waits for the given tcp port to start accepting connections by polling every
 # interval seconds
 # waits for a maxmium of timeout seconds
@@ -103,22 +104,19 @@ def main(seed, args):
     # wait for a random duration before starting to submit
     random_wait(args.hit_mean, args.hit_deviation)
     while True:
-
-        try:
-            # perform submission hit
-            browser = webdriver.Remote(
-                command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
-                desired_capabilities=DesiredCapabilities.FIREFOX)
+        # perform submission hit
+        browser = webdriver.Remote(
+            command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
+            desired_capabilities=DesiredCapabilities.FIREFOX)
 
 
-            submit(browser, args.target_url, args.contest, args.task)
-            browser.quit()
-            print(".", end="", flush=True)
+        submit(browser, args.target_url, args.contest, args.task)
+        browser.quit()
+        if args.verbose:
+            print("sent submission")
 
-            # wait for a random duration before submitting again
-            random_wait(args.hit_mean, args.hit_deviation)
-        finally:
-            pass
+        # wait for a random duration before submitting again
+        random_wait(args.hit_mean, args.hit_deviation)
 
 # parse command line arguments for submit.py
 def parse_args():
@@ -149,10 +147,14 @@ def parse_args():
 
     return parser.parse_args()
 
+# health check status path
+# created when everything is functioning normally
+HEALTH_CHECK_PATH="/tmp/healthz"
 
 if __name__ == "__main__":
     args = parse_args()
 
+    # start proccesses to simulate uses
     n_processes = args.processes
     processes = []
     for i in range(n_processes):
@@ -162,10 +164,19 @@ if __name__ == "__main__":
         process.start()
         processes.append(process)
 
-    try:
-        while True:
-            time.sleep(0.1)
-    except KeyboardInterrupt:
-        for process in processes:
-            process.kill()
+    # notify that we are up and running
+    open(HEALTH_CHECK_PATH, "w").close()
+
+    is_healthy = True
+    while is_healthy:
+        time.sleep(0.1)
+        # check the health of the given processes
+        is_healthy = all([ process.is_alive() for process in processes ])
+
+    # something bad happened - signal to health check
+    os.remove(HEALTH_CHECK_PATH)
+
+    # cleanup worker processes
+    for process in processes:
+        process.kill()
 
