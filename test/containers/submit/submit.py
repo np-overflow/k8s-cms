@@ -102,7 +102,7 @@ def main(process_id, seed, args):
     # wait for selenium service to become available
     if args.verbose:
         print(f"{prefix} waiting for selenium service on: "
-              f"{args.selenium_host}:{args.selenium_port}")
+              f"{args.selenium_host}:{args.selenium_port}", flush=True)
     wait_for_port(args.selenium_host, args.selenium_port)
 
     # seed random no. generator
@@ -112,7 +112,8 @@ def main(process_id, seed, args):
     while True:
         # wait for a random duration before submitting again
         wait_time = random_wait(args.hit_mean, args.hit_deviation, args.verbose)
-        if args.verbose: print("{} waiting for {:0.2f}s".format(prefix, wait_time))
+        if args.verbose:
+            print("{} waiting for {:0.2f}s".format(prefix, wait_time), flush=True)
         time.sleep(wait_time)
 
         # perform submission hit
@@ -122,7 +123,7 @@ def main(process_id, seed, args):
 
         submit(browser, args.target_url, args.contest, args.task)
         browser.quit()
-        if args.verbose: print(f"{prefix} sent submission")
+        if args.verbose: print(f"{prefix} sent submission", flush=True)
 
 # parse command line arguments for submit.py
 def parse_args():
@@ -165,13 +166,13 @@ if __name__ == "__main__":
     # start proccesses to simulate uses
     n_processes = args.processes
     processes = []
-    for i in range(n_processes):
+    for i in range(1, n_processes + 1):
         seed = np.random.randint(0, 2**32 -1)
         process = Process(target=main, kwargs={ "process_id": i,
                                                 "seed": seed,
                                                 "args": args })
         process.start()
-        if args.verbose: print(f"started user process {i}")
+        if args.verbose: print(f"started user process {i}", flush=True)
         processes.append(process)
 
     # notify that we are up and running

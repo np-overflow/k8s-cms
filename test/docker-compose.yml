@@ -23,4 +23,13 @@ services:
       - selenium
     volumes:
       - "./containers/submit:/project"
-    command: sleep 99999d
+    environment:
+      - CONTEST=test
+      - CONTEST_USERNAME=test
+      - CONTEST_PASSWORD=test
+      - SIMULATE_USERS=4
+      - HIT_AVERAGE=60
+      - HIT_STDDEV=30
+      - SELENIUM_PORT=4444
+      - SELENIUM_HOST=selenium
+      - TARGET_URL=https://demo-npio.np-overflow.club
