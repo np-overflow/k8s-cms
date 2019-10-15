@@ -1,4 +1,4 @@
-FROM selenium/standalone-firefox-debug
+FROM selenium/standalone-firefox
 
 # copy test runc
 RUN mkdir /home/seluser/project

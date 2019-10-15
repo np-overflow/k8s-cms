@@ -5,6 +5,7 @@
 #
 
 import os
+import sys
 import time
 import socket
 import numpy as np
@@ -99,11 +100,6 @@ def random_wait(mean, deviation, verbose=False):
 # args.selenium_port - port of the seleniums service
 def main(process_id, seed, args):
     prefix = f"Process {process_id}: "
-    # wait for selenium service to become available
-    if args.verbose:
-        print(f"{prefix} waiting for selenium service on: "
-              f"{args.selenium_host}:{args.selenium_port}", flush=True)
-    wait_for_port(args.selenium_host, args.selenium_port)
 
     # seed random no. generator
     np.random.seed(seed)
@@ -113,7 +109,7 @@ def main(process_id, seed, args):
         # wait for a random duration before submitting again
         wait_time = random_wait(args.hit_mean, args.hit_deviation, args.verbose)
         if args.verbose:
-            print("{} waiting for {:0.2f}s".format(prefix, wait_time), flush=True)
+            print("waiting for {:0.2f}s".format(prefix, wait_time), flush=True)
         time.sleep(wait_time)
 
         # perform submission hit
@@ -163,6 +159,12 @@ HEALTH_CHECK_PATH="/tmp/healthz"
 if __name__ == "__main__":
     args = parse_args()
 
+    # wait for selenium service to become available
+    if args.verbose:
+        print(f"waiting for selenium service on: "
+              f"{args.selenium_host}:{args.selenium_port}", flush=True)
+    wait_for_port(args.selenium_host, args.selenium_port)
+
     # start proccesses to simulate uses
     n_processes = args.processes
     processes = []
@@ -185,10 +187,13 @@ if __name__ == "__main__":
         is_healthy = all([ process.is_alive() for process in processes ])
         heath_status = "healthy" if is_healthy else "unhealthy"
 
-    # something bad happened - signal to health check
-    os.remove(HEALTH_CHECK_PATH)
 
-    # cleanup worker processes
-    for process in processes:
-        process.kill()
+    if not is_healthy:
+        # something bad happened - signal to health check
+        os.remove(HEALTH_CHECK_PATH)
 
+        # cleanup worker processes
+        for process in processes:
+            process.kill()
+
+        sys.exit(1)
