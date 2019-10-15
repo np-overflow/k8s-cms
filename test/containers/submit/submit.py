@@ -145,7 +145,7 @@ def parse_args():
                         dest="contest", default="test")
     parser.add_argument("-t", "--task", help="The task to select when testing",
                         dest="task", default="test")
-    parser.add_argument("--selenium-port", type=float, dest="selenium_port",
+    parser.add_argument("--selenium-port", type=int, dest="selenium_port",
                         help="Port to use when talking to selenium", default=4444)
 
     # required arguments
