@@ -14,7 +14,7 @@ services:
       - "4444:4444"
       - "5900:5900"
     volumes:
-      - "./selenium:/home/seluser/project/"
+      - "./containers/selenium:/home/seluser/project/"
   submit:
     image: mrzzy/cms-test-submit 
     build:
@@ -22,5 +22,5 @@ services:
     depends_on:
       - selenium
     volumes:
-      - "./submit:/project"
+      - "./containers/submit:/project"
     command: sleep 99999d
