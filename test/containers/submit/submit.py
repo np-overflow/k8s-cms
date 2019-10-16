@@ -53,8 +53,9 @@ def wait(browser, timeout, predicate):
         browser.quit()
         raise TimeoutError
 
-# perform login to the contest site with given credentialf
-def login(browser, username, password):
+# perform login to the contest site with given credentia
+# waits for a maxmium of timeout seconds giving up trying to login
+def login(browser, username, password, timeout=TIMEOUT):
     if is_login(browser): return # alreadly logged in
 
     # Log In
@@ -114,17 +115,17 @@ def main(process_id, seed, args):
         time.sleep(wait_time)
 
         # perform submission hit
+        browser = webdriver.Remote(
+            command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
+            desired_capabilities=DesiredCapabilities.FIREFOX)
         try:
-            browser = webdriver.Remote(
-                command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
-                desired_capabilities=DesiredCapabilities.FIREFOX)
-
             submit(browser, args.target_url, args.contest, args.task)
-            browser.quit()
             if args.verbose: print(f"{prefix} sent submission", flush=True)
         except Exception as e:
-            if args.verbose: print(f"{prefix} failed to send submission", flush=True)
-            traceback.print_exc()
+            print(f"{prefix} failed to send submission", flush=True)
+            print(traceback.format_exc(), flush=True)
+        finally:
+            browser.quit()
 
 # parse command line arguments for submit.py
 def parse_args():
