@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     gettext-base \
     iputils-ping \
     netcat \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # configure user/groups
 RUN useradd --user-group --home-dir /cms cmsuser
