@@ -169,13 +169,6 @@ resources:
       memory: 200Mi
   proxy:
     requests:
-      cpu: 80m
-      memory: 200Mi
-    limits:
-      cpu: 80m
-      memory: 200Mi
-  proxy:
-    requests:
       cpu: 40m
       memory: 150Mi
     limits:
@@ -183,13 +176,15 @@ resources:
       memory: 150Mi
   printing: 
     requests:
-      cpu: 25m
+      cpu: 3m
       memory: 130Mi
   checker:
-  admin:
-  ranking:
-  contest:
-  worker:
+    requests:
+      cpu: 50m
+      memory: 140Mi
+    limits:
+      cpu: 50m
+      memory: 140Mi
 
   
   

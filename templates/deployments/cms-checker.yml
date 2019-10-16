@@ -60,6 +60,9 @@ spec:
               port: cmscheck
             periodSeconds: 3
 
+          resources:
+{{ toYaml .Values.resources.checker | indent 12 }}
+
           volumeMounts:
             - name: config-file
               mountPath: "/cms/config"
