@@ -1,0 +1,37 @@
+#
+# k8s-cms
+# Docker Compose
+# Contest Web Server Testing 
+#
+
+version: "3"
+services:
+  selenium:
+    image: mrzzy/cms-test-selenium
+    build:
+      context: "containers/selenium"
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+    volumes:
+      - "./containers/selenium:/home/seluser/project/"
+      - "/dev/shm:/dev/shm"
+  submit:
+    image: mrzzy/cms-test-submit 
+    build:
+      context: "containers/submit"
+    depends_on:
+      - selenium
+    volumes:
+      - "./containers/submit:/project"
+    environment:
+      - CONTEST=test
+      - CONTEST_USERNAME=test
+      - CONTEST_PASSWORD=test
+      - SIMULATE_USERS=48
+      - HIT_AVERAGE=60
+      - HIT_STDDEV=30
+      - SELENIUM_PORT=4444
+      - SELENIUM_HOST=selenium
+      - TIMEOUT=10
+      - TARGET_URL=https://demo-npio.np-overflow.club
