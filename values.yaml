@@ -167,6 +167,27 @@ resources:
     limits:
       cpu: 80m
       memory: 200Mi
+  proxy:
+    requests:
+      cpu: 80m
+      memory: 200Mi
+    limits:
+      cpu: 80m
+      memory: 200Mi
+  proxy:
+    requests:
+      cpu: 40m
+      memory: 150Mi
+    limits:
+      cpu: 40m
+      memory: 150Mi
+  printing:
+  checker:
+  admin:
+  ranking:
+  contest:
+  worker:
+
   
   
 nodeSelector: {}
