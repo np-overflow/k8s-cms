@@ -146,6 +146,13 @@ resources:
     limits:
       cpu: 60m
       memory: 850Mi
+  resources:
+    requests:
+      cpu: 3m
+      memory: 128Mi
+    limits:
+      cpu: 3m
+      memory: 150Mi
   evaluation:
     requests:
       cpu: 80m
@@ -153,7 +160,7 @@ resources:
     limits:
       cpu: 80m
       memory: 200Mi
-    
+  
   
 nodeSelector: {}
 tolerations: []
