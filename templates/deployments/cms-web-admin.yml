@@ -64,6 +64,9 @@ spec:
                   name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: CMS_ADMIN_PASSWORD
 
+          resources:
+{{ toYaml .Values.resources.contest | indent 12 }}
+
           livenessProbe:
             httpGet:
               port: http
@@ -73,6 +76,9 @@ spec:
             httpGet:
               port: http
             periodSeconds: 3
+
+          resources:
+{{ toYaml .Values.resources.admin | indent 12 }}
 
           volumeMounts:
             - name: config-file
