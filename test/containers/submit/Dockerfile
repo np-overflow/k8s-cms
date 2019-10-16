@@ -32,4 +32,5 @@ CMD python3 submit.py \
     --hit-avg $HIT_AVERAGE \
     --hit-stddev $HIT_STDDEV \
     --selenium-port $SELENIUM_PORT \ 
+    --timeout $TIMEOUT \
     $SELENIUM_HOST $TARGET_URL

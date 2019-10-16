@@ -55,27 +55,28 @@ def wait(browser, timeout, predicate):
 
 # perform login to the contest site with given credentia
 # waits for a maxmium of timeout seconds giving up trying to login
-def login(browser, username, password, timeout=TIMEOUT):
+def login(browser, username, password, timeout=10):
     if is_login(browser): return # alreadly logged in
 
     # Log In
-    wait(browser, 10, EC.presence_of_element_located((By.ID, "username")))
+    wait(browser, timeout, EC.presence_of_element_located((By.ID, "username")))
     browser.find_element_by_id("username").send_keys(username + Keys.TAB)
     browser.find_element_by_id("password").send_keys(password + Keys.ENTER)
 
-    wait(browser, 10, EC.presence_of_element_located((By.ID, "countdown_box")))
+    wait(browser, timeout, EC.presence_of_element_located((By.ID, "countdown_box")))
     assert is_login(browser)
 
 # perform a single submission to target_url using the given contest and task
-def submit(browser, target_url, contest, task):
+# waits for a maxmium of timeout seconds giving up trying to submit
+def submit(browser, target_url, contest, task, timeout=10):
     # get contest page
     browser.get(f"{target_url}/{contest}")
     # if we are not already authenticated, perform login first
-    if not is_login(browser): login(browser, args.username, args.password)
+    if not is_login(browser): login(browser, args.username, args.password, timeout)
 
     # Load submission page
     browser.get(f"{target_url}/{contest}/tasks/{task}/submissions")
-    wait(browser, 10, EC.presence_of_element_located((By.CLASS_NAME, "task_submissions")))
+    wait(browser, timeout, EC.presence_of_element_located((By.CLASS_NAME, "task_submissions")))
 
     # Submit
     browser.find_element_by_id("input0").send_keys("/home/seluser/project/test.c")
@@ -119,7 +120,7 @@ def main(process_id, seed, args):
             command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
             desired_capabilities=DesiredCapabilities.FIREFOX)
         try:
-            submit(browser, args.target_url, args.contest, args.task)
+            submit(browser, args.target_url, args.contest, args.task, args.timeout)
             if args.verbose: print(f"{prefix} sent submission", flush=True)
         except Exception as e:
             print(f"{prefix} failed to send submission", flush=True)
@@ -150,6 +151,8 @@ def parse_args():
                         dest="task", default="test")
     parser.add_argument("--selenium-port", type=int, dest="selenium_port",
                         help="Port to use when talking to selenium", default=4444)
+    parser.add_argument("-w", "--timeout", help="Maximum seconds to wait when testing before timing out",
+                        dest="timeout", default=10)
 
     # required arguments
     parser.add_argument("selenium_host",
@@ -180,7 +183,8 @@ if __name__ == "__main__":
                                                 "seed": seed,
                                                 "args": args })
         process.start()
-        if args.verbose: print(f"started user process {i}", flush=True)
+        if args.verbose:
+            print(f"{socket.getfqdn()} started user process {i}", flush=True)
         processes.append(process)
 
     # notify that we are up and running
