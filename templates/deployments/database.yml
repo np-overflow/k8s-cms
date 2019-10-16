@@ -58,6 +58,9 @@ spec:
               command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
             periodSeconds: 2
 
+          resources:
+{{ toYaml .Values.resources.database | indent 12 }}
+        
           volumeMounts:
             - name: database-data
               mountPath: "/var/lib/postgresql/data"

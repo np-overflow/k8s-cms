@@ -58,6 +58,9 @@ spec:
               port: cmslog
             periodSeconds: 3
           
+          resources:
+{{ toYaml .Values.resources.logging | indent 12 }}
+
           volumeMounts:
             - name: config-file
               mountPath: "/cms/config"

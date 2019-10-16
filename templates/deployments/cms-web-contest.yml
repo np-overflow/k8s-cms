@@ -69,6 +69,8 @@ spec:
               port: http
             periodSeconds: 3
 
+          resources:
+{{ toYaml .Values.resources.contest | indent 12 }}
 
           volumeMounts:
             - name: config-file

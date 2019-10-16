@@ -127,20 +127,94 @@ services:
     name: k8s-cms-web-contest
     type: NodePort
   
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+resources:
+  database:
+    requests:
+      cpu: 950m
+      memory: 512Mi
+    limits:
+      cpu: 950m
+      memory: 512Mi
+  logging:
+    requests:
+      cpu: 60m
+      memory: 128Mi
+    limits:
+      cpu: 60m
+      memory: 850Mi
+  resources: # cms resource service
+    requests:
+      cpu: 3m
+      memory: 128Mi
+    limits:
+      cpu: 3m
+      memory: 150Mi
+  scoring:
+    requests:
+      cpu: 15m
+      memory: 128Mi
+    limits:
+      cpu: 15m
+      memory: 150Mi
+  evaluation:
+    requests:
+      cpu: 80m
+      memory: 200Mi
+    limits:
+      cpu: 80m
+      memory: 200Mi
+  proxy:
+    requests:
+      cpu: 40m
+      memory: 150Mi
+    limits:
+      cpu: 40m
+      memory: 150Mi
+  printing: 
+    requests:
+      cpu: 3m
+      memory: 130Mi
+  checker:
+    requests:
+      cpu: 50m
+      memory: 140Mi
+    limits:
+      cpu: 50m
+      memory: 140Mi
+  ranking:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+    limits:
+      cpu: 10m
+      memory: 50Mi
+  admin:
+    requests:
+      cpu: 30m
+      memory: 180Mi
+    limits:
+      cpu: 30m
+      memory: 180Mi
+  contest:
+    requests:
+      cpu: 250m
+      memory: 400Mi
+    limits:
+      cpu: 850m
+      memory: 1100Mi
+  worker:
+    requests:
+      cpu: 850m
+      memory: 1150Mi
+    limits:
+      cpu: 850m
+      memory: 1150Mi
+  
 nodeSelector: {}
-
 tolerations: []
 
 affinity: {}
