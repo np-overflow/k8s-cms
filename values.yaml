@@ -134,10 +134,10 @@ services:
 resources:
   database:
     requests:
-      cpu: 1000m
+      cpu: 950m
       memory: 512Mi
     limits:
-      cpu: 1000m
+      cpu: 950m
       memory: 512Mi
   logging:
     requests:
@@ -206,7 +206,13 @@ resources:
     limits:
       cpu: 850m
       memory: 1100Mi
-  
+  worker:
+    requests:
+      cpu: 850m
+      memory: 1150Mi
+    limits:
+      cpu: 850m
+      memory: 1150Mi
   
 nodeSelector: {}
 tolerations: []
