@@ -58,6 +58,14 @@ spec:
               command: [ "/usr/bin/pg_isready" , "--username", "postgres" ]
             periodSeconds: 2
 
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+        
           volumeMounts:
             - name: database-data
               mountPath: "/var/lib/postgresql/data"
