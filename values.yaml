@@ -181,7 +181,10 @@ resources:
     limits:
       cpu: 40m
       memory: 150Mi
-  printing:
+  printing: 
+    requests:
+      cpu: 25m
+      memory: 130Mi
   checker:
   admin:
   ranking:
