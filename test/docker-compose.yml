@@ -15,6 +15,7 @@ services:
       - "5900:5900"
     volumes:
       - "./containers/selenium:/home/seluser/project/"
+      - "/dev/shm:/dev/shm"
   submit:
     image: mrzzy/cms-test-submit 
     build:
@@ -27,7 +28,7 @@ services:
       - CONTEST=test
       - CONTEST_USERNAME=test
       - CONTEST_PASSWORD=test
-      - SIMULATE_USERS=4
+      - SIMULATE_USERS=8
       - HIT_AVERAGE=60
       - HIT_STDDEV=30
       - SELENIUM_PORT=4444

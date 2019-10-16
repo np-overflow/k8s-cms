@@ -9,6 +9,8 @@ import sys
 import time
 import socket
 import numpy as np
+import traceback
+import socket
 
 from multiprocessing import Process
 from argparse import ArgumentParser
@@ -19,7 +21,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
 
 # waits for the given tcp port to start accepting connections by polling every
 # interval seconds
@@ -99,7 +100,7 @@ def random_wait(mean, deviation, verbose=False):
 # args.selenium_host - the host that exposes a selenium servicef
 # args.selenium_port - port of the seleniums service
 def main(process_id, seed, args):
-    prefix = f"Process {process_id}: "
+    prefix = f"{socket.getfqdn()}: Process {process_id}: "
 
     # seed random no. generator
     np.random.seed(seed)
@@ -109,17 +110,21 @@ def main(process_id, seed, args):
         # wait for a random duration before submitting again
         wait_time = random_wait(args.hit_mean, args.hit_deviation, args.verbose)
         if args.verbose:
-            print("waiting for {:0.2f}s".format(prefix, wait_time), flush=True)
+            print("{} waiting for {:0.2f}s".format(prefix, wait_time), flush=True)
         time.sleep(wait_time)
 
         # perform submission hit
-        browser = webdriver.Remote(
-            command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
-            desired_capabilities=DesiredCapabilities.FIREFOX)
+        try:
+            browser = webdriver.Remote(
+                command_executor=f"http://{args.selenium_host}:{args.selenium_port}/wd/hub",
+                desired_capabilities=DesiredCapabilities.FIREFOX)
 
-        submit(browser, args.target_url, args.contest, args.task)
-        browser.quit()
-        if args.verbose: print(f"{prefix} sent submission", flush=True)
+            submit(browser, args.target_url, args.contest, args.task)
+            browser.quit()
+            if args.verbose: print(f"{prefix} sent submission", flush=True)
+        except Exception as e:
+            if args.verbose: print(f"{prefix} failed to send submission", flush=True)
+            traceback.print_exc()
 
 # parse command line arguments for submit.py
 def parse_args():
@@ -161,7 +166,7 @@ if __name__ == "__main__":
 
     # wait for selenium service to become available
     if args.verbose:
-        print(f"waiting for selenium service on: "
+        print(f"{socket.getfqdn()}: waiting for selenium service on: "
               f"{args.selenium_host}:{args.selenium_port}", flush=True)
     wait_for_port(args.selenium_host, args.selenium_port)
 
