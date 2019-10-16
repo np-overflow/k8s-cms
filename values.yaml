@@ -146,12 +146,19 @@ resources:
     limits:
       cpu: 60m
       memory: 850Mi
-  resources:
+  resources: # cms resource service
     requests:
       cpu: 3m
       memory: 128Mi
     limits:
       cpu: 3m
+      memory: 150Mi
+  scoring:
+    requests:
+      cpu: 15m
+      memory: 128Mi
+    limits:
+      cpu: 15m
       memory: 150Mi
   evaluation:
     requests:

@@ -59,6 +59,9 @@ spec:
               port: cmsscore
             periodSeconds: 3
 
+          resources:
+{{ toYaml .Values.resources.scoring | indent 12 }}
+
           volumeMounts:
             - name: config-file
               mountPath: "/cms/config"
