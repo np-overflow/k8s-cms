@@ -185,7 +185,13 @@ resources:
     limits:
       cpu: 50m
       memory: 140Mi
-
+  ranking:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+    limits:
+      cpu: 10m
+      memory: 50Mi
   
   
 nodeSelector: {}
