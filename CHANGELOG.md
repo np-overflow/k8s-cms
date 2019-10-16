@@ -2,6 +2,11 @@
 ## Version 0.3.0 - Unreleased
 ### Added
 - checksum configmaps and secrets to restart pods on updates
+- Quality of Service
+    - profiling resource usage for simulated workload (48 particpants/1 submission per 60s)
+- securing k8s-cms:
+    - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
+        - setup cert manager chart to use lets encrypt to obtain certificates 
 
 ### Changed
 - migrate kubernetes yaml to helm v2
@@ -22,9 +27,6 @@
     - Checker service and deployment
     - ContestWebServer service and deployment
     - Worker service and deployment
-- securing k8s-cms:
-    - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
-        - setup cert manager chart to use lets encrypt to obtain certificates 
 
 ### Removed
 - remove support for kustomize under k8s/
