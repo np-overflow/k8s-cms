@@ -199,6 +199,13 @@ resources:
     limits:
       cpu: 30m
       memory: 180Mi
+  contest:
+    requests:
+      cpu: 250m
+      memory: 400Mi
+    limits:
+      cpu: 850m
+      memory: 1100Mi
   
   
 nodeSelector: {}
