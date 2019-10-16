@@ -1,0 +1,60 @@
+#
+# k8s-cms
+# Submissison Load test
+# Submission script Deployment
+#
+
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  namespace: k8s-cms-test
+  name: submission
+  labels:
+    app: k8s-cms-test
+    component: submission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cms-test
+      component: submission
+  template:
+    metadata:
+      name: submission
+      namespace: k8s-cms-test
+      labels:
+        app: k8s-cms-test
+        component: submission
+    spec:
+      containers:
+        - name: submission
+          image: mrzzy/cms-test-submit
+          livenessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 8
+            exec:
+              command: ["/bin/cat", "/tmp/healthz"]
+          readinessProbe:
+            initialDelaySeconds: 4
+            periodSeconds: 6
+            exec:
+              command: ["/bin/cat", "/tmp/healthz"]
+          env:
+            - name: CONTEST
+              value: "test"
+            - name: CONTEST_USERNAME
+              value: "test"
+            - name: CONTEST_PASSWORD
+              value: "test"
+            - name: SIMULATE_USERS
+              value: "48"
+            - name: HIT_AVERAGE
+              value: "60"
+            - name: HIT_STDDEV
+              value: "30"
+            - name: SELENIUM_PORT
+              value: "4444"
+            - name: SELENIUM_HOST
+              value: "selenium"
+            - name: TARGET_URL
+              value: "https://demo-npio.np-overflow.club"

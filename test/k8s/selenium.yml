@@ -1,0 +1,79 @@
+#
+# k8s-cms
+# Submissison Load test
+# Selenium Deployment
+#
+
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  namespace: k8s-cms-test
+  name: selenium
+  labels:
+    app: k8s-cms-test
+    component: selenium
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: k8s-cms-test
+      component: selenium
+  template:
+    metadata:
+      namespace: k8s-cms-test
+      name: selenium
+      labels:
+        app: k8s-cms-test
+        component: selenium
+    spec:
+      containers:
+        - name: selenium
+          image: mrzzy/cms-test-selenium
+          ports:
+            - name: vnc
+              containerPort: 5900
+            - name: selenium
+              containerPort: 4444
+          livenessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 8
+            tcpSocket:
+              port:  selenium
+          readinessProbe:
+            initialDelaySeconds: 4
+            periodSeconds: 6
+            tcpSocket:
+              port: selenium
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: shm
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+    
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: k8s-cms-test
+  name: selenium
+  labels:
+    app: k8s-cms-test
+    component: selenium
+spec:
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP: 
+      timeoutSeconds: 40
+  selector:
+      app: k8s-cms-test
+      component: selenium
+  ports:
+    - targetPort: 4444
+      port: 4444
+      name: selenium
+    - targetPort: 5900
+      port: 5900
+      name: vnc
+  type: ClusterIP
