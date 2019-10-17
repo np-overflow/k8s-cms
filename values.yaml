@@ -132,8 +132,8 @@ services:
 # resources, such as Minikube. If you do want to specify resources, uncomment the following
 # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
 resources:
+  # guarantee QOS
   database:
-    # guarantee QOS
     requests:
       cpu: 950m
       memory: 512Mi
@@ -154,13 +154,15 @@ resources:
     limits:
       cpu: 60m
       memory: 150Mi
+  # guarantee QOS
   scoring:
     requests:
       cpu: 60m
-      memory: 128Mi
+      memory: 150Mi
     limits:
       cpu: 60m
       memory: 150Mi
+  # guarantee QOS
   evaluation:
     requests:
       cpu: 80m
@@ -168,6 +170,7 @@ resources:
     limits:
       cpu: 80m
       memory: 200Mi
+  # guarantee QOS
   proxy:
     requests:
       cpu: 40m
@@ -179,6 +182,7 @@ resources:
     requests:
       cpu: 3m
       memory: 130Mi
+  # guarantee QOS
   checker:
     requests:
       cpu: 50m
