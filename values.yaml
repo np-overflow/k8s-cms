@@ -24,7 +24,7 @@ config:
     configPath: /cms/config/cms.ranking.config
 
 replicas:
-  workersCount: 6 # max 24
+  workersCount: 2 # max 24
   contestWebCount: 3
   adminWebCount: 1
   
@@ -133,6 +133,7 @@ services:
 # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
 resources:
   database:
+    # guarantee QOS
     requests:
       cpu: 950m
       memory: 512Mi
@@ -146,19 +147,19 @@ resources:
     limits:
       cpu: 60m
       memory: 850Mi
-  resources: # cms resource service
+  resources:
     requests:
       cpu: 3m
       memory: 128Mi
     limits:
-      cpu: 3m
+      cpu: 60m
       memory: 150Mi
   scoring:
     requests:
-      cpu: 15m
+      cpu: 60m
       memory: 128Mi
     limits:
-      cpu: 15m
+      cpu: 60m
       memory: 150Mi
   evaluation:
     requests:
@@ -187,25 +188,27 @@ resources:
       memory: 140Mi
   ranking:
     requests:
-      cpu: 10m
+      cpu: 20m
       memory: 50Mi
     limits:
-      cpu: 10m
+      cpu: 50m
       memory: 50Mi
+  # guarantee QOS
   admin:
     requests:
-      cpu: 30m
+      cpu: 90m
       memory: 180Mi
     limits:
-      cpu: 30m
+      cpu: 90m
       memory: 180Mi
   contest:
     requests:
-      cpu: 250m
+      cpu: 30m
       memory: 400Mi
     limits:
       cpu: 850m
       memory: 1100Mi
+  # guarantee QOS
   worker:
     requests:
       cpu: 850m
@@ -271,7 +274,7 @@ nginx-ingress:
 
 # nginx nginx controller
 cert-manager:
-  enabled: true # whether to deploy cert manager 
+  enabled: false # whether to deploy cert manager 
 
 prometheus-operator:
-  enabled: true # whether to deploy prometheus-operator
+  enabled: false # whether to deploy prometheus-operator
