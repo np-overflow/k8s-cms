@@ -52,7 +52,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: cmsscore
-            initialDelaySeconds: 10
+            initialDelaySeconds: 45
             periodSeconds: 5
           readinessProbe:
             tcpSocket:

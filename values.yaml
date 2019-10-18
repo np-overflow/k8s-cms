@@ -203,10 +203,10 @@ resources:
   # guarantee QOS
   admin:
     requests:
-      cpu: 40m
+      cpu: 50m
       memory: 180Mi
     limits:
-      cpu: 40m
+      cpu: 50m
       memory: 180Mi
   contest:
     requests:

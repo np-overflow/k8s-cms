@@ -70,7 +70,7 @@ spec:
           livenessProbe:
             httpGet:
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
