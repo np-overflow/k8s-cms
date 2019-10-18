@@ -135,17 +135,17 @@ resources:
   # guarantee QOS
   database:
     requests:
-      cpu: 950m
+      cpu: 400m
       memory: 512Mi
     limits:
-      cpu: 950m
+      cpu: 400m
       memory: 512Mi
   logging:
     requests:
-      cpu: 60m
+      cpu: 30m
       memory: 128Mi
     limits:
-      cpu: 60m
+      cpu: 30m
       memory: 850Mi
   resources:
     requests:
@@ -157,10 +157,10 @@ resources:
   # guarantee QOS
   scoring:
     requests:
-      cpu: 60m
+      cpu: 15m
       memory: 150Mi
     limits:
-      cpu: 60m
+      cpu: 15m
       memory: 150Mi
   # guarantee QOS
   evaluation:
@@ -173,10 +173,10 @@ resources:
   # guarantee QOS
   proxy:
     requests:
-      cpu: 40m
+      cpu: 15m
       memory: 150Mi
     limits:
-      cpu: 40m
+      cpu: 15m
       memory: 150Mi
   printing: 
     requests:
@@ -188,10 +188,10 @@ resources:
   # guarantee QOS
   checker:
     requests:
-      cpu: 50m
+      cpu: 40m
       memory: 140Mi
     limits:
-      cpu: 50m
+      cpu: 40m
       memory: 140Mi
   ranking:
     requests:
@@ -203,26 +203,26 @@ resources:
   # guarantee QOS
   admin:
     requests:
-      cpu: 90m
+      cpu: 40m
       memory: 180Mi
     limits:
-      cpu: 90m
+      cpu: 40m
       memory: 180Mi
   contest:
     requests:
-      cpu: 90m
+      cpu: 200m
       memory: 200Mi
     limits:
-      cpu: 700m
+      cpu: 900m
       memory: 800Mi
   # guarantee QOS
   worker:
     requests:
-      cpu: 850m
-      memory: 1150Mi
+      cpu: 1500m
+      memory: 1000Mi
     limits:
-      cpu: 850m
-      memory: 1150Mi
+      cpu: 1500m
+      memory: 1000Mi
   
 nodeSelector: {}
 tolerations: []
