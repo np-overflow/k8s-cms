@@ -208,7 +208,7 @@ resources:
   contest:
     requests:
       cpu: 30m
-      memory: 400Mi
+      memory: 200Mi
     limits:
       cpu: 850m
       memory: 1100Mi
