@@ -151,7 +151,8 @@ def parse_args():
                         dest="task", default="test")
     parser.add_argument("--selenium-port", type=int, dest="selenium_port",
                         help="Port to use when talking to selenium", default=4444)
-    parser.add_argument("-w", "--timeout", help="Maximum seconds to wait when testing before timing out",
+    parser.add_argument("-w", "--timeout", type=int,
+                        help="Maximum seconds to wait when testing before timing out",
                         dest="timeout", default=10)
 
     # required arguments
