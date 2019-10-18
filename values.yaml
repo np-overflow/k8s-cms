@@ -207,11 +207,11 @@ resources:
       memory: 180Mi
   contest:
     requests:
-      cpu: 30m
+      cpu: 90m
       memory: 200Mi
     limits:
-      cpu: 850m
-      memory: 1100Mi
+      cpu: 700Mi
+      memory: 800Mi
   # guarantee QOS
   worker:
     requests:
