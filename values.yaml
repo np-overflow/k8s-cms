@@ -182,6 +182,9 @@ resources:
     requests:
       cpu: 3m
       memory: 130Mi
+    limits:
+      cpu: 60m
+      memory: 130Mi
   # guarantee QOS
   checker:
     requests:
@@ -210,7 +213,7 @@ resources:
       cpu: 90m
       memory: 200Mi
     limits:
-      cpu: 700Mi
+      cpu: 700m
       memory: 800Mi
   # guarantee QOS
   worker:
