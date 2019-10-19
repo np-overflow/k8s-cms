@@ -12,7 +12,7 @@ metadata:
 {{ include "k8s-cms.labels" . | indent 4 }}
     component: contest
 spec:
-  replicas: {{ .Values.replicas.contestWebCount }}
+  replicas: {{ .Values.replicas.contest.minCount }}
   selector:
     matchLabels:
 {{ include "k8s-cms.selectors" . | indent 6 }}

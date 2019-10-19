@@ -24,8 +24,10 @@ config:
     configPath: /cms/config/cms.ranking.config
 
 replicas:
+  contest:
+    minCount: 1
+    maxCount: 12
   workersCount: 1 # max 24
-  contestWebCount: 1
   adminWebCount: 1
   
 # configure the images to deploy
@@ -210,11 +212,11 @@ resources:
       memory: 350Mi
   contest:
     requests:
-      cpu: 200m
-      memory: 200Mi
+      cpu: 700m
+      memory: 300Mi
     limits:
-      cpu: 800m
-      memory: 800Mi
+      cpu: 900m
+      memory: 500Mi
   # guarantee QOS
   worker:
     requests:
