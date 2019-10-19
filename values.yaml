@@ -139,10 +139,10 @@ resources:
   # guarantee QOS
   database:
     requests:
-      cpu: 400m
+      cpu: 700m
       memory: 512Mi
     limits:
-      cpu: 400m
+      cpu: 700m
       memory: 512Mi
   logging:
     requests:
@@ -215,10 +215,10 @@ resources:
   contest:
     requests:
       cpu: 700m
-      memory: 300Mi
+      memory: 600Mi
     limits:
       cpu: 900m
-      memory: 500Mi
+      memory: 1000Mi
   # guarantee QOS
   worker:
     requests:
