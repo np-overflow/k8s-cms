@@ -27,7 +27,7 @@ data:
 
 
   {{- $services := .Values.services -}}
-  {{- $replicas := .Values.replicas.workersCount | int -}}
+  {{- $replicas := .Values.replicas.worker.maxCount | int -}}
   {{- $fullname := include "k8s-cms.fullname" . }}
   
   {{ range $i, $e := until $replicas -}}
