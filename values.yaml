@@ -222,10 +222,10 @@ resources:
   # guarantee QOS
   worker:
     requests:
-      cpu: 2000m
+      cpu: 900m
       memory: 1200Mi
     limits:
-      cpu: 2000m
+      cpu: 900m
       memory: 1200Mi
   
 nodeSelector: {}
