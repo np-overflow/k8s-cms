@@ -63,11 +63,11 @@ spec:
             httpGet:
               port: http
             initialDelaySeconds: 10
-            periodSeconds: 5
+            periodSeconds: 20
           readinessProbe:
             httpGet:
               port: http
-            periodSeconds: 3
+            periodSeconds: 15
 
           resources:
 {{ toYaml .Values.resources.contest | indent 12 }}
