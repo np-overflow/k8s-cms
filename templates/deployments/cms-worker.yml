@@ -30,6 +30,8 @@ spec:
     spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      tolerations:
+        {{ toYaml .Values.tolerations.worker | nindent 8 }}
       serviceAccountName: {{ .Values.security.serviceAccount.name }}
       containers:
         {{- with .Values.images.worker }}

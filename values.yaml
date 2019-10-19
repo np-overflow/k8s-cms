@@ -229,7 +229,18 @@ resources:
       memory: 1200Mi
   
 nodeSelector: {}
-tolerations: []
+
+tolerations:
+  contest:
+    - key: hosting-qos
+      operator: Equal
+      value: transient
+      effect: NoSchedule
+  worker:
+    - key: hosting-qos
+      operator: Equal
+      value: transient
+      effect: NoSchedule
 
 affinity: {}
 
