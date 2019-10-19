@@ -26,8 +26,10 @@ config:
 replicas:
   contest:
     minCount: 1
-    maxCount: 12
-  workersCount: 1 # max 24
+    maxCount: 24
+  worker:
+    minCount: 1
+    maxCount: 24 # max 24
   adminWebCount: 1
   
 # configure the images to deploy

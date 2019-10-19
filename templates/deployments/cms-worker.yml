@@ -14,7 +14,7 @@ metadata:
 spec:
   serviceName: {{ .Values.services.worker.name }}
   podManagementPolicy: Parallel
-  replicas: {{ .Values.replicas.workersCount }}
+  replicas: {{ .Values.replicas.worker.minCount }}
   selector:
     matchLabels:
 {{ include "k8s-cms.selectors" . | indent 6 }}
