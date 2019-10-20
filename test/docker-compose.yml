@@ -29,9 +29,9 @@ services:
       - CONTEST_USERNAME=test
       - CONTEST_PASSWORD=test
       - SIMULATE_USERS=48
-      - HIT_AVERAGE=300
-      - HIT_STDDEV=150
+      - HIT_AVERAGE=60
+      - HIT_STDDEV=30
       - SELENIUM_PORT=4444
       - SELENIUM_HOST=selenium
       - TIMEOUT=10
-      - TARGET_URL=https://demo-npio.np-overflow.club
+      - TARGET_URL=https://pioi.np-overflow.club
