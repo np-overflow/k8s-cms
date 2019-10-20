@@ -4,9 +4,13 @@
 - checksum configmaps and secrets to restart pods on updates
 - Quality of Service
     - profiling resource usage for simulated workload (48 particpants/1 submission per 60s)
+    - limit worker resources to ensure quality of service.
+    - set limits and requests for pods in kubernetes
 - securing k8s-cms:
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
         - setup cert manager chart to use lets encrypt to obtain certificates 
+- autoscaling for contest web servers and workers to handle the load
+- node taints & selector to to control pod scheduling 
 
 ### Changed
 - migrate kubernetes yaml to helm v2

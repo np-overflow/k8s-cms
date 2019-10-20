@@ -1,15 +1,11 @@
 # k8s-cms Roadmap
 ## Version 0.3.0
 - Quality of Service
-    - limit worker resources to ensure quality of service.
-    - set limits and requests for pods in kubernetes
-		- requires profiling of container performance. 
 	- ddos protection - conncurrent connections and rate limiting through nginx ingress.
     - node taints & selector to to control pod scheduling 
-- fix issue where retrieving favicon causes a 404
 - migrate init operations to onetime jobs
-    - cmsInitDb
-    - cmsAddAdmin
+   - cmsInitDb
+   - cmsAddAdmin
 - migrate postgres db service from in house image to postgres chart
     - postgres db replication
 
