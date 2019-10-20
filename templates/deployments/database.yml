@@ -64,6 +64,7 @@ spec:
           volumeMounts:
             - name: database-data
               mountPath: "/var/lib/postgresql/data"
+              subPath: "cms-database-data"
             - name: config-file
               mountPath: "/cms/config"
       volumes:
