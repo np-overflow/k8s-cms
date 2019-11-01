@@ -3,7 +3,7 @@
 # Contest Web Server Container
 # 
 
-FROM mrzzy/cms-base
+FROM /cms-base:0.3.0b
 
 # copy container source
 COPY containers/cms-web-contest /scripts

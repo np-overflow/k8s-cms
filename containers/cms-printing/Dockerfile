@@ -3,7 +3,7 @@
 # Printing Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM /cms-base:0.3.0b
 
 # copy config
 COPY config /cms/config

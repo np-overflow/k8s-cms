@@ -10,7 +10,7 @@
     - HTTPs for RankingWebServer,AdminWebServer,ContestWebServer.
         - setup cert manager chart to use lets encrypt to obtain certificates 
 - autoscaling for contest web servers and workers to handle the load
-- node taints & selector to to control pod scheduling 
+- node taints & selector to control pod scheduling 
 
 ### Changed
 - migrate kubernetes yaml to helm v2

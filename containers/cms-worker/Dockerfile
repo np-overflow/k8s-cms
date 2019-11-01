@@ -3,7 +3,7 @@
 # Worker Container
 # 
 
-FROM mrzzy/cms-base
+FROM /cms-base:0.3.0b
 
 ## install packages for language support
 # no user interaction.
