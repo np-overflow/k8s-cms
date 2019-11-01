@@ -1,15 +1,13 @@
 # k8s-cms Roadmap
-## Version 0.3.0
+
+## Version 0.4.0
 - Quality of Service
 	- ddos protection - conncurrent connections and rate limiting through nginx ingress.
-    - node taints & selector to to control pod scheduling 
 - migrate init operations to onetime jobs
    - cmsInitDb
    - cmsAddAdmin
 - migrate postgres db service from in house image to postgres chart
     - postgres db replication
-
-## Version 0.4.0
 - k8s-cms-master 
     - bridge between CMS and k8s
     - exposes REST api used to control cms with `kcmscli` 

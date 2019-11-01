@@ -1,5 +1,5 @@
 # k8s-cms Changelog
-## Version 0.3.0 - Unreleased
+## Version 0.3.0 - Nov 01, 2019
 ### Added
 - checksum configmaps and secrets to restart pods on updates
 - Quality of Service
