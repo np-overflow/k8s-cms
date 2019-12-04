@@ -3,7 +3,7 @@
 # Admin Web Server Container
 # 
 
-FROM /cms-base:0.3.0b
+FROM mrzzy/cms-base:0.3.0b
 
 # copy source
 COPY /containers/cms-web-admin/web-admin-entrypoint.sh /scripts
