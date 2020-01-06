@@ -1,4 +1,8 @@
 # k8s-cms Changelog
+## Version 0.3.1 - Jan 06, 2020
+### Changed
+- Fixed missing username prefix in FROM directives in  dockerfiles 
+
 ## Version 0.3.0 - Nov 01, 2019
 ### Added
 - checksum configmaps and secrets to restart pods on updates
