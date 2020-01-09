@@ -289,14 +289,14 @@ certGenerate:
 # nginx ingress controller
 nginx-ingress: 
   # whether to deploy a ingress controller
-  enabled: true 
+  enabled: false 
   controller:
     metrics:
       enabled: true # prometheus metrics
 
 # nginx nginx controller
 cert-manager:
-  enabled: true # whether to deploy cert manager 
+  enabled: false # whether to deploy cert manager 
 
 prometheus-operator:
   enabled: false # whether to deploy prometheus-operator
