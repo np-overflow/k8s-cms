@@ -5,7 +5,7 @@ metadata:
   labels:
 {{ include "k8s-cms.labels" . | indent 4 }}
   annotations:
-    "helm.sh/hook": test-success
+    "helm.sh/hook": test
 spec:
   containers:
     - name: wget-{{ .Values.services.database.port }}
