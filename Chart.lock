@@ -1,0 +1,12 @@
+dependencies:
+- name: nginx-ingress
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.24.0
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v0.12.0
+- name: prometheus-operator
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 6.14.2
+digest: sha256:cd991ee2800706c00a221530729ad66c97f570ef6ae82576f1effc7c8b32b24e
+generated: "2020-01-09T16:52:04.953353437+08:00"

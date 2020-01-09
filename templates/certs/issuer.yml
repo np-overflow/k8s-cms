@@ -6,7 +6,7 @@
 
 {{if ".Values.certGenerate.enabled" -}}
 
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   {{- if ne .Values.environment "production" }}

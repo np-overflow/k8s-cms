@@ -286,7 +286,7 @@ certGenerate:
   email: yr.email.address.here@gmaild.om
 
 # addons
-# nginx inresss controller
+# nginx ingress controller
 nginx-ingress: 
   # whether to deploy a ingress controller
   enabled: true 
@@ -299,4 +299,4 @@ cert-manager:
   enabled: true # whether to deploy cert manager 
 
 prometheus-operator:
-  enabled: true # whether to deploy prometheus-operator
+  enabled: false # whether to deploy prometheus-operator
