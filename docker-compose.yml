@@ -196,5 +196,21 @@ services:
       - cms-db
     privileged: true
 
+  # k8s-cms master
+  k8s-cms-master:
+    build:
+      context: .
+      dockerfile: containers/k8s-cms-master/Dockerfile
+    image: "mrzzy/k8s-cms-master"
+    ports:
+      - "5000:5000"
+    env_file: 
+      - ".env"
+      - "config/config.env"
+    volumes:
+      - "./src/master:/master"
+    depends_on:
+      - cms-db
+    
 volumes:
   db-data:
