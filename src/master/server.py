@@ -1,10 +1,11 @@
 #
-# k8s-cms Master
+# k8s-cms master
 # Flask Server
 #
 
 import settings
 import contest
+import error
 
 from flask import Flask
 from healthcheck import HealthCheck
@@ -13,6 +14,7 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 # add api blueprints
 app.register_blueprint(contest.api)
+app.register_blueprint(error.handlers)
 # setup healthcheck probe
 health = HealthCheck(app, "/healthz")
 
@@ -34,6 +36,7 @@ def check_db():
 @app.route("/")
 def route_root():
     return "k8s-cms master is up and running!"
+
 
 if __name__ == "__main__":
     app.run(settings.SERVER_HOST, settings.LISTEN_PORT)
