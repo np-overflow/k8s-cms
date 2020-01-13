@@ -33,3 +33,6 @@ data:
   {{ range $i, $e := until $replicas -}}
   CMS_WORKER_{{$i}}: {{ $fullname }}-worker-{{$e}}.{{$services.worker.name}}
   {{ end -}}
+
+  # force python services to have unbuffered output
+  PYTHONUNBUFFERED: "1"
