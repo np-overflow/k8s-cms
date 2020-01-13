@@ -72,26 +72,26 @@ def import_contest(data_dir, for_update=False):
 
 ## mappings
 # mapping from contest model to json representation
-contest_mapping = {
-    "name": "name",
-    "description": "description",
-    "allowed_localizations": "allowedLocalizations",
-    "languages": "lanaguages",
-    "submissions_download_allowed": "allowSubmissionsDownload",
-    "allow_questions": "allowQuestions",
-    "allow_password_authentication": "allowPasswordAuthentication",
-    "ip_restriction": "enforceIPRestriction",
-    "ip_autologin": "allowIPAutoLogin",
-    "start": "startTime",
-    "stop": "stopTime",
-    "timezone": "timezone",
-    "per_user_time": "maxContestPerUser",
-    "max_submission_number": "maxSubmissionNum",
-    "max_user_test_number": "maxTestsPerUser",
-    "min_submission_interval": "minSubmissionInterval",
-    "min_user_test_interval": "minUsertestInterval",
-    "score_precision": "scorePrecision"
-}
+contest_mapping = [
+    ("name", "name"),
+    ("description", "description"),
+    ("allowed_localizations", "allowedLocalizations"),
+    ("languages", "languages"),
+    ("submissions_download_allowed", "allowSubmissionsDownload"),
+    ("allow_questions", "allowQuestions"),
+    ("allow_password_authentication", "allowPasswordAuthentication"),
+    ("ip_restriction", "enforceIPRestriction"),
+    ("ip_autologin", "allowIPAutoLogin"),
+    ("start", "startTime"),
+    ("stop", "stopTime"),
+    ("timezone", "timezone"),
+    ("per_user_time", "maxContestPerUser"),
+    ("max_submission_number", "maxSubmissionNum"),
+    ("max_user_test_number", "maxTestsPerUser"),
+    ("min_submission_interval", "minSubmissionInterval"),
+    ("min_user_test_interval", "minUsertestInterval"),
+    ("score_precision", "scorePrecision"),
+]
 
 ## routes
 # api route lists contests on the cms systems by id with the given url param
@@ -138,13 +138,16 @@ def route_contest(contest_id):
             # update contest based on body params
             update_params = dict(request.json)
             contest = get(Contest, session, contest_id)
-            contest = map_obj(contest_id, update_params, reverse_mapping(contest_mapping))
+            contest = map_obj(contest, update_params, reverse_mapping(contest_mapping))
             session.commit()
+            return jsonify({"success": True})
         elif request.method == "DELETE":
             # delete contest based on body params
             # TODO: kill ProxyService for contest
             contest = get(Contest, session, contest_id)
             session.delete(contest)
+            session.commit()
+            return jsonify({"success": True})
         else:
             abort(404) # unimplemented http method
 

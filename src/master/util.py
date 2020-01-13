@@ -55,3 +55,4 @@ def parse_bool(value):
 def get(Model, session, id):
     contest = session.query(Model).get(id)
     if contest is None: abort(404, f"Model {Model.__name__} with id {id} could not be found")
+    return contest
