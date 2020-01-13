@@ -6,6 +6,7 @@
 import settings
 import contest
 import error
+import auth
 
 from flask import Flask
 from healthcheck import HealthCheck
@@ -14,6 +15,7 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 # add api blueprints
 app.register_blueprint(contest.api)
+app.register_blueprint(auth.api)
 app.register_blueprint(error.handlers)
 # setup healthcheck probe
 health = HealthCheck(app, "/healthz")

@@ -20,3 +20,6 @@ LISTEN_PORT = os.environ.get("KCMS_MASTER_PORT", cms_config["master_listen_port"
 
 # db settings
 DB_CONNNECTION_STR = cms_config["database"]
+
+# jwt settings
+JWT_KEY = os.environ.get("KCMS_MASTER_JWT_KEY", cms_config["master_jwt_key"])
