@@ -207,8 +207,6 @@ services:
     env_file: 
       - ".env"
       - "config/config.env"
-    volumes:
-      - "./src/master:/master"
     depends_on:
       - cms-db
     
