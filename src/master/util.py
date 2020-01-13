@@ -3,6 +3,8 @@
 # Contest API
 #
 
+from flask import abort
+
 # reverse mapping - swap mappings ordering
 # returns reverse mapping
 def reverse_mapping(mapping):
@@ -47,4 +49,9 @@ def parse_bool(value):
 
         if val_lower == "true" or val_lower == "t" or val_lower == "1": return True
         elif val_lower == "false" or val_lower == "f" or val_lower == "0": return False
-        else: raise NotImplementedError(f"Unparsable bool value: {value}")
+        else: abort(400, f"Unparsable bool value: {value}")
+
+# get model for the given id using the given db session
+def get(Model, session, id):
+    contest = session.query(Model).get(id)
+    if contest is None: abort(404, f"Model {Model.__name__} with id {id} could not be found")

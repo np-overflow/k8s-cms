@@ -6,11 +6,10 @@
 import os
 import json
 
-# read cms config file
+# cms config
 CMS_CONFIG_PATH = os.environ.get("CMS_CONFIG", "/cms/config/cms.conf")
 with open(CMS_CONFIG_PATH, "r") as f:
     cms_config = json.load(f)
-
 
 # api settings
 API_VERSION = 0
