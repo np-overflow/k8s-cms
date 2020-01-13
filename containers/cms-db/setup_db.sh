@@ -5,10 +5,9 @@
 #
 
 # configure database according to CMS docs
-psql --username=postgres -c "CREATE USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD';" 
-createdb --username=postgres --owner=cmsuser cmsdb 
-psql --username=postgres --dbname=cmsdb --command='ALTER SCHEMA public OWNER TO cmsuser' 
-psql --username=postgres --dbname=cmsdb --command='GRANT SELECT ON pg_largeobject TO cmsuser' 
+createdb --username=$POSTGRES_USER --owner=$POSTGRES_USER cmsdb 
+psql --username=$POSTGRES_USER --dbname=cmsdb --command="ALTER SCHEMA public OWNER TO $POSTGRES_USER"
+psql --username=$POSTGRES_USER --dbname=cmsdb --command="GRANT SELECT ON pg_largeobject TO $POSTGRES_USER" 
 
 # run db setup scripts
 exec bash -c '/cms/scripts/cmsInitDB'
