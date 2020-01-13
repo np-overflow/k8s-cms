@@ -1,15 +1,18 @@
 #
-# k8s-cms
-# Master Service
+# k8s-cms Master
+# Flask Server
 #
 
 import settings
+import contest
 
 from flask import Flask
 from healthcheck import HealthCheck
 from sqlalchemy import create_engine
 
 app = Flask(__name__)
+# add api blueprints
+app.register_blueprint(contest.api)
 # setup healthcheck probe
 health = HealthCheck(app, "/healthz")
 
