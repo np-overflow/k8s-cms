@@ -24,15 +24,6 @@ nano .env # use your favourite editor
 Runs CMS on Kubernetes cluster. Suitable for hosting actual contests:
 - Requires Kubernetes Cluster with the following:
     - preconfigured default storage class (check with `kubectl get sc`)
-    - ingress controller optional for ingress support.
-- Requires [Helm](https://helm.sh/docs/using_helm/#installing-helm) to be up and running. 
-    - For security use [Tillerless Helm](https://github.com/rimusz/helm-tiller)
-
-```sh
-helm tiller start # tillerless helm only
-helm install .
-helm tiller stop # tillerless helm only
-```
 
 #### Optional Addons
 Optionally configure addons the following in `values.yaml` before `helm install .`
