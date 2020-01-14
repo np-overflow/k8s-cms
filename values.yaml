@@ -307,14 +307,20 @@ certGenerate:
 # nginx ingress controller
 nginx-ingress: 
   # whether to deploy a ingress controller
-  enabled: false 
+  # recommended to set to true, as custom configuration of the ingress controller 
+  # is needed for k8s-cms to work correctly
+  enabled: true
   controller:
+    # custom config of ingress controller for k8s-cms
+    # remember to restart nginx-ingress pods after updating the config
+    config:
+      proxy-body-size: "100m" # adjust contest import upload size is larger
     metrics:
       enabled: true # prometheus metrics
 
 # nginx nginx controller
 cert-manager:
-  enabled: false # whether to deploy cert manager 
+  enabled: true # whether to deploy cert manager 
 
 prometheus-operator:
-  enabled: false # whether to deploy prometheus-operator
+  enabled: true # whether to deploy prometheus-operator
