@@ -26,8 +26,13 @@ Runs CMS on Kubernetes cluster. Suitable for hosting actual contests:
     - preconfigured default storage class (check with `kubectl get sc`)
 
 #### Optional Addons
-Optionally configure addons the following in `values.yaml` before `helm install .`
-- Expose services with ingress:
+Optionally configure addons the following in `values.yaml` before `helm install .`:
+> Import addon charts before enabling addons:
+> - `helm repo add stable https://kubernetes-charts.storage.googleapis.com/`
+> - `helm repo add jetstack https://charts.jetstack.io`
+> - `helm dep build`
+
+- Expose services with ingress
     - deploy nginx ingress controller setting `nginx-ingress.enabled` to `true`
     - set `ingress.enabled` to `true` and configure dns hosts
 - Automatically provision TLS certificates for HTTPs:
@@ -35,7 +40,7 @@ Optionally configure addons the following in `values.yaml` before `helm install 
     - deploy cert-manage by setting `cert-manager.enabled` to `true`
     - set `certGenerate.enabled` to `true` and configure email
 - Mointoring with monitoring and alerts and prometheus and grafana 
-    - deploy cert-manage by setting `prometheus-operato.enabled` to `true`
+    - deploy cert-manage by setting `prometheus-operator.enabled` to `true`
     - Port forward the grafana service to access monitoing dashboards.
 
 ### Docker-Compose
