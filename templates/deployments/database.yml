@@ -61,7 +61,9 @@ spec:
           volumeMounts:
             - name: database-data
               mountPath: "/var/lib/postgresql/data"
-              subPath: "cms-database-data"
+              {{ if .Values.config.database.subPath -}}
+              subPath: "{{ .Values.config.database.subPath }}"
+              {{- end }}
             - name: config-file
               mountPath: "/cms/config"
       volumes:
