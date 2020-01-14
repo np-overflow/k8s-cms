@@ -29,3 +29,12 @@ deps/
 
 # container dockerfiles
 containers/
+
+# source code
+src/
+# python virtualenvs
+src/master/venv/
+
+# test files
+test/
+

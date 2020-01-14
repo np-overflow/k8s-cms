@@ -25,5 +25,5 @@ DB_CONNNECTION_STR = cms_config["database"]
 
 # jwt settings
 keyspace = string.digits + string.ascii_letters
-default_jwt_key ="".join(random.choices(keyspace, k=32)
+default_jwt_key = "".join(random.choices(keyspace, k=32))
 JWT_KEY = os.environ.get("KCMS_MASTER_JWT_KEY", default_jwt_key)
