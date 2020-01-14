@@ -44,14 +44,11 @@ spec:
             - configMapRef:
                 name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "k8s-cms.fullname" . }}-secrets
-                  key: POSTGRES_PASSWORD
+            {{- include "k8s-cms.db-credentials" . | nindent 12 }}
             # required for container to listen
             - name: CMS_ADMIN
               value: "0.0.0.0"
+            # TODO: remove when replace CreateAdmin with individual job
             # inject credentials for admin web server
             - name: CMS_ADMIN_USER
               valueFrom:
@@ -63,9 +60,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "k8s-cms.fullname" . }}-secrets
                   key: CMS_ADMIN_PASSWORD
-
-          resources:
-{{ toYaml .Values.resources.contest | indent 12 }}
 
           livenessProbe:
             httpGet:

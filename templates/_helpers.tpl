@@ -71,3 +71,19 @@ checksum/{{ include "k8s-cms.fullname" . }}-config-env: {{ include (print $.Temp
 checksum/{{ include "k8s-cms.fullname" . }}-config-file: {{ include (print $.Template.BasePath "/config/config-file.yml") . | sha256sum }}
 {{- end -}}
 
+{{/*
+Database Credentials
+Injects Database Credentials as environment variables
+*/}}
+{{- define "k8s-cms.db-credentials" -}}
+- name: POSTGRES_USER
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "k8s-cms.fullname" . }}-secrets
+      key: POSTGRES_USER
+- name: POSTGRES_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "k8s-cms.fullname" . }}-secrets
+      key: POSTGRES_PASSWORD
+{{- end -}}

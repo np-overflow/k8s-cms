@@ -40,11 +40,7 @@ spec:
             - configMapRef:
                 name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "k8s-cms.fullname" . }}-secrets
-                  key: POSTGRES_PASSWORD
+            {{- include "k8s-cms.db-credentials" . | nindent 12 }}
             # required to listen properly
             - name: CMS_LOG
               value: "0.0.0.0"

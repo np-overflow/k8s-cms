@@ -40,11 +40,8 @@ spec:
             - configMapRef:
                 name: {{ include "k8s-cms.fullname" . }}-config-env
           env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "k8s-cms.fullname" . }}-secrets
-                  key: POSTGRES_PASSWORD
+            {{- include "k8s-cms.db-credentials" . | nindent 12 }}
+            # interval the proxy service polls for contests to attach to
             - name: CMS_POLL_INTERVAL
               value: {{ .Values.config.proxyService.pollInterval | quote }}
             # inject ranking credentials require to access ranking serve
