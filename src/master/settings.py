@@ -5,6 +5,8 @@
 
 import os
 import json
+import string
+import random
 
 # cms config
 CMS_CONFIG_PATH = os.environ.get("CMS_CONFIG", "/cms/config/cms.conf")
@@ -22,4 +24,6 @@ LISTEN_PORT = os.environ.get("KCMS_MASTER_PORT", cms_config["master_listen_port"
 DB_CONNNECTION_STR = cms_config["database"]
 
 # jwt settings
-JWT_KEY = os.environ.get("KCMS_MASTER_JWT_KEY", cms_config["master_jwt_key"])
+keyspace = string.digits + string.ascii_letters
+default_jwt_key ="".join(random.choices(keyspace, k=32)
+JWT_KEY = os.environ.get("KCMS_MASTER_JWT_KEY", default_jwt_key)
