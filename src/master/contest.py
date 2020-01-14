@@ -11,6 +11,7 @@ from shutil import rmtree
 from flask import abort, request, Blueprint, jsonify
 
 from util import *
+from auth import authenticate
 from settings import API_VERSION
 from cms.db.util import SessionGen, Contest, get_contest_list
 from cmscontrib.ImportContest import ContestImporter
@@ -97,6 +98,7 @@ contest_mapping = [
 # api route lists contests on the cms systems by id with the given url param
 # incl-names - whether to include names in json response
 @api.route(f"/api/v{API_VERSION}/contests", methods=["GET"])
+@authenticate(kind="access")
 def route_contests():
     # parse filter params
     params = dict(request.args)
@@ -106,7 +108,6 @@ def route_contests():
     # check for unknown filter params
     if len(params) > 0: abort(400)
 
-    # TODO: refactor with_entities()
     with SessionGen() as session:
         if has_include_names:
             # return ids & names
@@ -124,6 +125,7 @@ def route_contests():
 # PATCH - update parameters on the contest for the given id 
 # DELETE - delete the given contests for the given id
 @api.route(f"/api/v{API_VERSION}/contest/<int:contest_id>", methods=["GET", "PATCH", "DELETE"])
+@authenticate(kind="access")
 def route_contest(contest_id):
     # check url params
     if contest_id is None: abort(400)
@@ -157,6 +159,7 @@ def route_contest(contest_id):
 # PATCH - update the contest for the given contest_id with the given contest data
 @api.route(f"/api/v{API_VERSION}/contest/import", methods=["POST"])
 @api.route(f"/api/v{API_VERSION}/contest/import/<int:contest_id>", methods=["PATCH"])
+@authenticate(kind="access")
 def route_import_contest(contest_id=None):
     # unpack contest data 
     data_dir = unpack_data(request)
