@@ -1,0 +1,65 @@
+#
+# k8s-cms
+# Kubernetes Intergration
+# k8s-cms Master 
+#
+
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-cms.fullname" . }}-master
+  labels:
+{{ include "k8s-cms.labels" . | indent 4 }}
+    component: master
+spec:
+  replicas: {{ .Values.replicas.masterCount }}
+  selector:
+    matchLabels:
+{{ include "k8s-cms.selectors" . | indent 6 }}
+      component: master
+  template:
+    metadata:
+      labels:
+{{ include "k8s-cms.labels" . | indent 8 }}
+        component: master
+      annotations:
+{{ include "k8s-cms.annotations" . | indent 8 }}
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ .Values.security.serviceAccount.name }}
+      containers:
+        {{- with .Values.images.master }}
+        - name: {{ .name }}
+          image: {{ .repository }}:{{ .tag }}
+        {{- end }}
+          ports:
+            # port exposes the k8s-cms master REST API
+            - name: http
+              containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: {{ include "k8s-cms.fullname" . }}-config-env
+          env:
+            {{- include "k8s-cms.db-credentials" . | nindent 12 }}
+
+          livenessProbe:
+            httpGet:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: http
+            periodSeconds: 3
+
+          resources:
+{{ toYaml .Values.resources.master | indent 12 }}
+
+          volumeMounts:
+            - name: config-file
+              mountPath: "/cms/config"
+      volumes:
+        - name: config-file
+          configMap:
+            name: {{ include "k8s-cms.fullname" . }}-config-file

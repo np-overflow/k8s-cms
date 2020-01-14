@@ -31,6 +31,7 @@ replicas:
     minCount: 1
     maxCount: 24 # max 24
   adminWebCount: 1
+  masterCount: 1
   
 # configure the images to deploy
 images:
@@ -83,6 +84,10 @@ images:
     name: cms-worker
     repository: mrzzy/cms-worker
     tag: latest
+  master:
+    name: k8s-cms-master
+    repository: mrzzy/k8s-cms-master
+    tag: latest
 
 services:
   database:
@@ -119,8 +124,10 @@ services:
     name: k8s-cms-contest
     type: ClusterIP
   worker:
+    # worker services is headless
     name: k8s-cms-worker
 
+  ## external services
   webAdmin:
     name: k8s-cms-web-admin
     type: NodePort
@@ -130,11 +137,11 @@ services:
   webContest:
     name: k8s-cms-web-contest
     type: NodePort
-  
-# We usually recommend not to specify default resources and to leave this as a conscious
-# choice for the user. This also increases chances charts run on environments with little
-# resources, such as Minikube. If you do want to specify resources, uncomment the following
-# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  master:
+    name: k8s-cms-master
+    type: NodePort
+
+## resource limits
 resources:
   # guarantee QOS
   database:
@@ -227,7 +234,10 @@ resources:
     limits:
       cpu: 950m
       memory: 1200Mi
-  
+  # TODO: profile master resource usage
+  # guarantee QOS
+  master: {}
+
 nodeSelector: {}
 
 tolerations:
@@ -254,7 +264,9 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
   hosts:
-    - host: k8s-cms.io
+    # configure hostnames for ingress services
+    # change hostnames to your own domains and ensure you update tls hosts below
+    - host: contest.k8s-cms.io
       serviceName: k8s-cms-web-contest
       paths: [ "/" ]
     - host: admin.k8s-cms.io
@@ -263,14 +275,20 @@ ingress:
     - host: ranking.k8s-cms.io
       serviceName: k8s-cms-web-ranking
       paths: [ "/" ]
-  # configure tls certificate secrets for HTTps
+    - host: master.k8s-cms.io
+      serviceName: k8s-cms-master
+      paths: [ "/" ]
+    
+  # configure tls certificate secrets for HTTPs
   # if using certificate generation, the sercrets do not have to exist
   tls: 
     - secretName: k8s-cms-tls-cert
+      # change hostnames to match hostnames in ingress.hosts
       hosts:
-        - k8s-cms.io
+        - contest.k8s-cms.io
         - admin.k8s-cms.io
         - ranking.k8s-cms.io
+        - master.k8s-cms.io
   
 # config for cert generation.
 # Requires cert-manager to be enabled and ingress to be configured 
