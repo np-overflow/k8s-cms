@@ -20,13 +20,14 @@ type GlobalConfig struct {
 
 func main() {
 	var usageInfo string = `Usage: kcmscli [options] <subcommand ...> 
-kcmscli - Command line tool for controlling k8s-cms
+kcmscli - Command line tool for controlling k8s-cms via k8s-cms master
 
 SUBCOMMANDS
 * use <subcommand> -h to show usage info for each subcommand
 config - change configuration values
 auth - authenticate, deauthenticate with k8s-cms master.
-contests - import, list, update, delete contests
+user - import, export users
+contest - import, list, delete contests
 
 OPTIONS
 `
@@ -56,6 +57,8 @@ OPTIONS
 		configCmd(&config, args)
 	case "auth" :
 		authCmd(&config, args)
+	case "user":
+		userCmd(&config, args)
 	case "contest":
 	default:
 		fmt.Printf("Unknown subcommand: %s\n", subCmd)

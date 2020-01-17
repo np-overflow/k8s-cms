@@ -8,6 +8,8 @@ package main
 import (
 	"os"
 	"fmt"
+	"bufio"
+	"strings"
 	"io/ioutil"
 )
 
@@ -38,7 +40,7 @@ func readBytes(filePath string) []byte {
 
 // write given bytes to the file at the given path
 func writeBytes(bytes []byte, path string) {
-	file, err := os.OpenFile(path, os.O_WRONLY , 0644)
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE , 0644)
 	if err != nil {
 		die(err.Error())
 	}
@@ -53,8 +55,8 @@ func writeBytes(bytes []byte, path string) {
 	file.Sync()
 	file.Close()
 }
-	
-/* CSV utilties */
+
+/* CSV Utilties */
 // load & return a column of the given name in the csv file located as the given csv path.
 // the file should be seperated with given seperator
 // the csv file should have a first header line with column names
@@ -94,4 +96,3 @@ func loadCSVColumn(csvPath string, colName string, seperator string) []string {
 	
 	return colValues
 }
-
