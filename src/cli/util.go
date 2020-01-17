@@ -19,6 +19,7 @@ func die(message string) {
 	os.Exit(1)
 }
 
+/* I/O */
 // read the file at the given path as []byte
 // returns read bytes
 func readBytes(filePath string) []byte {
@@ -34,3 +35,22 @@ func readBytes(filePath string) []byte {
 	
 	return bytes
 }
+
+// write given bytes to the file at the given path
+func writeBytes(bytes []byte, path string) {
+	file, err := os.OpenFile(path, os.O_WRONLY , 0644)
+	if err != nil {
+		die(err.Error())
+	}
+	file.Truncate(0)
+	file.Seek(0, 0) // whence 0: - with refrence to the start of the file
+	
+	_, err = file.Write(bytes)
+	if err != nil {
+		die(err.Error())
+	}
+	
+	file.Sync()
+	file.Close()
+}
+	

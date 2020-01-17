@@ -44,28 +44,15 @@ func (config ConfigFile) commit() {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		os.MkdirAll(dir, os.ModePerm)
 	}
-	
-	// clear file of prior content
 	path := filepath.Join(dir, "config.yaml")
-	file, err := os.OpenFile(path, os.O_WRONLY | os.O_CREATE, 0644)
-	if err != nil {
-		die(err.Error())
-	}
-	file.Truncate(0)
-	file.Seek(0, 0) // whence 0: - with refrence to the start of the file
-	
+
+	// convert config to yaml
 	configYAML, err := yaml.Marshal(config)
 	if err != nil {
 		die(err.Error())
 	}
 	
-	_, err = file.Write(configYAML)
-	if err != nil {
-		die(err.Error())
-	}
-	
-	file.Sync()
-	file.Close()
+	writeBytes(configYAML, path)
 }
 
 // config subcommand
