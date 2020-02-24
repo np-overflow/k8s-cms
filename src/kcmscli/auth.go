@@ -28,6 +28,7 @@ kcmscli auth - authenticate, deauthenticate with k8s-cms API
 SUBCOMMANDS
 login  - authenticate with k8s-cms API with admin credentials
 logout - ends the authenticated session with k8s-cms API.
+check - check if the CLI is currently authenticated with the server
 
 OPTIONS
 `
@@ -56,6 +57,8 @@ OPTIONS
 		authLoginCmd(globalConfig, restArgs)
 	case "logout" :
 		authLogoutCmd(globalConfig, restArgs)
+	case "check":
+		authCheckCmd(globalConfig, restArgs)
 	default:
 		fmt.Printf("Unknown subcommand: %s\n", subCmd)
 		os.Exit(1);
@@ -144,3 +147,39 @@ OPTIONS
 	config.RefreshToken = ""
 	config.commit()
 }
+
+// authentication - auth check subcommand
+// config - global program config 
+// args - arguments parsed to subcommand
+func authCheckCmd(globalConfig *GlobalConfig, args []string) {
+	var usageInfo string = `Usage: kcmscli auth check
+kcmscli auth check - check if the CLI is currently authenticated with the API
+OPTIONS
+`
+	// parse & evaluate options
+	optSet := getopt.New()
+	optSet.FlagLong(&globalConfig.shouldHelp , "help", 'h', "show usage info")
+	optSet.Parse(args)
+	
+	if globalConfig.shouldHelp {
+		fmt.Print(usageInfo)
+		optSet.PrintOptions(os.Stdout)
+		os.Exit(0)
+	}
+	
+	// check validity of refresh token with server
+	configFile := readConfigFile()
+	api := makeAPI(configFile, globalConfig)
+	resp := api.call("GET", "auth/check", "", nil)
+	
+	// parse server response
+	switch resp.StatusCode {
+	case http.StatusOK:
+		fmt.Println("Authenticated with the API")
+	case http.StatusUnauthorized:
+		fmt.Println("Not authenticated with the API")
+	default:
+		die(fmt.Sprintf("Got unknown status code: %d", resp.StatusCode))
+	}
+}
+
