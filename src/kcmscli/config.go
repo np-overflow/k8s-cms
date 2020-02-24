@@ -9,7 +9,7 @@ import (
 	"os"
 	"fmt"
 	"path/filepath"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"github.com/kirsle/configdir"
 	"github.com/pborman/getopt/v2"
 )
