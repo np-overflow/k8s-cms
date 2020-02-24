@@ -42,6 +42,7 @@ func (api *API) refreshAccess() error {
 		return errors.New("Failed to refresh access token")
 	}
 	
+	fmt.Println(response["accessToken"])
 	api.accessToken = response["accessToken"]
 	return nil
 }
@@ -50,7 +51,7 @@ func (api *API) refreshAccess() error {
 func (api API) attachToken(req *http.Request) {
 	// attach auth token for authentication
 	attachToken := func (token string) {
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer: %s", token))
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	}
 	if len(api.accessToken) > 0 {
 		attachToken(api.accessToken)
@@ -71,6 +72,7 @@ func (api API) attachToken(req *http.Request) {
 
 // make an API call at the given route with an body, using http method
 // calls api at <ApiHost>/api/v0/<route>, where ApiHost is found in the config file.
+// automatically attaches auth token when available
 // returns the response from the http request
 func (api API) call(method string, route string, contentType string, body io.Reader) *http.Response {
 	// build api call URL
@@ -82,8 +84,10 @@ func (api API) call(method string, route string, contentType string, body io.Rea
 	if err != nil {
 		die(err.Error())
 	}
+
 	req.Header.Add("Content-Type", contentType)
-	api.attachToken(req)
+	// automatically attach auth token
+	api.attachToken(req) 
 
 	// make call
 	if api.globalConfig.isVerbose {
