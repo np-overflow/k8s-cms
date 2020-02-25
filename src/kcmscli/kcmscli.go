@@ -1,22 +1,20 @@
 /*
  * k8s-cms
  * kcmscli - k8s-cms comand line client
-*/
+ */
 package main
 
 import (
-	"os"
 	"fmt"
 	"github.com/pborman/getopt/v2"
+	"os"
 )
-
 
 // global program config - common config for all subcommands
 type GlobalConfig struct {
-	isVerbose bool
+	isVerbose  bool
 	shouldHelp bool
 }
-
 
 func main() {
 	var usageInfo string = `Usage: kcmscli [options] <subcommand ...> 
@@ -34,7 +32,7 @@ OPTIONS
 	// parse & evaluate program opts
 	var config GlobalConfig
 	optSet := getopt.New()
-	optSet.FlagLong(&config.shouldHelp , "help", 'h', "show usage info")
+	optSet.FlagLong(&config.shouldHelp, "help", 'h', "show usage info")
 	optSet.FlagLong(&config.isVerbose, "verbose", 'v', "produce verbose output")
 	optSet.Parse(os.Args)
 
@@ -55,13 +53,14 @@ OPTIONS
 	switch subCmd {
 	case "config":
 		configCmd(&config, args)
-	case "auth" :
+	case "auth":
 		authCmd(&config, args)
 	case "user":
 		userCmd(&config, args)
 	case "contest":
+		contestCmd(&config, args)
 	default:
 		fmt.Printf("Unknown subcommand: %s\n", subCmd)
-		os.Exit(1);
+		os.Exit(1)
 	}
 }

@@ -2,21 +2,22 @@
  * k8s-cms
  * kcmscli - k8s-cms comand line client
  * config file
-*/
+ */
 package main
 
 import (
-	"os"
 	"fmt"
-	"path/filepath"
-	"gopkg.in/yaml.v3"
 	"github.com/kirsle/configdir"
+	"github.com/np-overflow/k8s-cms/src/kcmscli/utils"
 	"github.com/pborman/getopt/v2"
+	"gopkg.in/yaml.v3"
+	"os"
+	"path/filepath"
 )
 
 // config file
 type ConfigFile struct {
-	ApiHost string `yaml:"api_host"`
+	ApiHost      string `yaml:"api_host"`
 	RefreshToken string `yaml:"refresh_token"`
 }
 
@@ -28,8 +29,8 @@ func readConfigFile() ConfigFile {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return ConfigFile{}
 	}
-	configYAML := readBytes(path)
-	
+	configYAML := utils.ReadBytes(path)
+
 	// parse config file yaml
 	var config ConfigFile
 	yaml.Unmarshal(configYAML, &config)
@@ -51,12 +52,12 @@ func (config ConfigFile) commit() {
 	if err != nil {
 		die(err.Error())
 	}
-	
-	writeBytes(configYAML, path)
+
+	utils.WriteBytes(configYAML, path)
 }
 
 // config subcommand
-// globalConfig - global program config 
+// globalConfig - global program config
 // args - arguments parsed to subcommand
 func configCmd(globalConfig *GlobalConfig, args []string) {
 	var usageInfo string = `Usage: kcmscli config [options] <item> [value]
@@ -71,7 +72,7 @@ OPTIONS
 `
 	// parse & evaluate options
 	optSet := getopt.New()
-	optSet.FlagLong(&globalConfig.shouldHelp , "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
 	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
 	optSet.Parse(args)
 
@@ -95,7 +96,7 @@ OPTIONS
 	configFile := readConfigFile()
 	switch configItem {
 	case "ApiHost":
-		if configValue == "" { 
+		if configValue == "" {
 			// get value
 			fmt.Println(configFile.ApiHost)
 		} else {
@@ -103,8 +104,8 @@ OPTIONS
 		}
 	default:
 		fmt.Printf("Unknown config item: %s\n", configItem)
-		os.Exit(1);
+		os.Exit(1)
 	}
-	
+
 	configFile.commit()
 }

@@ -2,27 +2,28 @@
  * k8s-cms
  * kcmscli - k8s-cms comand line client
  * user subcommand
-*/
+ */
 package main
 
 import (
-	"os"
 	"fmt"
-	"strings"
-	"math/rand"
-	"path/filepath"
-	"gopkg.in/yaml.v2"
+	"github.com/np-overflow/k8s-cms/src/kcmscli/utils"
 	"github.com/pborman/getopt/v2"
+	"gopkg.in/yaml.v3"
+	"math/rand"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 // user type
 type User struct {
 	UserName string `yaml:"username"`
 	FullName string `yaml:"last_name"`
-	Passwd string `yaml:"password"`
+	Passwd   string `yaml:"password"`
 }
 
-func getUserHeaders(seperator string) []byte  {
+func getUserHeaders(seperator string) []byte {
 	headers := []string{"username", "fullname", "password"}
 	return []byte(strings.Join(headers, ","))
 }
@@ -34,7 +35,7 @@ func (user User) toCSV(seperator string) []byte {
 
 // write users to disk as CSV
 func writeUsersCSV(path string, users []User) {
-	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE , 0644)
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0644)
 	_, err = file.Write(getUserHeaders(","))
 	_, err = file.WriteString("\n")
 	if err != nil {
@@ -52,36 +53,31 @@ func writeUsersCSV(path string, users []User) {
 
 // write users to disk as YAML
 func writeUsers(users []User, contestDir string) {
-	// convert user data to yaml
-	usersMap := map[string][]User {
-		"users": users,
-	}
-	usersYAML, err := yaml.Marshal(&usersMap)
+	usersYAML, err := yaml.Marshal(&users)
 	if err != nil {
 		die(err.Error())
 	}
 
 	// write user yaml to contest dir
 	path := filepath.Join(contestDir, "users.yaml")
-	writeBytes(usersYAML, path)
+	utils.WriteBytes(usersYAML, path)
 }
 
 // read users form disk as YAML
 func readUsers(contestDir string) []User {
 	// read user yaml
 	path := filepath.Join(contestDir, "users.yaml")
-	usersYAML := readBytes(path)
+	usersYAML := utils.ReadBytes(path)
 
-	
 	// parse user yaml
-	var usersMap map[string][]User
-	yaml.Unmarshal(usersYAML, &usersMap)
-	
-	return usersMap["users"]
+	var users []User
+	yaml.Unmarshal(usersYAML, &users)
+
+	return users
 }
 
 // user subcommand
-// globalConfig - global program config 
+// globalConfig - global program config
 // args - arguments parsed to subcommand
 func userCmd(globalConfig *GlobalConfig, args []string) {
 	var usageInfo string = `Usage: kcmscli user [options] <subcommand ...>
@@ -95,7 +91,7 @@ OPTIONS
 `
 	// parse & evaluate options
 	optSet := getopt.New()
-	optSet.FlagLong(&globalConfig.shouldHelp , "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
 	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
 	optSet.Parse(args)
 
@@ -104,7 +100,7 @@ OPTIONS
 		optSet.PrintOptions(os.Stdout)
 		os.Exit(0)
 	}
-	
+
 	// parse subcommand
 	args = optSet.Args()
 	if len(args) < 1 {
@@ -114,13 +110,13 @@ OPTIONS
 
 	// delegate to various subcommands
 	switch subCmd {
-	case "import" :
+	case "import":
 		userImportCmd(globalConfig, args)
-	case "export" :
+	case "export":
 		userExportCmd(globalConfig, args)
 	default:
 		fmt.Printf("Unknown subcommand: %s\n", subCmd)
-		os.Exit(1);
+		os.Exit(1)
 	}
 }
 
@@ -129,17 +125,17 @@ OPTIONS
 type UserImportConfig struct {
 	isPasswdAutogen  bool
 	autogenPasswdLen int
-	passwd string
-	isVerbose bool
-	userNameCol string
-	fullNameCol string
-	registryPath string
-	contestDir string
-	csvSeperator string
+	passwdCol        string
+	isVerbose        bool
+	userNameCol      string
+	fullNameCol      string
+	registryPath     string
+	contestDir       string
+	csvSeperator     string
 }
 
 // user import subcommand
-// globalConfig - global program config 
+// globalConfig - global program config
 // args - arguments parsed to subcommand
 func userImportCmd(globalConfig *GlobalConfig, args []string) {
 	usageInfo := `Usage: kcmscli user import [options] <registration csv> <contest dir>
@@ -152,20 +148,20 @@ NOTES:
 OPTIONS
 	`
 	// parse command line options
-	userNameCol, passwd :=  "user", "AUTO"
-	csvSeperator, autogenPasswdLen, fullNameCol  := ",", 16, "name"
+	userNameCol, passwdCol := "user", "AUTO"
+	csvSeperator, autogenPasswdLen, fullNameCol := ",", 16, "name"
 	optSet := getopt.New()
-	optSet.FlagLong(&globalConfig.shouldHelp , "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
 	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
-	optSet.FlagLong(&userNameCol, "user-column", 'u', "Name of the column to " +
-					"extract usernames in registration CSV")
-	optSet.FlagLong(&passwd, "password", 'p', "The password assigned to the or "+ 
-					"'AUTO' to autogenerate password")
+	optSet.FlagLong(&userNameCol, "user-column", 'u', "Name of the column to "+
+		"extract usernames in registration CSV")
+	optSet.FlagLong(&passwdCol, "password", 'p', "The password assigned to the users or "+
+		"'AUTO' to autogenerate password")
 	optSet.FlagLong(&csvSeperator, "csv-seperator", 's', "The seperator used to seperate the CSV file")
-	optSet.FlagLong(&autogenPasswdLen, "autogen-len", 'l', "Length of the " +
+	optSet.FlagLong(&autogenPasswdLen, "autogen-len", 'l', "Length of the "+
 		"autogenerated password if autogeneration is enabled")
-	optSet.FlagLong(&fullNameCol, "name-column", 'n', "Name of the column to " +
-					"extract participant's fullname in registration CSV")
+	optSet.FlagLong(&fullNameCol, "name-column", 'n', "Name of the column to "+
+		"extract participant's fullname in registration CSV")
 	optSet.Parse(args)
 
 	if globalConfig.shouldHelp {
@@ -174,12 +170,12 @@ OPTIONS
 		os.Exit(0)
 	}
 
-	isPasswdAutogen :=  false
-	if passwd == "AUTO" {
+	isPasswdAutogen := false
+	if passwdCol == "AUTO" {
 		isPasswdAutogen = true
-		passwd = ""
+		passwdCol = ""
 	}
-	
+
 	// parse positional arguments
 	args = optSet.Args()
 	if len(args) != 2 {
@@ -187,34 +183,36 @@ OPTIONS
 	}
 	registryPath, contestDir := args[0], args[1]
 
-	if globalConfig.isVerbose { 
-		fmt.Printf("using username column: \"%s\"", userNameCol)
-		fmt.Printf("using registration CSV path: \"%s\"", registryPath)
-		fmt.Printf("using contest directory path: \"%s\"", contestDir)
+	if globalConfig.isVerbose {
+		fmt.Printf("using username column: \"%s\"\n", userNameCol)
+		fmt.Printf("using registration CSV path: \"%s\"\n", registryPath)
+		fmt.Printf("using contest directory path: \"%s\"\n", contestDir)
 		if isPasswdAutogen {
-			fmt.Printf("configured to autogenerate passwords for users")
+			fmt.Println("configured to autogenerate passwords for users")
+		} else {
+			fmt.Printf("using password column: \"%s\"\n", passwdCol)
 		}
 	}
 
 	// peform user import
-	config := UserImportConfig {
-		isVerbose: globalConfig.isVerbose,
-		isPasswdAutogen: isPasswdAutogen,
-		passwd: passwd,
-		userNameCol: userNameCol,
-		fullNameCol: fullNameCol,
-		registryPath: registryPath,
-		contestDir: contestDir,
-		csvSeperator: csvSeperator,
+	config := UserImportConfig{
+		isVerbose:        globalConfig.isVerbose,
+		isPasswdAutogen:  isPasswdAutogen,
+		passwdCol:        passwdCol,
+		userNameCol:      userNameCol,
+		fullNameCol:      fullNameCol,
+		registryPath:     registryPath,
+		contestDir:       contestDir,
+		csvSeperator:     csvSeperator,
 		autogenPasswdLen: autogenPasswdLen,
 	}
-	
+
 	config.importUsers()
 }
 
 // validate user import config state
 func (config UserImportConfig) validate() {
-	exists := func (path string) bool {
+	exists := func(path string) bool {
 		if _, err := os.Stat(path); err == nil {
 			return true
 		} else {
@@ -222,8 +220,8 @@ func (config UserImportConfig) validate() {
 		}
 	}
 
-	if !config.isPasswdAutogen && len(config.passwd) < 1 {
-		die("Password cannot be empty")
+	if !config.isPasswdAutogen && len(config.passwdCol) < 1 {
+		die("Password column cannot be empty if not using password autogeneration.")
 	} else if len(config.userNameCol) < 1 {
 		die("Username column cannot be empty")
 	} else if !exists(config.registryPath) {
@@ -240,7 +238,7 @@ func (config UserImportConfig) validate() {
 // compile passwds for the given nUsers.
 func (config UserImportConfig) compilePasswds(nUsers int) []string {
 	// autogenerate a alpha numeric passwd
-	genPasswd := func (genLen int) string {
+	genPasswd := func(genLen int) string {
 		alphaNumChars := "abcdefghijklmnopqrstunwxyzABCDEFGHIJKLMNOPQRSTUNWXYZ0123456789"
 		var passwdChars []string
 
@@ -252,36 +250,35 @@ func (config UserImportConfig) compilePasswds(nUsers int) []string {
 		return strings.Join(passwdChars, "")
 	}
 
+	// compile autogenerate passwds
 	var passwds []string
 	for i := 0; i < nUsers; i++ {
-		if config.isPasswdAutogen {
-			passwds = append(passwds, genPasswd(config.autogenPasswdLen))
-		} else {
-			passwds = append(passwds, config.passwd)
-		}
-	} 
-	
+		passwds = append(passwds, genPasswd(config.autogenPasswdLen))
+	}
+
 	return passwds
 }
 
 // build & returns users for importConfig
 func (config UserImportConfig) buildUsers() []User {
 	// compile user data
-	userNames := loadCSVColumn(config.registryPath, config.userNameCol, config.csvSeperator)
+	userNames := utils.LoadCSVColumn(config.registryPath, config.userNameCol, config.csvSeperator)
+	fullNames := utils.LoadCSVColumn(config.registryPath, config.fullNameCol, config.csvSeperator)
 	nUsers := len(userNames)
-	passwds := config.compilePasswds(nUsers)
-	var fullNames []string
-	if len(config.fullNameCol) > 0 {
-		fullNames = loadCSVColumn(config.registryPath, config.fullNameCol, config.csvSeperator)
+	var passwds []string
+	if config.isPasswdAutogen {
+		passwds = config.compilePasswds(len(userNames))
+	} else {
+		passwds = utils.LoadCSVColumn(config.registryPath, config.passwdCol, config.csvSeperator)
 	}
 
 	// build user structs
 	var users []User
-	for i := 0; i < nUsers; i ++ {
-		user := User {
+	for i := 0; i < nUsers; i++ {
+		user := User{
 			UserName: userNames[i],
 			FullName: fullNames[i],
-			Passwd: passwds[i],
+			Passwd:   passwds[i],
 		}
 		users = append(users, user)
 	}
@@ -299,7 +296,7 @@ func (config UserImportConfig) importUsers() {
 
 /* user export */
 // user export subcommand
-// globalConfig - global program config 
+// globalConfig - global program config
 // args - arguments parsed to subcommand
 func userExportCmd(globalConfig *GlobalConfig, args []string) {
 	usageInfo := `Usage: kcmscli user export  [options] <contest dir>
@@ -310,7 +307,7 @@ OPTIONS
 	// parse & evaluate options
 	exportPath := "users.csv"
 	optSet := getopt.New()
-	optSet.FlagLong(&globalConfig.shouldHelp , "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
 	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
 	optSet.FlagLong(&exportPath, "export-path", 'p', "path of CSV to export user data")
 	optSet.Parse(args)
@@ -320,14 +317,14 @@ OPTIONS
 		optSet.PrintOptions(os.Stdout)
 		os.Exit(0)
 	}
-	
+
 	// parse positional arguments
 	args = optSet.Args()
 	if len(args) < 1 {
 		die("Missing positional arguments: <contest dir>")
 	}
 	contestDir := args[0]
-	
+
 	// read users & write as csv
 	users := readUsers(contestDir)
 	writeUsersCSV(exportPath, users)

@@ -2,35 +2,35 @@
  * k8s-cms
  * kcmscli - k8s-cms comand line client
  * API support
-*/
+ */
 package main
 
-import  (
-	"io"
-	"fmt"
+import (
 	"bytes"
-	"errors"
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
 )
 
 /* API */
 type API struct {
 	globalConfig *GlobalConfig
 	refreshToken string
-	accessToken string
-	apiHost string
-	client *http.Client
+	accessToken  string
+	apiHost      string
+	client       *http.Client
 }
 
 // construct a api object  using the given globalConfig and configFile
 func makeAPI(configFile ConfigFile, globalConfig *GlobalConfig) API {
-	return API {
+	return API{
 		globalConfig: globalConfig,
 		refreshToken: configFile.RefreshToken,
-		apiHost: configFile.ApiHost,
-		client: &http.Client{},
+		apiHost:      configFile.ApiHost,
+		client:       &http.Client{},
 	}
 }
 
@@ -41,7 +41,7 @@ func (api *API) refreshAccess() error {
 	if statusCode != http.StatusOK {
 		return errors.New("Failed to refresh access token")
 	}
-	
+
 	fmt.Println(response["accessToken"])
 	api.accessToken = response["accessToken"]
 	return nil
@@ -50,7 +50,7 @@ func (api *API) refreshAccess() error {
 // attempt attach a token to authenticate with the API to the given request
 func (api API) attachToken(req *http.Request) {
 	// attach auth token for authentication
-	attachToken := func (token string) {
+	attachToken := func(token string) {
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	}
 	if len(api.accessToken) > 0 {
@@ -87,19 +87,19 @@ func (api API) call(method string, route string, contentType string, body io.Rea
 
 	req.Header.Add("Content-Type", contentType)
 	// automatically attach auth token
-	api.attachToken(req) 
+	api.attachToken(req)
 
 	// make call
 	if api.globalConfig.isVerbose {
 		fmt.Printf("Making API call: %s\n", apiRoute)
 	}
 
-	resp, err :=  api.client.Do(req)
+	resp, err := api.client.Do(req)
 	if err != nil {
 		die(err.Error())
 	}
-	
-	if api.globalConfig.isVerbose  {
+
+	if api.globalConfig.isVerbose {
 		fmt.Printf("API returned status code: %d\n", resp.StatusCode)
 	}
 	return resp
@@ -109,16 +109,16 @@ func (api API) call(method string, route string, contentType string, body io.Rea
 // returns status code and JSON response as map[string]string
 func (api API) callJSON(method string, route string, body interface{}) (
 	int, map[string]string) {
-	bodyJSON , err := json.Marshal(body)
+	bodyJSON, err := json.Marshal(body)
 	if err != nil {
 		die(err.Error())
 	}
-	
+
 	resp := api.call(method, route, "application/json", bytes.NewReader(bodyJSON))
-	
+
 	// parse JSON body to map
 	var responseJSON []byte
-	if body != nil { 
+	if body != nil {
 		responseJSON, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			die(err.Error())
@@ -126,6 +126,6 @@ func (api API) callJSON(method string, route string, body interface{}) (
 	}
 	var responseMap map[string]string
 	json.Unmarshal(responseJSON, &responseMap)
-	
+
 	return resp.StatusCode, responseMap
 }
