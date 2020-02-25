@@ -8,34 +8,39 @@ package utils
 import (
 	"io"
 	"os"
-	"fmt"
 	"bytes"
+	"strings"
 	"mime/multipart"
 )
 
-// ripped 
-func CreateMultipartFormData(fieldName string , fileName string) ([]byte, *multipart.Writer) {
-    var b bytes.Buffer
-    var err error
-    w := multipart.NewWriter(&b)
-    var fw io.Writer
-    file := mustOpen(fileName)
-    if fw, err = w.CreateFormFile(fieldName, file.Name()); err != nil {
-		panic(err.Error())
-    }
-    if _, err = io.Copy(fw, file); err != nil {
-		panic(err.Error())
-    }
-    w.Close()
-    return b.Bytes(), w
-}
+// create multipart formdata with the given args
+// fields - string fields to include in the multipart form data
+// fileFields - file fields to include in the form data
+// returns the content type and buffer with formdata
+func NewMultipartData(fields map[string]string, fileFields map[string]*os.File) (
+	string, *bytes.Buffer) {
+	// setup to write formdata to buffer
+	var formdata bytes.Buffer
 
-func mustOpen(f string) *os.File {
-    r, err := os.Open(f)
-    if err != nil {
-        pwd, _ := os.Getwd()
-        fmt.Println("PWD: ", pwd)
-        panic(err)
-    }
-    return r
+	multipart := multipart.NewWriter(&formdata)
+	defer multipart.Close()
+	// write form data fields
+	for name, data := range fields {
+		dataWriter, err := multipart.CreateFormField(name)
+		if err != nil {
+			panic(err.Error())
+		}
+		io.Copy(dataWriter, strings.NewReader(data))
+	}
+	
+	// write file fields 
+	for name, file := range fileFields {
+		fileWriter, err := multipart.CreateFormFile(name, file.Name())
+		if err != nil {
+			panic(err.Error())
+		}
+		io.Copy(fileWriter, file)
+	}
+	
+	return multipart.FormDataContentType(), &formdata
 }

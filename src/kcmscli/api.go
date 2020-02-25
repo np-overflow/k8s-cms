@@ -42,7 +42,6 @@ func (api *API) refreshAccess() error {
 		return errors.New("Failed to refresh access token")
 	}
 
-	fmt.Println(response["accessToken"])
 	api.accessToken = response["accessToken"]
 	return nil
 }
@@ -86,7 +85,7 @@ func (api API) call(method string, route string, contentType string, body io.Rea
 	}
 
 	req.Header.Add("Content-Type", contentType)
-	// automatically attach auth token
+	// refresh & automatically attach auth token
 	api.attachToken(req)
 
 	// make call
@@ -118,7 +117,7 @@ func (api API) callJSON(method string, route string, body interface{}) (
 
 	// parse JSON body to map
 	var responseJSON []byte
-	if body != nil {
+	if resp.Body != nil {
 		responseJSON, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			die(err.Error())

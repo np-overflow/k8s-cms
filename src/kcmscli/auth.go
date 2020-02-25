@@ -176,7 +176,7 @@ OPTIONS
 	case http.StatusOK:
 		fmt.Println("Authenticated with the API")
 	case http.StatusUnauthorized:
-		fmt.Println("Not authenticated with the API")
+		die(fmt.Sprint("Not authenticated with the API"))
 	default:
 		die(fmt.Sprintf("Got unknown status code: %d", resp.StatusCode))
 	}
