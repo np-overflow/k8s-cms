@@ -84,7 +84,7 @@ func userCmd(globalConfig *GlobalConfig, args []string) {
 import, export users
 
 SUBCOMMANDS
-import - import users from registration CSV to contest
+import - import users from registration CSV to contest data
 export - export contest users to CSV
 
 OPTIONS

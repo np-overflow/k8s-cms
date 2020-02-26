@@ -108,20 +108,22 @@ func (api API) call(method string, route string, contentType string, body io.Rea
 // returns status code and JSON response as map[string]string
 func (api API) callJSON(method string, route string, body interface{}) (
 	int, map[string]string) {
-	bodyJSON, err := json.Marshal(body)
-	if err != nil {
-		die(err.Error())
-	}
-
-	resp := api.call(method, route, "application/json", bytes.NewReader(bodyJSON))
-
-	// parse JSON body to map
-	var responseJSON []byte
-	if resp.Body != nil {
-		responseJSON, err = ioutil.ReadAll(resp.Body)
+	var resp *http.Response
+	if(body != nil) {
+		bodyJSON, err := json.Marshal(body)
 		if err != nil {
 			die(err.Error())
 		}
+		resp = api.call(method, route, "application/json", bytes.NewReader(bodyJSON))
+	} else {
+		resp = api.call(method, route, "", nil)
+	}
+
+	// parse JSON body to map
+	var responseJSON []byte
+	responseJSON, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		die(err.Error())
 	}
 	var responseMap map[string]string
 	json.Unmarshal(responseJSON, &responseMap)

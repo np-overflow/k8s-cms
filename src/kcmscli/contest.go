@@ -14,6 +14,9 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
+	"net/url"
+	"io/ioutil"
+	"encoding/json"
 )
 
 // contest type
@@ -100,7 +103,7 @@ func packageContest(contestDir string, archivePath string) {
 // args - arguments parsed to subcommand
 func contestCmd(globalConfig *GlobalConfig, args []string) {
 	var usageInfo string = `Usage: kcmscli contest [options] <subcommand ...>
-import, export users
+Import, List, Delete contests
 
 SUBCOMMANDS
 import - import a contest into k8s-cms
@@ -132,6 +135,8 @@ OPTIONS
 	switch subCmd {
 	case "import":
 		contestImportCmd(globalConfig, args)
+	case "list":
+		contestListCmd(globalConfig, args)
 	default:
 		fmt.Printf("Unknown subcommand: %s\n", subCmd)
 		os.Exit(1)
@@ -142,7 +147,9 @@ OPTIONS
 // contest import subcommand
 func contestImportCmd(globalConfig *GlobalConfig, args []string) {
 	var usageInfo string = `Usage: kcmscli contest import [options] <contest dir>
-Import contest into k8s-cms using contest data at contest dir
+Import contest into k8s-cms using contest data at contest dir. 
+The contest data should be in the italy contest format https://github.com/cms-dev/con_test.
+Users should already be imported into contest dir with kcmscli user import
 
 OPTIONS
 `
@@ -186,18 +193,73 @@ OPTIONS
 	}
 	contentType, formdata := utils.NewMultipartData(map[string]string{}, fileFields)
 	
-	// make api call
+	// make api call to import contes 
 	api := makeAPI(readConfigFile(), globalConfig)
-	api.refreshAccess() // refresh access token
+	api.refreshAccess() 
 	resp := api.call("POST", "contest/import", contentType, formdata)
 
 	// parse results of API call
 	switch resp.StatusCode {
 	case http.StatusOK:
 		fmt.Printf("Imported contest")
+	case http.StatusUnauthorized:
+		die("Not authorized to perform command: Login first. ")
 	case http.StatusConflict:
-		die(fmt.Sprint("Attempted to import a duplicate contest"))
+		die("Attempted to import a duplicate contest")
 	default:
 		die(fmt.Sprintf("Got unknown status code: %d", resp.StatusCode))
+	}
+}
+
+/* list & delete contests */
+// list contests subcommand
+// config - global program config
+// args - arguments parsed to subcommand
+func contestListCmd(globalConfig *GlobalConfig, args []string) {
+	var usageInfo string = `Usage: kcmscli contest list [options]
+List available contests in k8s-cms
+
+OPTIONS
+`
+	// parse & evaluate options
+	optSet := getopt.New()
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
+	optSet.Parse(args)
+
+	if globalConfig.shouldHelp {
+		fmt.Print(usageInfo)
+		optSet.PrintOptions(os.Stdout)
+		os.Exit(0)
+	}
+	
+	// perform api call & read response
+	api := makeAPI(readConfigFile(), globalConfig)
+	api.refreshAccess()
+	// include names in the response 
+	params := url.Values{}
+	params.Set("incl-names", "1")
+	resp := api.call("GET", "contests?" + params.Encode(), "", nil)
+	responseJSON, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		die(err.Error())
+	}
+
+	// parse results of API call
+	var contestInfo []map[string]interface{}
+	switch resp.StatusCode {
+	case http.StatusOK:
+		json.Unmarshal(responseJSON, &contestInfo)
+	case http.StatusUnauthorized:
+		die("Not authorized to perform command: Login first. ")
+	default:
+		die(fmt.Sprintf("Got unknown status code: %d", resp.StatusCode))
+	}
+	
+	// render contest info
+	fmt.Println("ID\tCONTEST")
+	for _, info := range contestInfo {
+		id := int(info["id"].(float64))
+		fmt.Printf("%d\t%s\n", id, info["name"])
 	}
 }
