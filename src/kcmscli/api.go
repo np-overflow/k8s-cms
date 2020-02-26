@@ -42,7 +42,7 @@ func (api *API) refreshAccess() error {
 		return errors.New("Failed to refresh access token")
 	}
 
-	api.accessToken = response["accessToken"]
+	api.accessToken = response["accessToken"].(string)
 	return nil
 }
 
@@ -107,7 +107,7 @@ func (api API) call(method string, route string, contentType string, body io.Rea
 // make a fully (request, response) JSON API call at the given route, using http method
 // returns status code and JSON response as map[string]string
 func (api API) callJSON(method string, route string, body interface{}) (
-	int, map[string]string) {
+	int, map[string]interface{}) {
 	var resp *http.Response
 	if(body != nil) {
 		bodyJSON, err := json.Marshal(body)
@@ -125,7 +125,7 @@ func (api API) callJSON(method string, route string, body interface{}) (
 	if err != nil {
 		die(err.Error())
 	}
-	var responseMap map[string]string
+	var responseMap map[string]interface{}
 	json.Unmarshal(responseJSON, &responseMap)
 
 	return resp.StatusCode, responseMap

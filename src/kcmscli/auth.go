@@ -118,7 +118,7 @@ OPTIONS
 	}
 
 	// save response refresh token for later use
-	configFile.RefreshToken = response["refreshToken"]
+	configFile.RefreshToken = response["refreshToken"].(string)
 	configFile.commit()
 }
 
