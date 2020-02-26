@@ -98,6 +98,40 @@ func packageContest(contestDir string, archivePath string) {
 	utils.MakeTGZ(workContestDir, archivePath)
 }
 
+// push contest with the specified contest data to api
+// return the response from the api push request
+func pushContest(globalConfig *GlobalConfig, method string, contestDir string) *http.Response {
+	// package contest into an archive to send
+	if globalConfig.isVerbose {
+		fmt.Println("Packing contest for upload...")
+	}
+	workDir := utils.MakeTempDir("archive")
+	archivePath := filepath.Join(workDir, "contest.tgz")
+	packageContest(contestDir, archivePath)
+	defer os.RemoveAll(workDir)
+
+	// construct form data with archive to send with request
+	archiveFile, err := os.Open(archivePath)
+    if err != nil {
+        panic(err.Error())
+    }
+	defer archiveFile.Close()
+	fileFields := map[string]*os.File {
+		"file": archiveFile,
+	}
+	contentType, formdata := utils.NewMultipartData(map[string]string{}, fileFields)
+	
+	// make api call to import contes 
+	if globalConfig.isVerbose {
+		fmt.Println("Pushing contest to API...")
+	}
+	api := makeAPI(readConfigFile(), globalConfig)
+	api.refreshAccess() 
+	resp := api.call(method, "contest/import", contentType, formdata)
+
+	return resp
+}
+
 // contest  subcommand
 // globalConfig - global program config
 // args - arguments parsed to subcommand
@@ -107,7 +141,9 @@ Import, List, Delete contests
 
 SUBCOMMANDS
 import - import a contest into k8s-cms
+update - update a contest in k8s-cms
 list - list contests in k8s-cms 
+get - get contest infomation
 delete - delete a contest 
 
 OPTIONS
@@ -137,13 +173,19 @@ OPTIONS
 		contestImportCmd(globalConfig, args)
 	case "list":
 		contestListCmd(globalConfig, args)
+	case "get":
+		contestGetCmd(globalConfig, args)
+	case "update":
+		contestUpdateCmd(globalConfig, args)
+	case "delete":
+		contestDeleteCmd(globalConfig, args)
 	default:
 		fmt.Printf("Unknown subcommand: %s\n", subCmd)
 		os.Exit(1)
 	}
 }
 
-/* import contests */
+/* contest CRUD operations */
 // contest import subcommand
 func contestImportCmd(globalConfig *GlobalConfig, args []string) {
 	var usageInfo string = `Usage: kcmscli contest import [options] <contest dir>
@@ -174,34 +216,14 @@ OPTIONS
 	if _, err := os.Stat(contestDir); os.IsNotExist(err) {
 		die("Given contest directory does not exist")
 	}
-
-	// package contest into an archive to send
-	workDir := utils.MakeTempDir("archive")
-	archivePath := filepath.Join(workDir, "contest.tgz")
-	packageContest(contestDir, archivePath)
-	defer os.RemoveAll(workDir)
-
-	// construct form data with archive to send with request
-	fmt.Println(archivePath)
-	archiveFile, err := os.Open(archivePath)
-    if err != nil {
-        panic(err.Error())
-    }
-	defer archiveFile.Close()
-	fileFields := map[string]*os.File {
-		"file": archiveFile,
-	}
-	contentType, formdata := utils.NewMultipartData(map[string]string{}, fileFields)
 	
-	// make api call to import contes 
-	api := makeAPI(readConfigFile(), globalConfig)
-	api.refreshAccess() 
-	resp := api.call("POST", "contest/import", contentType, formdata)
-
+	// make api request
+	resp := pushContest(globalConfig, "POST", contestDir)
+	
 	// parse results of API call
 	switch resp.StatusCode {
 	case http.StatusOK:
-		fmt.Printf("Imported contest")
+		fmt.Println("Imported contest")
 	case http.StatusUnauthorized:
 		die("Not authorized to perform command: Login first. ")
 	case http.StatusConflict:
@@ -211,7 +233,6 @@ OPTIONS
 	}
 }
 
-/* list & delete contests */
 // list contests subcommand
 // config - global program config
 // args - arguments parsed to subcommand
@@ -255,11 +276,169 @@ OPTIONS
 	default:
 		die(fmt.Sprintf("Got unknown status code: %d", resp.StatusCode))
 	}
-	
+
 	// render contest info
 	fmt.Println("ID\tCONTEST")
 	for _, info := range contestInfo {
 		id := int(info["id"].(float64))
 		fmt.Printf("%d\t%s\n", id, info["name"])
+	}
+}
+
+// get contests informations
+// config - global program config
+// args - arguments parsed to subcommand
+func contestGetCmd(globalConfig *GlobalConfig, args []string) {
+	var usageInfo string = `Usage: kcmscli contest get <contest id>
+Get contest info with the contest with specific id.
+
+OPTIONS
+`
+	// parse & evaluate options
+	optSet := getopt.New()
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
+	optSet.Parse(args)
+
+	if globalConfig.shouldHelp {
+		fmt.Print(usageInfo)
+		optSet.PrintOptions(os.Stdout)
+		os.Exit(0)
+	}
+	
+	// parse positional arguments
+	args = optSet.Args()
+	if len(args) < 1 {
+		die("Missing positional arguments: <contest id>")
+	}
+	contestId := args[0]
+
+	// perform api call & read response
+	api := makeAPI(readConfigFile(), globalConfig)
+	api.refreshAccess()
+	statusCode, contestInfo := api.callJSON("GET", "contest/" + contestId, nil)
+	
+	// parse response code
+	switch statusCode {
+	case http.StatusOK:
+	case http.StatusNotFound:
+		die("Contest with given id could not be found")
+	case http.StatusUnauthorized:
+		die("Not authorized to perform command: Login first. ")
+	default:
+		die(fmt.Sprintf("Got unknown status code: %d", statusCode))
+	}
+
+	// render contest info
+	fmt.Printf("CONTEST %s\n", contestInfo["name"])
+	fmt.Printf("description: %s\n", contestInfo["description"])
+	fmt.Printf("localizations: %s\n", contestInfo["allowedLocalizations"])
+	fmt.Printf("languages: %s\n", contestInfo["languages"])
+	fmt.Printf("timezone: %s\n", contestInfo["timezone"])
+	fmt.Printf("start time: %s\n", contestInfo["startTime"])
+	fmt.Printf("end time: %s\n", contestInfo["stopTime"])
+	fmt.Printf("max contest time: %.2fs\n", contestInfo["maxUserContestTime"])
+	fmt.Printf("max submissions: %d\n", int(contestInfo["maxSubmissionNum"].(float64)))
+
+	var enabled []string
+	var disabled []string
+	features := []string{ 
+		"allowIPAutoLogin", "allowPasswordAuthentication", "allowQuestions",
+		"allowSubmissionsDownload", "enforceIPRestriction",
+	}
+	
+	for _, feature := range features {
+		if contestInfo[feature].(bool) {
+			enabled = append(enabled, feature)
+		} else {
+			disabled = append(disabled, feature)
+		}
+	}
+	
+	fmt.Printf("enabled: %s\n", enabled)
+	fmt.Printf("disabled: %s\n", disabled)
+}
+
+// contest update subcommand subcommand
+func contestUpdateCmd(globalConfig *GlobalConfig, args []string) {
+	var usageInfo string = `Usage: kcmscli contest update [options] <contest dir>
+Update contest into k8s-cms using contest data at contest dir. 
+The contest data should be in the italy contest format https://github.com/cms-dev/con_test.
+
+OPTIONS
+`
+	// parse & evaluate options
+	optSet := getopt.New()
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
+	optSet.Parse(args)
+
+	if globalConfig.shouldHelp {
+		fmt.Print(usageInfo)
+		optSet.PrintOptions(os.Stdout)
+		os.Exit(0)
+	}
+
+	// parse position args
+	args = optSet.Args()
+	if len(args) < 1 {
+		die("Missing positional arguments: <contest dir>")
+	}
+	contestDir := args[0]
+	if _, err := os.Stat(contestDir); os.IsNotExist(err) {
+		die("Given contest directory does not exist")
+	}
+	
+	// make api request
+	resp := pushContest(globalConfig, "PATCH", contestDir)
+	
+	// parse results of API call
+	switch resp.StatusCode {
+	case http.StatusOK:
+		fmt.Println("Updated contest")
+	case http.StatusUnauthorized:
+		die("Not authorized to perform command: Login first. ")
+	default:
+		die(fmt.Sprintf("Got unknown status code: %d", resp.StatusCode))
+	}
+}
+
+func contestDeleteCmd(globalConfig *GlobalConfig, args []string) {
+	var usageInfo string = `Usage: kcmscli contest delete [options] <contest id>
+Delete contest info with the contest with specific id.
+
+OPTIONS
+`
+	// parse & evaluate options
+	optSet := getopt.New()
+	optSet.FlagLong(&globalConfig.shouldHelp, "help", 'h', "show usage info")
+	optSet.FlagLong(&globalConfig.isVerbose, "verbose", 'v', "produce verbose output")
+	optSet.Parse(args)
+
+	if globalConfig.shouldHelp {
+		fmt.Print(usageInfo)
+		optSet.PrintOptions(os.Stdout)
+		os.Exit(0)
+	}
+
+	// parse position args
+	args = optSet.Args()
+	if len(args) < 1 {
+		die("Missing positional arguments: <contest id>")
+	}
+	contestId := args[0]
+
+	// make api call to delete contest
+	api := makeAPI(readConfigFile(), globalConfig)
+	api.refreshAccess()
+	statusCode, _ := api.callJSON("DELETE", "contest/" + contestId, nil)
+	
+	switch statusCode {
+	case http.StatusOK:
+		fmt.Println("Deleted contest")
+	case http.StatusUnauthorized:
+		die("Not authorized to perform command: Login first. ")
+	default:
+		die(fmt.Sprintf("Got unknown status code: %d", statusCode))
 	}
 }
