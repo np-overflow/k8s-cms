@@ -167,9 +167,8 @@ def route_contest(contest_id):
 # api route to import, update contests based on contest data in the formats supported by CMS
 # request should a formdata file: gzipped tar archive of contest data 
 # POST - create a new contest for the given contest data
-# PATCH - update the contest for the given contest_id with the given contest data
-@api.route(f"/api/v{API_VERSION}/contest/import", methods=["POST"])
-@api.route(f"/api/v{API_VERSION}/contest/import/<int:contest_id>", methods=["PATCH"])
+# PATCH - update the contest with the given contest data
+@api.route(f"/api/v{API_VERSION}/contest/import", methods=["POST", "PATCH"])
 @authenticate(kind="access")
 def route_import_contest(contest_id=None):
     # unpack contest data 
@@ -179,11 +178,6 @@ def route_import_contest(contest_id=None):
         # TODO: spawn ProxyService for contest
         contest_id = import_contest(data_dir)
     elif request.method == "PATCH":
-        # verify that a contest with id exists
-        with SessionGen() as session:
-            contest = session.query(Contest).get(contest_id)
-            if contest is None: abort(404)
-
         contest_id = import_contest(data_dir, for_update=True)
 
     # cleanup
