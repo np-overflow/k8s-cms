@@ -8,6 +8,7 @@ import tarfile
 import tempfile
 import subprocess
 from shutil import rmtree
+from datetime import timedelta
 from flask import abort, request, Blueprint, jsonify
 
 from util import *
@@ -86,11 +87,11 @@ contest_mapping = [
     ("start", "startTime"),
     ("stop", "stopTime"),
     ("timezone", "timezone"),
-    ("per_user_time", "maxContestPerUser"),
+    ("per_user_time", "maxUserContestTime"),
     ("max_submission_number", "maxSubmissionNum"),
     ("max_user_test_number", "maxTestsPerUser"),
     ("min_submission_interval", "minSubmissionInterval"),
-    ("min_user_test_interval", "minUsertestInterval"),
+    ("min_user_test_interval", "minUserTestInterval"),
     ("score_precision", "scorePrecision"),
 ]
 
@@ -130,15 +131,25 @@ def route_contest(contest_id):
     # check url params
     if contest_id is None: abort(400)
 
+    # names of timedelta fields that would need tobe converted since 
+    # json serialisation does not work on timedelta
+    convert_fields = [ "maxUserContestTime", "minSubmissionInterval", "minUserTestInterval"]
+
     with SessionGen() as session:
         if request.method == "GET":
             # get contest by id & map to json representation
             contest = get(Contest, session, contest_id)
             contest_dict = map_dict(contest, contest_mapping)
+            # convert fields to correct type
+            for field in convert_fields:
+                contest_dict[field] = contest_dict[field].total_seconds()
             return jsonify(contest_dict)
         elif request.method == "PATCH":
-            # update contest based on body params
             update_params = dict(request.json)
+            # convert fields to correct type
+            for field in convert_fields:
+                update_params[field] = timedelta(seconds=update_params[field])
+            # update contest based on body params
             contest = get(Contest, session, contest_id)
             contest = map_obj(contest, update_params, reverse_mapping(contest_mapping))
             session.commit()

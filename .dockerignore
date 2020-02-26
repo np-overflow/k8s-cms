@@ -2,3 +2,5 @@
 src/master/venv/
 # github repos
 .git/
+# tags
+tag*

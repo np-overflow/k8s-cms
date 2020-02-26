@@ -108,7 +108,6 @@ def verify_token(jwt_token, kind="access"):
         return False
 
     # verify token fields
-    print(kind, token.kind)
     if kind != "any" and token.kind != kind: return False
     if token.expires < datetime.utcnow(): return False
     if token.issue_on > datetime.utcnow(): return False
