@@ -10,7 +10,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-db/Dockerfile
-    image: "mrzzy/cms-db"
+    image: "mrzzy/cms-db:latest"
     expose:
     - "5432"
     env_file: 
@@ -26,7 +26,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-log/Dockerfile
-    image: "mrzzy/cms-log"
+    image: "mrzzy/cms-log:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -38,7 +38,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-scoring/Dockerfile
-    image: "mrzzy/cms-scoring"
+    image: "mrzzy/cms-scoring:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -50,7 +50,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-resource/Dockerfile
-    image: "mrzzy/cms-resource"
+    image: "mrzzy/cms-resource:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -62,7 +62,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-proxy/Dockerfile
-    image: "mrzzy/cms-proxy"
+    image: "mrzzy/cms-proxy:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -75,7 +75,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-printing/Dockerfile
-    image: "mrzzy/cms-printing"
+    image: "mrzzy/cms-printing:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -87,7 +87,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-evaluation/Dockerfile
-    image: "mrzzy/cms-evaluation"
+    image: "mrzzy/cms-evaluation:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -99,7 +99,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-checker/Dockerfile
-    image: "mrzzy/cms-checker"
+    image: "mrzzy/cms-checker:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -124,7 +124,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-web-ranking/Dockerfile
-    image: "mrzzy/cms-web-ranking"
+    image: "mrzzy/cms-web-ranking:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -136,7 +136,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-web-admin/Dockerfile
-    image: "mrzzy/cms-web-admin"
+    image: "mrzzy/cms-web-admin:latest"
     ports:
       - "8889:8889"
     expose:
@@ -150,7 +150,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-web-contest/Dockerfile
-    image: "mrzzy/cms-web-contest"
+    image: "mrzzy/cms-web-contest:latest"
     ports:
       - "8888:8888"
     expose:
@@ -166,7 +166,7 @@ services:
     build:
       context: .
       dockerfile: containers/cms-worker/Dockerfile
-    image: "mrzzy/cms-worker"
+    image: "mrzzy/cms-worker:latest"
     expose:
       - "26000"
     env_file: 
@@ -183,7 +183,7 @@ services:
     build:
       context: .
       dockerfile: containers/cms-worker/Dockerfile
-    image: "mrzzy/cms-worker"
+    image: "mrzzy/cms-worker:latest"
     expose:
       - "26000"
     env_file: 
@@ -201,7 +201,7 @@ services:
     build:
       context: .
       dockerfile: containers/k8s-cms-master/Dockerfile
-    image: "mrzzy/k8s-cms-master"
+    image: "mrzzy/k8s-cms-master:latest"
     ports:
       - "5000:5000"
     env_file: 

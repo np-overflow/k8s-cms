@@ -17,7 +17,7 @@ IMG_NAMES:=$(notdir $(wildcard containers/*))
 IMAGES:=$(foreach img,$(IMG_NAMES),$(TAG_PREFIX)/$(img))
 BASE_IMAGE:=$(TAG_PREFIX)/cms-base
 # names of the images that depends on base image
-DEP_BASE_NAMES:=$(filter-out cms-base,$(filter-out cms-db, $(IMG_NAMES)))
+DEP_BASE_NAMES:=$(filter-out cms-base, $(IMG_NAMES))
 DEP_BASE_IMAGES:=$(foreach img,$(DEP_BASE_NAMES),$(TAG_PREFIX)/$(img))
 
 PUSH_TARGETS:=$(foreach img,$(IMAGES),push/$(img))
