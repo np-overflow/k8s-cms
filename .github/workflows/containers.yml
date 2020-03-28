@@ -300,6 +300,7 @@ jobs:
           path: build/containers/k8s-cms-master.tar
   
   test-containers:
+    runs-on: ubuntu-18.04
     needs:
       - build-cms-db
       - build-cms-base
