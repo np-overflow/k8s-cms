@@ -38,4 +38,7 @@ docker-compose pull
 docker-compose up
 ```
 
-> [More Deployment Details](./docs/deploy.md)
+## Docs
+- [Deploying k8s-cms](./docs/deploy.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
