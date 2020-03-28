@@ -1,0 +1,278 @@
+#
+# k8s-cms
+# Github Actions: Containers
+#
+
+name: Containers
+on: [ push, pull_request ]
+env:
+  VERSION: latest
+  N_CONCURRENT: 12
+  TAG_PREFIX: mrzzy
+
+jobs:
+  # builds k8s-cms docker containers
+  build-cms-db:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - name: "Build CMS DB Image"
+        run: |
+          make $TAG_PREFIX/cms-db
+          make export/$TAG_PREFIX/cms-db
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-db
+          path: build/containers/cms-db.tar
+      
+  build-cms-base:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - name: "Build CMS Base Image"
+        run: |
+          make $TAG_PREFIX/cms-base
+          make export/$TAG_PREFIX/cms-base
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      
+  build-cms-checker:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS checker Image"
+        run: |
+          make $TAG_PREFIX/cms-checker
+          make export/$TAG_PREFIX/cms-checker
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-checker
+          path: build/containers/cms-checker.tar
+      
+  build-cms-evaluation:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS evaluation Image"
+        run: |
+          make $TAG_PREFIX/cms-evaluation
+          make export/$TAG_PREFIX/cms-evaluation
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-evaluation
+          path: build/containers/cms-evaluation.tar
+      
+  build-cms-log:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS log Image"
+        run: |
+          make $TAG_PREFIX/cms-log
+          make export/$TAG_PREFIX/cms-log
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-log
+          path: build/containers/cms-log.tar
+
+  build-cms-printing:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS printing Image"
+        run: |
+          make $TAG_PREFIX/cms-printing
+          make export/$TAG_PREFIX/cms-printing
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-printing
+          path: build/containers/cms-printing.tar
+
+  build-cms-proxy:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS proxy Image"
+        run: |
+          make $TAG_PREFIX/cms-proxy
+          make export/$TAG_PREFIX/cms-proxy
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-proxy
+          path: build/containers/cms-proxy.tar
+      
+  build-cms-resource:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS resource Image"
+        run: |
+          make $TAG_PREFIX/cms-resource
+          make export/$TAG_PREFIX/cms-resource
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-resource
+          path: build/containers/cms-resource.tar
+      
+  build-cms-scoring:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS scoring Image"
+        run: |
+          make $TAG_PREFIX/cms-scoring
+          make export/$TAG_PREFIX/cms-scoring
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-scoring
+          path: build/containers/cms-scoring.tar
+      
+  build-cms-web-admin:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS admin frontend Image"
+        run: |
+          make $TAG_PREFIX/cms-web-admin
+          make export/$TAG_PREFIX/cms-web-admin
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-web-admin
+          path: build/containers/cms-web-admin.tar
+
+  build-cms-web-contest:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS contest frontend Image"
+        run: |
+          make $TAG_PREFIX/cms-web-contest
+          make export/$TAG_PREFIX/cms-web-contest
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-web-contest
+          path: build/containers/cms-web-contest.tar
+
+  build-cms-web-ranking:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS ranking frontend Image"
+        run: |
+          make $TAG_PREFIX/cms-web-ranking
+          make export/$TAG_PREFIX/cms-web-ranking
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-web-ranking
+          path: build/containers/cms-web-ranking.tar
+    
+  build-cms-worker:
+    needs: build-cms-base
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers/cms-base.tar
+      - name: "Build CMS worker Image"
+        run: |
+          make $TAG_PREFIX/cms-worker
+          make export/$TAG_PREFIX/cms-worker
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cms-worker
+          path: build/containers/cms-worker.tar
+
+  build-kcms-master:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2
+        with:
+          submodules: recursive
+      - name: "Build k8s-cms master Image"
+        run: |
+          make $TAG_PREFIX/k8s-cms-master
+          make export/$TAG_PREFIX/k8s-cms-master
+      - uses: actions/upload-artifact@v1
+        with:
+          name: k8s-cms-master
+          path: build/containers/k8s-cms-master.tar
