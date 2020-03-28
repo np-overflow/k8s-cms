@@ -18,7 +18,7 @@ Runs CMS on Kubernetes cluster. Suitable for hosting actual contests:
     - ingress (nginx-ingress available as optional addon)
 
 ```sh
-helm install k8s-cms .
+helm install k8s-cms chart
 ```
 
 > Additional deployment configuration in `values.yaml`:

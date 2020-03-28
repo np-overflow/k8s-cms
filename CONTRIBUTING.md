@@ -22,7 +22,7 @@ nano .env # use your favourite editor
 docker-compose up 
 # use kubernetes. you need to have a kubernetes cluster
 # already up and running.
-helm install k8s-cms .
+helm install k8s-cms chart
 ```
 ### Project Structure
 - project changelog - updated on new releases: `CHANGELOG.md`

@@ -30,7 +30,7 @@ nano .env # use your favourite editor
 3. Deploy
 - On Kubernetes 
 ```sh
-helm install k8s-cms .
+helm install k8s-cms chart
 ```
 - On Docker-Compose
 ```sh
