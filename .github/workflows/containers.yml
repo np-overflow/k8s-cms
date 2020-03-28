@@ -15,7 +15,7 @@ jobs:
   build-cms-db:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - name: "Build CMS DB Image"
@@ -30,7 +30,7 @@ jobs:
   build-cms-base:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - name: "Build CMS Base Image"
@@ -46,7 +46,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -66,7 +66,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -86,7 +86,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -106,7 +106,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -126,7 +126,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -146,7 +146,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -166,7 +166,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -186,7 +186,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -206,7 +206,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -226,7 +226,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -246,7 +246,7 @@ jobs:
     needs: build-cms-base
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - uses: actions/download-artifact@v1
@@ -265,7 +265,7 @@ jobs:
   build-kcms-master:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
         with:
           submodules: recursive
       - name: "Build k8s-cms master Image"
