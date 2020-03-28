@@ -4,7 +4,6 @@ Guidelines for contributors:
 - Make suggestions for improvement by creating an issue.
 - Be nice.
 
-
 ### Development Environment Setup
 Development setup for contributors:
 1. Resolve submodules after cloning
@@ -24,9 +23,26 @@ docker-compose up
 # already up and running.
 helm install k8s-cms chart
 ```
+
 ### Project Structure
 - project changelog - updated on new releases: `CHANGELOG.md`
 - dockerfiles used to build the images: `containers/`
 - Kubernetes manifests/helm chart: `chart/`
 - `kcmscli` source code: `src/kcmscli/`
 - End to end tests: `test/`
+
+### Project Makefile
+The Project Makefile makes building & pushing the docker images easier:
+- build specific docker image 
+```
+make <docker image name>
+```
+- build all the docker images
+```
+make
+```
+- push all the docker images
+```
+make push
+```
+
