@@ -8,3 +8,5 @@ tags*
 charts/
 # ccls cache
 .ccls-cache/
+# build folder
+build/
