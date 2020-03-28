@@ -1,9 +1,9 @@
 #
 # k8s-cms
-# Github Actions: Containers
+# Github Actions: Build Containers
 #
 
-name: Containers
+name: Build Containers
 on: [ push, pull_request ]
 env:
   VERSION: latest
@@ -55,6 +55,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS checker Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-checker
           make export/$TAG_PREFIX/cms-checker
       - uses: actions/upload-artifact@v1
@@ -75,6 +76,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS evaluation Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-evaluation
           make export/$TAG_PREFIX/cms-evaluation
       - uses: actions/upload-artifact@v1
@@ -95,6 +97,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS log Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-log
           make export/$TAG_PREFIX/cms-log
       - uses: actions/upload-artifact@v1
@@ -115,6 +118,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS printing Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-printing
           make export/$TAG_PREFIX/cms-printing
       - uses: actions/upload-artifact@v1
@@ -135,6 +139,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS proxy Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-proxy
           make export/$TAG_PREFIX/cms-proxy
       - uses: actions/upload-artifact@v1
@@ -155,6 +160,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS resource Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-resource
           make export/$TAG_PREFIX/cms-resource
       - uses: actions/upload-artifact@v1
@@ -175,6 +181,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS scoring Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-scoring
           make export/$TAG_PREFIX/cms-scoring
       - uses: actions/upload-artifact@v1
@@ -195,6 +202,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS admin frontend Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-web-admin
           make export/$TAG_PREFIX/cms-web-admin
       - uses: actions/upload-artifact@v1
@@ -215,6 +223,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS contest frontend Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-web-contest
           make export/$TAG_PREFIX/cms-web-contest
       - uses: actions/upload-artifact@v1
@@ -235,6 +244,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS ranking frontend Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-web-ranking
           make export/$TAG_PREFIX/cms-web-ranking
       - uses: actions/upload-artifact@v1
@@ -255,6 +265,7 @@ jobs:
           path: build/containers/cms-base.tar
       - name: "Build CMS worker Image"
         run: |
+          make load/$TAG_PREFIX/cms-base
           make $TAG_PREFIX/cms-worker
           make export/$TAG_PREFIX/cms-worker
       - uses: actions/upload-artifact@v1
