@@ -1,14 +1,25 @@
 #
 # k8s-cms
-# Github Actions: Build Containers
+# Github Actions: Containers
 #
 
-name: Build Containers
+name: Containers
 on: [ push, pull_request ]
 env:
+  # build args
   VERSION: latest
   N_CONCURRENT: 12
   TAG_PREFIX: mrzzy
+  # testing dotenv
+  CMS_SECRET_KEY: 4438f6c37f3b6401980d90b0bf06fd03
+  KCMS_MASTER_JWT_KEY: 5wBVNc3Ltch8Ygj4FKaGPChqgkmx3JEH
+  POSTGRES_USER: cmsuser
+  POSTGRES_PASSWORD: YWaEjprTaRn3XGKuf5K3oB4vmVUrtCvh
+  CMS_ADMIN_USER: admin
+  CMS_ADMIN_PASSWORD: oJfU8UGdoLJNr2dED9yW2aQj
+  CMS_RANKING_USER: ranking
+  CMS_RANKING_PASSWORD: V4nRutupimVgn6F7B7WeUCzjRZGQOGK
+
 
 jobs:
   # builds k8s-cms docker containers
@@ -52,7 +63,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS checker Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -73,7 +84,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS evaluation Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -94,7 +105,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS log Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -115,7 +126,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS printing Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -136,7 +147,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS proxy Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -157,7 +168,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS resource Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -178,7 +189,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS scoring Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -199,7 +210,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS admin frontend Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -220,7 +231,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS contest frontend Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -241,7 +252,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS ranking frontend Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -262,7 +273,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: cms-base
-          path: build/containers/cms-base.tar
+          path: build/containers
       - name: "Build CMS worker Image"
         run: |
           make load/$TAG_PREFIX/cms-base
@@ -287,3 +298,86 @@ jobs:
         with:
           name: k8s-cms-master
           path: build/containers/k8s-cms-master.tar
+  
+  test-containers:
+    needs:
+      - build-cms-db
+      - build-cms-base
+      - build-cms-checker
+      - build-cms-evaluation
+      - build-cms-log
+      - build-cms-printing
+      - build-cms-proxy
+      - build-cms-resource
+      - build-cms-scoring
+      - build-cms-web-admin
+      - build-cms-web-contest
+      - build-cms-web-ranking
+      - build-cms-worker
+      - build-kcms-master
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-db
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-base
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-checker
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-evaluation
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-log
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-printing
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-proxy
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-resource
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-scoring
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-web-admin
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-web-contest
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-web-ranking
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: cms-worker
+          path: build/containers
+      - uses: actions/download-artifact@v1
+        with:
+          name: kcms-master
+          path: build/containers
+      # tests containers run by running the docker-compose
+      # stack and making sure none of them exit unexpectly
+      - name: "Test Containers Run"
+        run: |
+          make load
+          timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
