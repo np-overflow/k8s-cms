@@ -1,5 +1,20 @@
 # k8s-cms Changelog
-## Version 0.3.0 - Unreleased
+
+## Version 0.4.0
+### Added
+- k8s-cms master component
+    - added JWT token authentication for k8s-cms master
+    - added contest api to import/update/delete contests
+    - added dockerfile and k8s service & deployment for k8s-cms master
+- kcmscli - k8s-cms CLI
+    - import, export users from CSV files
+    - import contests into k8s-cms
+    - get,update,delete contests from k8s-cms
+
+### Changed
+- migrate from helm v2 to helm v3
+
+## Version 0.3.0
 ### Added
 - checksum configmaps and secrets to restart pods on updates
 - Quality of Service
@@ -35,7 +50,7 @@
 ### Removed
 - remove support for kustomize under k8s/
 
-## Version 0.2.3 beta - Unreleased
+## Version 0.2.3 beta 
 ### Changed
 - fixed issue where cms entrypoint did not drop permssions correctly
 
