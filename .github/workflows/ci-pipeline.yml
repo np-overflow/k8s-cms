@@ -24,7 +24,7 @@ jobs:
         run: |
           make -j $(N_CONCURRENT)
           make export
-          tar -crzf build/containers.tgz build/containers
+          tar -czvf build/containers.tgz build/containers
       - uses: actions/upload-artifact@v1
         with:
           name: containers
