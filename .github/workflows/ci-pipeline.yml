@@ -12,7 +12,7 @@ env:
   TAG_PREFIX: mrzzy
 
 jobs:
-  ## containers - builds & test k8s-cms containers
+  ## build pipiline
   # build cms containers
   build-containers:
     runs-on: ubuntu-18.04
@@ -31,18 +31,17 @@ jobs:
           name: containers
           path: build/containers
 
+  ## testing pipeline
   # tests containers run using the docker compose setup without exiting
   test-docker-compose-up:
     runs-on: ubuntu-18.04
     needs: [ build-containers ]
     steps:
      - uses: actions/checkout@v2
-       with:
-         submodules: recursive
      - uses: actions/download-artifact@v1
        with:
          name: containers
-         path: build
+         path: build/containers
 
      # tests containers run by running the docker-compose
      # stack and making sure none of them exit unexpectly
@@ -60,6 +59,7 @@ jobs:
          make load -j ${N_CONCURRENT}
          timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
 
+
   ## helm chart
   # lints helm chart
   lint-helm-chart:
@@ -74,3 +74,25 @@ jobs:
         run: |
           helm lint chart
       
+  ## release pipeline - run only on main repo
+  publish-containers:
+    #if: github.repository == "np-overflow/k8s-cms" && github.head_ref == "master"
+    runs-on: ubuntu-18.04
+    needs: 
+     - build-containers
+     - test-docker-compose-up
+    steps:
+     - uses: actions/checkout@v2
+     - uses: actions/download-artifact@v1
+       with:
+         name: containers
+         path: build/containers
+     - name: "Push Containers to Dockerhub"
+       env:
+        DOCKER_USER: $TAG_PREFIX
+        DOCKER_TOKEN: ${{ secrets.docker_token }}
+       run: |
+         make load
+         echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+         make push -j ${N_CONCURRENT}
+
