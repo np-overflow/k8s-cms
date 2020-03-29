@@ -21,7 +21,7 @@ jobs:
         with:
           submodules: recursive
       - name: "Build Containers"
-        steps: |
+        run: |
           make -j $(N_CONCURRENT)
           make export
           tar -crzf build/containers.tgz build/containers
@@ -62,9 +62,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: "Pull dependencies"
-        steps: |
+        run: |
           # pull helm
           curl -fsSL  https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  | bash -
       - name: "Lint Helm chart"
-        steps: |
+        run: |
           helm lint chart
