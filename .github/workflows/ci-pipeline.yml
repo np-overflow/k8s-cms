@@ -30,12 +30,11 @@ jobs:
         with:
           name: containers
           path: build/containers
-
- # tests containers run using the docker compose setup without exiting
- test-docker-compose-up:
-   runs-on: ubuntu-18.04
-   needs: [ build-containers ]
-   steps:
+  # tests containers run using the docker compose setup without exiting
+  test-docker-compose-up:
+    runs-on: ubuntu-18.04
+    needs: [ build-containers ]
+    steps:
      - uses: actions/checkout@v2
        with:
          submodules: recursive
@@ -43,7 +42,7 @@ jobs:
        with:
          name: containers
          path: build
-   
+
      # tests containers run by running the docker-compose
      # stack and making sure none of them exit unexpectly
      - name: "Test Docker Compose up"
@@ -60,16 +59,16 @@ jobs:
          make load -j ${N_CONCURRENT}
          timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
 
- ## helm chart
- # lints helm chart
- lint-helm-chart:
-   runs-on: ubuntu-18.04
-   steps:
-     - uses: actions/checkout@v2
-     - name: "Pull dependencies"
-       run: |
-         # pull helm
-         curl -fsSL  https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  | bash -
-     - name: "Lint Helm chart"
-       run: |
-         helm lint chart
+  ## helm chart
+  # lints helm chart
+  lint-helm-chart:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Pull dependencies"
+        run: |
+          # pull helm
+          curl -fsSL  https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  | bash -
+      - name: "Lint Helm chart"
+        run: |
+          helm lint chart
