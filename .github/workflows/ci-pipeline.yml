@@ -3,23 +3,13 @@
 # Github Actions: CI pipeline
 #
 
-name: tests
+name: ci-pipeline
 on: [ push, pull_request ]
 env:
-  # build args
+  # container build args
   VERSION: latest
   N_CONCURRENT: 12
   TAG_PREFIX: mrzzy
-
-  # testing environement vars to pass to
-  CMS_SECRET_KEY: 4438f6c37f3b6401980d90b0bf06fd03
-  KCMS_MASTER_JWT_KEY: 5wBVNc3Ltch8Ygj4FKaGPChqgkmx3JEH
-  POSTGRES_USER: cmsuser
-  POSTGRES_PASSWORD: YWaEjprTaRn3XGKuf5K3oB4vmVUrtCvh
-  CMS_ADMIN_USER: admin
-  CMS_ADMIN_PASSWORD: oJfU8UGdoLJNr2dED9yW2aQj
-  CMS_RANKING_USER: ranking
-  CMS_RANKING_PASSWORD: V4nRutupimVgn6F7B7WeUCzjRZGQOGK
 
 jobs:
   ## containers - builds & test k8s-cms containers
@@ -48,9 +38,19 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+    
       # tests containers run by running the docker-compose
       # stack and making sure none of them exit unexpectly
-      - name: "Test Docker Compose up "
+      - name: "Test Docker Compose up"
+        env:
+          CMS_SECRET_KEY: 4438f6c37f3b6401980d90b0bf06fd03
+          KCMS_MASTER_JWT_KEY: 5wBVNc3Ltch8Ygj4FKaGPChqgkmx3JEH
+          POSTGRES_USER: cmsuser
+          POSTGRES_PASSWORD: YWaEjprTaRn3XGKuf5K3oB4vmVUrtCvh
+          CMS_ADMIN_USER: admin
+          CMS_ADMIN_PASSWORD: oJfU8UGdoLJNr2dED9yW2aQj
+          CMS_RANKING_USER: ranking
+          CMS_RANKING_PASSWORD: V4nRutupimVgn6F7B7WeUCzjRZGQOGK
         run: |
           make load
           timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
