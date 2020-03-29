@@ -1,0 +1,69 @@
+#
+# k8s-cms
+# Github Actions: CI pipeline
+#
+
+name: tests
+on: [ push, pull_request ]
+env:
+  # build args
+  VERSION: latest
+  N_CONCURRENT: 12
+  TAG_PREFIX: mrzzy
+
+  # testing environement vars to pass to
+  CMS_SECRET_KEY: 4438f6c37f3b6401980d90b0bf06fd03
+  KCMS_MASTER_JWT_KEY: 5wBVNc3Ltch8Ygj4FKaGPChqgkmx3JEH
+  POSTGRES_USER: cmsuser
+  POSTGRES_PASSWORD: YWaEjprTaRn3XGKuf5K3oB4vmVUrtCvh
+  CMS_ADMIN_USER: admin
+  CMS_ADMIN_PASSWORD: oJfU8UGdoLJNr2dED9yW2aQj
+  CMS_RANKING_USER: ranking
+  CMS_RANKING_PASSWORD: V4nRutupimVgn6F7B7WeUCzjRZGQOGK
+
+jobs:
+  ## containers - builds & test k8s-cms containers
+  # build containers using project makefile
+  build-containers:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: "Build Containers"
+        steps: |
+          make -j $(N_CONCURRENT)
+          make export
+          tar -crzf build/containers.tgz build/containers
+      - uses: actions/upload-artifact@v1
+        with:
+          name: containers
+          path: build/containers.tgz
+
+  # tests containers run using the docker compose setup without exiting
+  test-docker-compose-up:
+    runs-on: ubuntu-18.04
+    needs: [ build-containers ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      # tests containers run by running the docker-compose
+      # stack and making sure none of them exit unexpectly
+      - name: "Test Docker Compose up "
+        run: |
+          make load
+          timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
+        
+  ## helm charts
+  # lints helm chart
+  lint-helm-chart:
+    runs-on: ubuntu-18.04
+      - uses: actions/checkout@v2
+      - name: "Pull dependencies"
+        steps: |
+          # pull helm
+          curl -fsSL  https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  | bash -
+      - name: "Lint Helm chart"
+        steps: |
+          helm lint chart
