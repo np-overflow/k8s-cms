@@ -14,7 +14,7 @@ env:
 jobs:
   ## containers - builds & test k8s-cms containers
   # build cms containers
-  build-cms-base:
+  build-containers:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -30,6 +30,7 @@ jobs:
         with:
           name: containers
           path: build/containers
+
   # tests containers run using the docker compose setup without exiting
   test-docker-compose-up:
     runs-on: ubuntu-18.04
@@ -72,3 +73,4 @@ jobs:
       - name: "Lint Helm chart"
         run: |
           helm lint chart
+      
