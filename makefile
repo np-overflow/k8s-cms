@@ -59,6 +59,9 @@ load: $(LOAD_TARGETS)
 
 load/%:
 	docker load -i $(EXPORT_DIR)/$(notdir $@).tar
+	# auto delete the tar file afte import to reduce disk consumption
+	# necessary due to disk limit in github actions
+	rm -f $(EXPORT_DIR)/$(notdir $@).tar 
 
 # cleans docker images
 # clean all docker images
