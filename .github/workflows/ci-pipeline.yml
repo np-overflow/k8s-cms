@@ -56,7 +56,7 @@ jobs:
          CMS_RANKING_USER: ranking
          CMS_RANKING_PASSWORD: ranking
        run: |
-         make load -j ${N_CONCURRENT}
+         make load
          timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
 
   ## helm chart

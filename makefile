@@ -52,15 +52,18 @@ export: $(EXPORT_TARGETS)
 
 export/%:
 	mkdir -p $(EXPORT_DIR)
-	docker save $(subst export/,,$@):$(VERSION) -o $(EXPORT_DIR)/$(notdir $@).tar
+	docker save $(subst export/,,$@):$(VERSION) | gzip > $(EXPORT_DIR)/$(notdir $@).tgz
+	@# purge built docker image layers
+	@# necessary due to disk limit in github acti
+	docker rmi -f $(subst export/,,$@):$(VERSION)
 
 # load docker images from a tar archive
 load: $(LOAD_TARGETS)
 
 load/%:
-	docker load -i $(EXPORT_DIR)/$(notdir $@).tar
-	# auto delete the tar file afte import to reduce disk consumption
-	# necessary due to disk limit in github actions
+	zcat $(EXPORT_DIR)/$(notdir $@).tgz	| docker load
+	@# auto delete the tgz file after import to reduce disk consumption
+	@# necessary due to disk limit in github actions
 	rm -f $(EXPORT_DIR)/$(notdir $@).tar 
 
 # cleans docker images
