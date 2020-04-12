@@ -52,7 +52,9 @@ jobs:
        run: |
          make load
          echo $DOTENV >.env
-         timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
+         # required to run cms-db first as a workaround for issue #23 
+         timeout --preserve-status -sTERM 40s docker-compose run cms-db --abort-on-container-exit --no-build
+         timeout --preserve-status -sTERM 100s docker-compose up --abort-on-container-exit --no-build
 
   ## helm chart
   # lints helm chart
