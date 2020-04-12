@@ -9,7 +9,8 @@ env:
   # container build args
   VERSION: latest
   N_CONCURRENT: 12
-  TAG_PREFIX: mrzzy
+  DOCKER_REGISTRY: "docker.io"
+  DOCKER_USER: mrzzy
 
 jobs:
   ## build pipiline
@@ -88,8 +89,7 @@ jobs:
          path: build/containers
      - name: "Push Containers to Dockerhub"
        env:
-        DOCKER_USER: $TAG_PREFIX
-        DOCKER_TOKEN: ${{ secrets.docker_token }}
+        DOCKER_TOKEN: "${{ secrets.DOCKER_TOKEN }}"
        run: |
          make load
          echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin

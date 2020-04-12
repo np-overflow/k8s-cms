@@ -6,8 +6,11 @@
 # vars
 VERSION:=latest
 
+
 DOCKER:=docker
-TAG_PREFIX:=mrzzy
+DOCKER_REGISTRY:=docker.io
+DOCKER_USER:=mrzzy
+TAG_PREFIX:=$(REGISTRY)/$(DOCKER_USER)
 
 CMS_SRC_DIR:=deps/cms/
 EXPORT_DIR:=build/containers
