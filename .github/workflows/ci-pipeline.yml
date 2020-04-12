@@ -48,16 +48,10 @@ jobs:
      # stack and making sure none of them exit unexpectly
      - name: "Test Docker Compose up"
        env:
-         CMS_SECRET_KEY: 4438f6c37f3b6401980d90b0bf06fd03
-         KCMS_MASTER_JWT_KEY: 5wBVNc3Ltch8Ygj4FKaGPChqgkmx3JEH
-         POSTGRES_USER: cmsuser
-         POSTGRES_PASSWORD: YWaEjprTaRn3XGKuf5K3oB4vmVUrtCvh
-         CMS_ADMIN_USER: admin
-         CMS_ADMIN_PASSWORD: admin
-         CMS_RANKING_USER: ranking
-         CMS_RANKING_PASSWORD: ranking
+         DOTENV: "${{ secrets.DOTENV }}"
        run: |
          make load
+         echo $DOTENV >.env
          timeout --preserve-status -sTERM 30s docker-compose up --abort-on-container-exit --no-build
 
   ## helm chart
