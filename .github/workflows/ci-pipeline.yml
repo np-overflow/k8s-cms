@@ -55,7 +55,7 @@ jobs:
          # required to run cms-db first as a workaround for issue #23
          # the database has to complete its initdb operation before the stack 
          # would work properly.
-         timeout --preserve-status -sTERM 20s docker-compose run cms-db || true
+         docker-compose -d run cms-db && sleep 30 && docker-compose down
          timeout --preserve-status -sTERM 100s docker-compose up --abort-on-container-exit --no-build
 
   ## helm chart
