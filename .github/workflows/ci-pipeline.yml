@@ -32,32 +32,6 @@ jobs:
           name: containers
           path: build/containers
 
-  ## testing pipeline
-  # tests containers run using the docker compose setup without exiting
-  test-docker-compose-up:
-    runs-on: ubuntu-18.04
-    needs: [ build-containers ]
-    steps:
-     - uses: actions/checkout@v2
-     - uses: actions/download-artifact@v1
-       with:
-         name: containers
-         path: build/containers
-
-     # tests containers run by running the docker-compose
-     # stack and making sure none of them exit unexpectly
-     - name: "Test Docker Compose up"
-       env:
-         DOTENV: "${{ secrets.DOTENV }}"
-       run: |
-         make load
-         echo $DOTENV >.env
-         # required to run cms-db first as a workaround for issue #23
-         # the database has to complete its initdb operation before the stack 
-         # would work properly.
-         docker-compose run -d cms-db && sleep 60 && docker-compose down
-         timeout --preserve-status -sTERM 120s docker-compose up --abort-on-container-exit --no-build
-
   ## helm chart
   # lints helm chart
   lint-helm-chart:
