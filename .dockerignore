@@ -4,3 +4,5 @@ src/master/venv/
 .git/
 # tags
 tag*
+# build folder
+build/

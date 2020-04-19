@@ -1,0 +1,68 @@
+#
+# k8s-cms
+# Github Actions: CI pipeline
+#
+
+name: ci-pipeline
+on: [ push, pull_request ]
+env:
+  # container build args
+  VERSION: latest
+  N_CONCURRENT: 12
+  DOCKER_REGISTRY: "docker.io"
+  DOCKER_USER: mrzzy
+
+jobs:
+  ## build pipiline
+  # build cms containers
+  build-containers:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: "Build Containers"
+        run: |
+          make -j ${N_CONCURRENT}
+          make export
+          df -h
+          free -h
+      - uses: actions/upload-artifact@v1
+        with:
+          name: containers
+          path: build/containers
+
+  ## helm chart
+  # lints helm chart
+  lint-helm-chart:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Pull dependencies"
+        run: |
+          # pull helm
+          curl -fsSL  https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  | bash -
+      - name: "Lint Helm chart"
+        run: |
+          helm lint chart
+      
+  ## release pipeline - run only on main repo
+  publish-containers:
+    #if: github.repository == "np-overflow/k8s-cms" && github.head_ref == "master"
+    runs-on: ubuntu-18.04
+    needs: 
+     - build-containers
+    steps:
+     - uses: actions/checkout@v2
+     - uses: actions/download-artifact@v1
+       with:
+         name: containers
+         path: build/containers
+     - name: "Push Containers to Dockerhub"
+       env:
+        DOCKER_TOKEN: "${{ secrets.DOCKER_TOKEN }}"
+       run: |
+         make load
+         echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+         make push -j ${N_CONCURRENT}
+
