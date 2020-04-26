@@ -3,7 +3,7 @@
 # Master Container
 # 
 
-FROM mrzzy/cms-base
+FROM mrzzy/cms-base:latest
 
 # install module depdendencies
 COPY src/master/requirements.txt  /tmp/requirements.txt

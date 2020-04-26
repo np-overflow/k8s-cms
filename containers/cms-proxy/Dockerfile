@@ -3,7 +3,7 @@
 # Proxy Service Container
 # 
 
-FROM mrzzy/cms-base
+FROM npoverflow/cms-base:latest
 
 # copy container source
 COPY containers/cms-proxy/proxy-entrypoint.sh /scripts/

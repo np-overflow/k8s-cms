@@ -3,7 +3,7 @@
 # Health Checker Container
 # 
 
-FROM mrzzy/cms-base
+FROM npoverflow/cms-base:latest
 
 # copy config
 COPY config /cms/config
