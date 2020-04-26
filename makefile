@@ -9,7 +9,7 @@ VERSION:=latest
 
 DOCKER:=docker
 DOCKER_REGISTRY:=docker.io
-DOCKER_USER:=mrzzy
+DOCKER_USER:=npoverflow
 TAG_PREFIX:=$(DOCKER_REGISTRY)/$(DOCKER_USER)
 
 CMS_SRC_DIR:=deps/cms/
