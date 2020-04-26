@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: selenium
-          image: mrzzy/cms-test-selenium
+          image: npoverflow/cms-test-selenium:latest
           ports:
             - name: vnc
               containerPort: 5900

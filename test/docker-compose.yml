@@ -7,7 +7,7 @@
 version: "3"
 services:
   selenium:
-    image: mrzzy/cms-test-selenium
+    image: npoverflow/cms-test-selenium:latest
     build:
       context: "containers/selenium"
     ports:
@@ -17,7 +17,7 @@ services:
       - "./containers/selenium:/home/seluser/project/"
       - "/dev/shm:/dev/shm"
   submit:
-    image: mrzzy/cms-test-submit 
+    image: npoverflow/cms-test-submit:latest
     build:
       context: "containers/submit"
     depends_on:
