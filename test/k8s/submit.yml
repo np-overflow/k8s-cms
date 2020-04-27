@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: submission
-          image: mrzzy/cms-test-submit
+          image: npoverflow/cms-test-submit:latest
           livenessProbe:
             initialDelaySeconds: 10
             periodSeconds: 8

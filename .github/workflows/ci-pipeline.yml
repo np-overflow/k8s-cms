@@ -10,7 +10,7 @@ env:
   VERSION: latest
   N_CONCURRENT: 12
   DOCKER_REGISTRY: "docker.io"
-  DOCKER_USER: mrzzy
+  DOCKER_USER: npoverflow
 
 jobs:
   ## build pipiline
@@ -48,7 +48,7 @@ jobs:
       
   ## release pipeline - run only on main repo
   publish-containers:
-    #if: github.repository == "np-overflow/k8s-cms" && github.head_ref == "master"
+    if: github.repository == "np-overflow/k8s-cms" && github.head_ref == "master"
     runs-on: ubuntu-18.04
     needs: 
      - build-containers

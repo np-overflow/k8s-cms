@@ -10,7 +10,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-db/Dockerfile
-    image: "docker.io/mrzzy/cms-db:latest"
+    image: "docker.io/npoverflow/cms-db:latest"
     expose:
     - "5432"
     env_file: 
@@ -26,7 +26,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-log/Dockerfile
-    image: "docker.io/mrzzy/cms-log:latest"
+    image: "docker.io/npoverflow/cms-log:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -38,7 +38,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-scoring/Dockerfile
-    image: "docker.io/mrzzy/cms-scoring:latest"
+    image: "docker.io/npoverflow/cms-scoring:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -50,7 +50,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-resource/Dockerfile
-    image: "docker.io/mrzzy/cms-resource:latest"
+    image: "docker.io/npoverflow/cms-resource:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -62,7 +62,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-proxy/Dockerfile
-    image: "docker.io/mrzzy/cms-proxy:latest"
+    image: "docker.io/npoverflow/cms-proxy:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -75,7 +75,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-printing/Dockerfile
-    image: "docker.io/mrzzy/cms-printing:latest"
+    image: "docker.io/npoverflow/cms-printing:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -87,7 +87,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-evaluation/Dockerfile
-    image: "docker.io/mrzzy/cms-evaluation:latest"
+    image: "docker.io/npoverflow/cms-evaluation:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -99,7 +99,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-checker/Dockerfile
-    image: "docker.io/mrzzy/cms-checker:latest"
+    image: "docker.io/npoverflow/cms-checker:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -124,7 +124,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-web-ranking/Dockerfile
-    image: "docker.io/mrzzy/cms-web-ranking:latest"
+    image: "docker.io/npoverflow/cms-web-ranking:latest"
     env_file: 
       - ".env"
       - "config/config.env"
@@ -136,7 +136,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-web-admin/Dockerfile
-    image: "docker.io/mrzzy/cms-web-admin:latest"
+    image: "docker.io/npoverflow/cms-web-admin:latest"
     ports:
       - "8889:8889"
     expose:
@@ -150,7 +150,7 @@ services:
     build: 
       context: .
       dockerfile: containers/cms-web-contest/Dockerfile
-    image: "docker.io/mrzzy/cms-web-contest:latest"
+    image: "docker.io/npoverflow/cms-web-contest:latest"
     ports:
       - "8888:8888"
     expose:
@@ -166,7 +166,7 @@ services:
     build:
       context: .
       dockerfile: containers/cms-worker/Dockerfile
-    image: "docker.io/mrzzy/cms-worker:latest"
+    image: "docker.io/npoverflow/cms-worker:latest"
     expose:
       - "26000"
     env_file: 
@@ -183,7 +183,7 @@ services:
     build:
       context: .
       dockerfile: containers/cms-worker/Dockerfile
-    image: "docker.io/mrzzy/cms-worker:latest"
+    image: "docker.io/npoverflow/cms-worker:latest"
     expose:
       - "26000"
     env_file: 
@@ -201,7 +201,7 @@ services:
     build:
       context: .
       dockerfile: containers/k8s-cms-master/Dockerfile
-    image: "docker.io/mrzzy/k8s-cms-master:latest"
+    image: "docker.io/npoverflow/k8s-cms-master:latest"
     ports:
       - "5000:5000"
     env_file: 
