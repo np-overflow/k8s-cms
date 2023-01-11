@@ -40,55 +40,55 @@ images:
   pullPolicy: IfNotPresent
   database:
     name: cms-db
-    repository: npoverflow/cms-db:latest
+    repository: npoverflow/cms-db
     tag: latest
   logging:
     name: cms-log
-    repository: npoverflow/cms-log:latest
+    repository: npoverflow/cms-log
     tag: latest
   resources:
     name: cms-resources
-    repository: npoverflow/cms-resource:latest
+    repository: npoverflow/cms-resource
     tag: latest
   scoring:
     name: cms-scoring
-    repository: npoverflow/cms-scoring:latest
+    repository: npoverflow/cms-scoring
     tag: latest
   evaluation:
     name: cms-evaluation
-    repository: npoverflow/cms-evaluation:latest
+    repository: npoverflow/cms-evaluation
     tag: latest
   proxy:
     name: cms-proxy
-    repository: npoverflow/cms-proxy:latest
+    repository: npoverflow/cms-proxy
     tag: latest
   printing:
     name: cms-printing
-    repository: npoverflow/cms-printing:latest
+    repository: npoverflow/cms-printing
     tag: latest
   checker:
     name: cms-checker
-    repository: npoverflow/cms-checker:latest
+    repository: npoverflow/cms-checker
     tag: latest
   admin:
     name: cms-web-admin
-    repository: npoverflow/cms-web-admin:latest
+    repository: npoverflow/cms-web-admin
     tag: latest
   ranking:
     name: cms-web-ranking
-    repository: npoverflow/cms-web-ranking:latest
+    repository: npoverflow/cms-web-ranking
     tag: latest
   contest:
     name: cms-web-contest
-    repository: npoverflow/cms-web-contest:latest
+    repository: npoverflow/cms-web-contest
     tag: latest
   worker:
     name: cms-worker
-    repository: npoverflow/cms-worker:latest
+    repository: npoverflow/cms-worker
     tag: latest
   master:
     name: k8s-cms-master
-    repository: npoverflow/k8s-cms-master:latest
+    repository: npoverflow/k8s-cms-master
     tag: latest
 
 services:
