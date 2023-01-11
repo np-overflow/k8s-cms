@@ -18,15 +18,15 @@ sources:
 
 # chart dependencies
 dependencies:
-- name: nginx-ingress
-  version: 1.28.2
-  repository: https://kubernetes-charts.storage.googleapis.com
+- name: ingress-nginx
+  version: 4.4.2
+  repository: https://kubernetes.github.io/ingress-nginx
   condition: nginx-ingress.enabled
 - name: cert-manager
-  version: 0.12.0
+  version: 1.10.2
   repository: https://charts.jetstack.io
   condition: cert-manager.enabled
-- name: prometheus-operator
-  version: 8.5.4
-  repository: https://kubernetes-charts.storage.googleapis.com
+- name: kube-prometheus-stack
+  version: 43.2.1
+  repository: https://prometheus-community.github.io/helm-charts 
   condition: prometheus-operator.enabled
